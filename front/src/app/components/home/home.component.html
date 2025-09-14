@@ -1,57 +1,57 @@
 <div class="home-container">
-  <div class="hero-section">
-    <h1 class="hero-title">STUDENT <span class="accent">VOICES</span></h1>
-    <p class="hero-subtitle">Discover insights, ideas, and inspiration from fellow students</p>
-  </div>
-
-  <div class="content-wrapper">
-    <main class="main-content">
-      <div class="articles-header">
-        <h2>Latest Articles</h2>
-        <div class="filters">
-          <button class="filter-btn active">All</button>
-          <button class="filter-btn">Technology</button>
-          <button class="filter-btn">Web Development</button>
-          <button class="filter-btn">Security</button>
-          <button class="filter-btn">Mobile</button>
-        </div>
+      <div class="hero-section">
+        <h1 class="hero-title">STUDENT <span class="accent">VOICES</span></h1>
+        <p class="hero-subtitle">Discover insights, ideas, and inspiration from fellow students</p>
       </div>
 
-      <div class="articles-grid">
-        <app-article-card 
-          *ngFor="let article of articles" 
-          [article]="article">
-        </app-article-card>
-      </div>
-    </main>
+      <div class="content-wrapper">
+        <main class="main-content">
+          <div class="articles-header">
+            <h2>Latest Articles</h2>
+            <div class="filters">
+              <button class="filter-btn active">All</button>
+              <button class="filter-btn">Technology</button>
+              <button class="filter-btn">Web Development</button>
+              <button class="filter-btn">Security</button>
+              <button class="filter-btn">Mobile</button>
+            </div>
+          </div>
 
-    <aside class="sidebar">
-      <div class="sidebar-section">
-        <h3>HEY!</h3>
-        <p>Welcome to our student blog community. Share your knowledge, learn from others, and grow together!</p>
-      </div>
+          <div class="articles-grid">
+            <app-article-card 
+              *ngFor="let article of articles" 
+              [article]="article">
+            </app-article-card>
+          </div>
+        </main>
 
-      <div class="sidebar-section">
-        <h3>CATEGORIES</h3>
-        <div class="categories">
-          <a href="#" class="category-link">Technology</a>
-          <a href="#" class="category-link">Web Development</a>
-          <a href="#" class="category-link">Security</a>
-          <a href="#" class="category-link">Mobile Development</a>
-          <a href="#" class="category-link">AI & Machine Learning</a>
-        </div>
-      </div>
+        <aside class="sidebar">
+          <div class="sidebar-section">
+            <h3>HEY!</h3>
+            <p>Welcome to our student blog community. Share your knowledge, learn from others, and grow together!</p>
+          </div>
 
-      <div class="sidebar-section">
-        <h3>TRENDING</h3>
-        <div class="trending-topics">
-          <span class="trending-tag">#MachineLearning</span>
-          <span class="trending-tag">#WebDev</span>
-          <span class="trending-tag">#React</span>
-          <span class="trending-tag">#Angular</span>
-          <span class="trending-tag">#Security</span>
-        </div>
+          <div class="sidebar-section">
+            <h3>CATEGORIES</h3>
+            <div class="categories">
+              <a href="#" class="category-link">Technology</a>
+              <a href="#" class="category-link">Web Development</a>
+              <a href="#" class="category-link">Security</a>
+              <a href="#" class="category-link">Mobile Development</a>
+              <a href="#" class="category-link">AI & Machine Learning</a>
+            </div>
+          </div>
+
+          <div class="sidebar-section">
+            <h3>TRENDING</h3>
+            <div class="trending-topics">
+              <span class="trending-tag">#MachineLearning</span>
+              <span class="trending-tag">#WebDev</span>
+              <span class="trending-tag">#React</span>
+              <span class="trending-tag">#Angular</span>
+              <span class="trending-tag">#Security</span>
+            </div>
+          </div>
+        </aside>
       </div>
-    </aside>
-  </div>
-</div>
+    </div>

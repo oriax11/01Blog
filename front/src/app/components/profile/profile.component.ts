@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { ArticleCardComponent } from '../article-card/article-card.component';
 import { ArticleService } from '../../services/article.service';
 import { Article, User } from '../../models/article.model';
@@ -8,7 +8,7 @@ import { Article, User } from '../../models/article.model';
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, ArticleCardComponent, RouterModule],
+  imports: [CommonModule, ArticleCardComponent],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
