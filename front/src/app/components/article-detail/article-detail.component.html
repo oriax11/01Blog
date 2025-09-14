@@ -1,0 +1,40 @@
+<div class="article-detail-container" *ngIf="article">
+  <article class="article">
+    <header class="article-header">
+      <div class="article-meta">
+        <span class="category">{{ article.category }}</span>
+        <span class="date">{{ article.createdAt | date:'MMMM dd, yyyy' }}</span>
+      </div>
+      
+      <h1 class="article-title">{{ article.title }}</h1>
+      
+      <div class="author-info">
+        <img [src]="article.author.avatarUrl" [alt]="article.author.username" class="author-avatar">
+        <div class="author-details">
+          <span class="author-name">{{ article.author.username }}</span>
+          <span class="read-time">5 min read</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="article-image" *ngIf="article.imageUrl">
+      <img [src]="article.imageUrl" [alt]="article.title">
+    </div>
+
+    <div class="article-content">
+      <p>{{ article.content }}</p>
+    </div>
+
+    <footer class="article-footer">
+      <div class="article-stats">
+        <button class="stat-btn">❤️ {{ article.likesCount }}</button>
+        <button class="stat-btn">💬 {{ article.commentsCount }}</button>
+        <button class="stat-btn">🔗 Share</button>
+      </div>
+      
+      <div class="article-tags">
+        <span *ngFor="let tag of article.tags" class="tag">{{ tag }}</span>
+      </div>
+    </footer>
+  </article>
+</div>

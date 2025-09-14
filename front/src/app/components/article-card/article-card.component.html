@@ -1,0 +1,27 @@
+<div class="article-card" [routerLink]="['/article', article.id]">
+  <div class="article-image" *ngIf="article.imageUrl">
+    <img [src]="article.imageUrl" [alt]="article.title">
+  </div>
+  
+  <div class="article-content">
+    <div class="article-meta">
+      <span class="category">{{ article.category }}</span>
+      <span class="date">{{ article.createdAt | date:'MMM dd, yyyy' }}</span>
+    </div>
+    
+    <h3 class="article-title">{{ article.title }}</h3>
+    <p class="article-excerpt">{{ article.excerpt }}</p>
+    
+    <div class="article-footer">
+      <div class="author">
+        <img [src]="article.author.avatarUrl" [alt]="article.author.username" class="author-avatar">
+        <span class="author-name">{{ article.author.username }}</span>
+      </div>
+      
+      <div class="article-stats">
+        <span class="stat">❤️ {{ article.likesCount }}</span>
+        <span class="stat">💬 {{ article.commentsCount }}</span>
+      </div>
+    </div>
+  </div>
+</div>
