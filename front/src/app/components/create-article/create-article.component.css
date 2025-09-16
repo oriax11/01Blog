@@ -80,6 +80,19 @@ textarea::placeholder {
   color: #9ca3af;
 }
 
+/* .article-content {
+  background-color: red;
+  display: block;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.article-img {
+  width: 80%;
+  height: auto;
+  display: block;
+} */
+
 .upload-placeholder {
   text-align: center;
   padding: 3rem 2rem;
@@ -225,7 +238,6 @@ textarea::placeholder {
   transition: background;
 }
 
-
 /* .form-group { margin-bottom: 15px; }
 
 .custom-file-label {
@@ -241,8 +253,6 @@ textarea::placeholder {
 
 .custom-file-label input { display: none; } */
 
-
-
 .video-preview {
   display: flex;
   flex-wrap: wrap;
@@ -250,7 +260,10 @@ textarea::placeholder {
   margin-top: 5px;
 }
 
-.video-container { position: relative; display: inline-block; }
+.video-container {
+  position: relative;
+  display: inline-block;
+}
 
 .video-container video {
   max-width: 200px;
@@ -261,7 +274,7 @@ textarea::placeholder {
 }
 
 .video-container button {
- position: absolute;
+  position: absolute;
   top: 10px;
   right: 10px;
   background: #22c55e;
@@ -276,3 +289,5 @@ textarea::placeholder {
   justify-content: center;
   transition: background;
 }
+
+

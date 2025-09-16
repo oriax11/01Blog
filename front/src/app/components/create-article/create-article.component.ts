@@ -8,6 +8,22 @@ import Quill from 'quill';
 const BlockEmbed = Quill.import('blots/block/embed') as any;
 const Parchment = Quill.import('parchment');
 
+class ImageBlot extends BlockEmbed {
+  static blotName = 'image';
+  static tagName = 'img';
+
+  static create(value: any) {
+    let node = super.create();
+    // node.setAttribute('style', "height: 10px; background-color: yellow;");
+    node.setAttribute('src', value);
+    // node.setAttribute('class', 'article-img');
+
+    return node;
+  }
+}
+
+Quill.register(ImageBlot);
+
 class LocalVideoBlot extends BlockEmbed {
   static blotName = 'localVideo';
   static tagName = 'video';
@@ -97,12 +113,6 @@ export class CreateArticleComponent implements AfterViewInit {
           this.quillEditor.insertEmbed(range.index, 'image', imageUrl);
         };
         reader.readAsDataURL(file);
-
-        // this.selectedImage = file;
-        // const imgReader = new FileReader();
-        // imgReader.onload = (e) => (this.imagePreview = e.target?.result as string);
-        // imgReader.readAsDataURL(file);
-        // this.article.imageUrl = this.imagePreview;
       } else if (type === 'video') {
         const videoUrl = URL.createObjectURL(file);
         this.quillEditor.insertEmbed(range.index, 'localVideo', videoUrl);
@@ -170,3 +180,44 @@ export class CreateArticleComponent implements AfterViewInit {
     });
   }
 }
+
+// -------------
+// async submitArticle() {
+//   let content = this.quillEditor.root.innerHTML;
+
+//   const formData = new FormData();
+
+//   this.article.files.forEach((file, idx) => {
+//     formData.append('files', file, file.name);
+//   });
+
+//   // Send files to your backend
+//   const uploadRes = await this.http.post<{urls: string[]}>('/api/upload', formData).toPromise();
+
+//   if (uploadRes?.urls) {
+//     uploadRes.urls.forEach((url, idx) => {
+//       const file = this.article.files[idx];
+
+//       // Replace base64/blob URLs with server URLs in content
+//       if (file.type.startsWith('image/')) {
+//         content = content.replace(
+//           new RegExp(`src="[^"]+"`, 'i'), // finds first src
+//           `src="${url}"`
+//         );
+//       } else if (file.type.startsWith('video/')) {
+//         content = content.replace(
+//           new RegExp(`src="[^"]+"`, 'i'),
+//           `src="${url}"`
+//         );
+//       }
+//     });
+//   }
+
+//   // Final article object
+//   const articlePayload = {
+//     title: this.article.title,
+//     content: content,
+//   };
+
+//   await this.http.post('/api/articles', articlePayload).toPromise();
+// }
