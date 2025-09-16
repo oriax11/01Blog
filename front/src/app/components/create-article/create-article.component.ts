@@ -16,11 +16,15 @@ export class CreateArticleComponent implements AfterViewInit {
   article = {
     title: '',
     content: '',
-    imageUrl: ''
+    imageUrl: '',
+    videos: [] as File[]
   };
 
   selectedImage: File | null = null;
   imagePreview: string = '';
+
+  selectedVideos: { file: File; preview: string }[] = [];
+
   private quillEditor!: Quill;
 
   constructor(
@@ -31,14 +35,13 @@ export class CreateArticleComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.quillEditor = new Quill('#editor', {
       theme: 'snow',
-      placeholder: 'Write your article content here...',
       modules: {
         toolbar: [
           ['bold', 'italic', 'underline', 'strike'],
           ['blockquote', 'code-block'],
           [{ header: 1 }, { header: 2 }],
           [{ list: 'ordered' }, { list: 'bullet' }],
-          ['link', 'image']
+          ['link', 'image', 'video']
         ]
       }
     });
@@ -47,9 +50,9 @@ export class CreateArticleComponent implements AfterViewInit {
       this.article.content = this.quillEditor.root.innerHTML;
     });
 
-    (this.quillEditor.getModule('toolbar') as any).addHandler('image', () => {
-      this.selectLocalImage();
-    });
+    const toolbar = this.quillEditor.getModule('toolbar') as any;
+    toolbar.addHandler('image', () => this.selectLocalImage());
+    toolbar.addHandler('video', () => this.selectLocalVideo());
   }
 
   selectLocalImage() {
@@ -66,9 +69,27 @@ export class CreateArticleComponent implements AfterViewInit {
       reader.onload = (e) => {
         const imageUrl = e.target?.result as string;
         const range = this.quillEditor.getSelection(true);
-        if (range) {
-          this.quillEditor.insertEmbed(range.index, 'image', imageUrl);
-        }
+        if (range) this.quillEditor.insertEmbed(range.index, 'image', imageUrl);
+      };
+      reader.readAsDataURL(file);
+    };
+  }
+
+  selectLocalVideo() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'video/*';
+    input.click();
+
+    input.onchange = () => {
+      const file = input.files?.[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const videoUrl = e.target?.result as string;
+        const range = this.quillEditor.getSelection(true);
+        if (range) this.quillEditor.insertEmbed(range.index, 'video', videoUrl);
       };
       reader.readAsDataURL(file);
     };
@@ -91,6 +112,28 @@ export class CreateArticleComponent implements AfterViewInit {
     this.selectedImage = null;
     this.imagePreview = '';
     this.article.imageUrl = '';
+  }
+
+  onVideoSelect(event: any) {
+    const files = event.target.files as FileList;
+    if (!files) return;
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      if (!file.type.startsWith('video/')) continue;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.selectedVideos.push({ file, preview: e.target?.result as string });
+        this.article.videos.push(file);
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  removeVideo(index: number) {
+    this.selectedVideos.splice(index, 1);
+    this.article.videos.splice(index, 1);
   }
 
   isFormValid(): boolean {

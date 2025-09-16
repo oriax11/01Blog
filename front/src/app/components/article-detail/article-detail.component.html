@@ -2,7 +2,6 @@
       <article class="article">
         <header class="article-header">
           <div class="article-meta">
-            <span class="category">{{ article.category }}</span>
             <span class="date">{{ article.createdAt | date:'MMMM dd, yyyy' }}</span>
           </div>
           
@@ -32,9 +31,7 @@
             <button class="stat-btn">🔗 Share</button>
           </div>
           
-          <div class="article-tags">
-            <span *ngFor="let tag of article.tags" class="tag">{{ tag }}</span>
-          </div>
+
         </footer>
       </article>
     </div>
