@@ -1,91 +1,35 @@
 <div class="create-container">
-      <div class="create-header">
-        <h1>CREATE <span class="accent">ARTICLE</span></h1>
-        <p>Share your knowledge with the student community</p>
-      </div>
-
-      <form (ngSubmit)="onSubmit()" class="create-form">
-        <div class="form-group">
-          <label for="title">Article Title</label>
-          <input
-            type="text"
-            id="title"
-            [(ngModel)]="article.title"
-            name="title"
-            placeholder="Enter an engaging title..."
-            required
-          >
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label for="category">Category</label>
-            <select id="category" [(ngModel)]="article.category" name="category" required>
-              <option value="">Select Category</option>
-              <option value="Technology">Technology</option>
-              <option value="Web Development">Web Development</option>
-              <option value="Mobile Development">Mobile Development</option>
-              <option value="Security">Security</option>
-              <option value="AI & Machine Learning">AI & Machine Learning</option>
-              <option value="Data Science">Data Science</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="tags">Tags</label>
-            <input
-              type="text"
-              id="tags"
-              [(ngModel)]="tagsInput"
-              name="tags"
-              placeholder="Enter tags separated by commas..."
-            >
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="excerpt">Article Excerpt</label>
-          <textarea
-            id="excerpt"
-            [(ngModel)]="article.excerpt"
-            name="excerpt"
-            placeholder="Write a brief summary of your article..."
-            rows="3"
-            required
-          ></textarea>
-        </div>
-
-        <div class="form-group">
-          <label for="image">Featured Image</label>
-          <div class="image-upload">
-            <input type="file" id="image" (change)="onImageSelect($event)" accept="image/*">
-            <div class="upload-placeholder" *ngIf="!selectedImage">
-              <div class="upload-icon">📷</div>
-              <p>Click to upload a featured image</p>
-              <span>JPG, PNG or GIF (max 5MB)</span>
-            </div>
-            <div class="image-preview" *ngIf="selectedImage">
-              <img [src]="imagePreview" alt="Preview">
-              <button type="button" class="remove-image" (click)="removeImage()">✕</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="content">Article Content</label>
-          <textarea
-            id="content"
-            [(ngModel)]="article.content"
-            name="content"
-            placeholder="Write your article content here..."
-            rows="15"
-            required
-          ></textarea>
-        </div>
-
-        <div class="form-actions">
-          <button type="button" class="btn-secondary" (click)="saveDraft()">SAVE DRAFT</button>
-          <button type="submit" class="btn-primary" [disabled]="!isFormValid()">PUBLISH ARTICLE</button>
-        </div>
-      </form>
+  <!-- Banner / Featured Image -->
+  <div class="form-group">
+    <label for="image">Featured Image</label>
+    <input type="file" id="image" (change)="onImageSelect($event)" accept="image/*">
+    <div class="image-preview" *ngIf="selectedImage">
+      <img [src]="imagePreview" alt="Preview">
+      <button type="button" (click)="removeImage()">✕</button>
     </div>
+  </div>
+
+  <!-- Title -->
+  <div class="form-group">
+    <label for="title">Article Title</label>
+    <input
+      type="text"
+      id="title"
+      [(ngModel)]="article.title"
+      name="title"
+      placeholder="Enter article title..."
+      required
+    >
+  </div>
+
+  <!-- Quill Editor -->
+  <div class="form-group">
+    <label for="content">Article Content</label>
+    <div id="editor" style="height: 400px; border: 1px solid #ccc;"></div>
+  </div>
+
+  <!-- Submit -->
+  <div class="form-actions">
+    <button type="submit" (click)="onSubmit()" [disabled]="!isFormValid()">PUBLISH ARTICLE</button>
+  </div>
+</div>

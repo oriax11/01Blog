@@ -25,7 +25,8 @@
               }
             ],
             "styles": [
-              "src/global_styles.css"
+              "src/global_styles.css",
+              "node_modules/quill/dist/quill.snow.css"
             ]
           },
           "configurations": {

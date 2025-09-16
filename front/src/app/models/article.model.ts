@@ -2,11 +2,8 @@ export interface Article {
   id: string;
   title: string;
   content: string;
-  excerpt: string;
   imageUrl?: string;
   author: User;
-  category: string;
-  tags: string[];
   createdAt: Date;
   updatedAt: Date;
   likesCount: number;
