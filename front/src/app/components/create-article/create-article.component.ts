@@ -1,9 +1,11 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ArticleService } from '../../services/article.service';
+import { AuthService } from '../../services/auth.service';
 import Quill from 'quill';
+import { jwtDecode } from 'jwt-decode';
 
 const BlockEmbed = Quill.import('blots/block/embed') as any;
 const Parchment = Quill.import('parchment');
@@ -14,10 +16,7 @@ class ImageBlot extends BlockEmbed {
 
   static create(value: any) {
     let node = super.create();
-    // node.setAttribute('style', "height: 10px; background-color: yellow;");
     node.setAttribute('src', value);
-    // node.setAttribute('class', 'article-img');
-
     return node;
   }
 }
@@ -43,7 +42,6 @@ class LocalVideoBlot extends BlockEmbed {
   }
 }
 
-// ✅ Register as object
 Quill.register({ 'formats/localVideo': LocalVideoBlot });
 
 @Component({
@@ -53,22 +51,28 @@ Quill.register({ 'formats/localVideo': LocalVideoBlot });
   templateUrl: './create-article.component.html',
   styleUrls: ['./create-article.component.css'],
 })
-export class CreateArticleComponent implements AfterViewInit {
-  article = {
+export class CreateArticleComponent implements AfterViewInit, OnInit {
+  article: any = {
     title: '',
     content: '',
-    imageUrl: '',
-    videos: [] as File[],
+    author: null
   };
-
-  selectedImage: File | null = null;
-  imagePreview: string = '';
-
-  selectedVideos: { file: File; preview: string }[] = [];
 
   private quillEditor!: Quill;
 
-  constructor(private articleService: ArticleService, private router: Router) {}
+  constructor(
+    private articleService: ArticleService, 
+    private router: Router,
+    private authService: AuthService
+  ) {}
+
+  ngOnInit(): void {
+    const token = this.authService.getToken();
+    if (token) {
+      const decodedToken: any = jwtDecode(token);
+      this.article.author = { id: decodedToken.userId };
+    }
+  }
 
   ngAfterViewInit() {
     this.quillEditor = new Quill('#editor', {
@@ -116,52 +120,8 @@ export class CreateArticleComponent implements AfterViewInit {
       } else if (type === 'video') {
         const videoUrl = URL.createObjectURL(file);
         this.quillEditor.insertEmbed(range.index, 'localVideo', videoUrl);
-        this.article.videos.push(file);
       }
     };
-  }
-
-  onImageSelect(event: any) {
-    const file = event.target.files?.[0];
-    if (file && file.type.startsWith('image/')) {
-      this.selectedImage = file;
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        this.imagePreview = e.target?.result as string;
-      };
-      reader.readAsDataURL(file);
-      this.article.imageUrl = this.imagePreview;
-    }
-  }
-
-  removeImage() {
-    this.selectedImage = null;
-    this.imagePreview = '';
-    this.article.imageUrl = '';
-  }
-
-  onVideoSelect(event: any) {
-    const files = event.target.files as FileList;
-    console.log('hello');
-
-    if (!files) return;
-
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      if (!file.type.startsWith('video/')) continue;
-
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        this.selectedVideos.push({ file, preview: e.target?.result as string });
-        this.article.videos.push(file);
-      };
-      reader.readAsDataURL(file);
-    }
-  }
-
-  removeVideo(index: number) {
-    this.selectedVideos.splice(index, 1);
-    this.article.videos.splice(index, 1);
   }
 
   isFormValid(): boolean {
@@ -172,52 +132,8 @@ export class CreateArticleComponent implements AfterViewInit {
   onSubmit() {
     if (!this.isFormValid()) return alert('Please enter title and content');
 
-    console.log('Article ready to submit:', this.article);
-
     this.articleService.createArticle(this.article).subscribe(() => {
-      // alert('Article published!');
-      // this.router.navigate(['/home']);
+      this.router.navigate(['/home']);
     });
   }
 }
-
-// -------------
-// async submitArticle() {
-//   let content = this.quillEditor.root.innerHTML;
-
-//   const formData = new FormData();
-
-//   this.article.files.forEach((file, idx) => {
-//     formData.append('files', file, file.name);
-//   });
-
-//   // Send files to your backend
-//   const uploadRes = await this.http.post<{urls: string[]}>('/api/upload', formData).toPromise();
-
-//   if (uploadRes?.urls) {
-//     uploadRes.urls.forEach((url, idx) => {
-//       const file = this.article.files[idx];
-
-//       // Replace base64/blob URLs with server URLs in content
-//       if (file.type.startsWith('image/')) {
-//         content = content.replace(
-//           new RegExp(`src="[^"]+"`, 'i'), // finds first src
-//           `src="${url}"`
-//         );
-//       } else if (file.type.startsWith('video/')) {
-//         content = content.replace(
-//           new RegExp(`src="[^"]+"`, 'i'),
-//           `src="${url}"`
-//         );
-//       }
-//     });
-//   }
-
-//   // Final article object
-//   const articlePayload = {
-//     title: this.article.title,
-//     content: content,
-//   };
-
-//   await this.http.post('/api/articles', articlePayload).toPromise();
-// }

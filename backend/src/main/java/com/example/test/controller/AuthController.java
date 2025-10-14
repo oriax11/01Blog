@@ -1,9 +1,15 @@
 package com.example.test.controller;
 
+import java.util.Map;
+
 import com.example.test.dto.JwtAuthResponse;
 import com.example.test.dto.LoginDto;
 import com.example.test.dto.RegisterDto;
 import com.example.test.service.AuthService;
+
+import jakarta.validation.Valid;
+import lombok.val;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,8 +29,8 @@ public class AuthController {
 
     // Build Login REST API
     @PostMapping(value = { "/login", "/signin" })
-    public ResponseEntity<JwtAuthResponse> login(@RequestBody LoginDto loginDto) {
-        String token = authService.login(loginDto);
+    public ResponseEntity<JwtAuthResponse> login(@Valid @RequestBody LoginDto loginDto) {
+        Map<String, String> token = authService.login(loginDto);
 
         JwtAuthResponse jwtAuthResponse = new JwtAuthResponse(token);
 
@@ -32,8 +38,8 @@ public class AuthController {
     }
 
     @PostMapping(value = { "/register", "/signup" })
-    public ResponseEntity<String> register(@RequestBody RegisterDto registerDto) {
-        String response = authService.register(registerDto);
+    public ResponseEntity<Map<String, String>> register(@Valid @RequestBody RegisterDto registerDto) {
+        Map<String, String> response = authService.register(registerDto);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 

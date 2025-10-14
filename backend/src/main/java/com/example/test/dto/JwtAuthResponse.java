@@ -1,11 +1,12 @@
 package com.example.test.dto;
+import java.util.Map;
 
 public class JwtAuthResponse {
     private String accessToken;
     private String tokenType = "Bearer";
 
-    public JwtAuthResponse(String accessToken) {
-        this.accessToken = accessToken;
+    public JwtAuthResponse(Map<String, String> map) {
+        this.accessToken = map.get("token");
     }
 
     // Getters and Setters

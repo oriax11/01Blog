@@ -8,14 +8,16 @@ import { NavbarUnloggedComponent } from './app/components/navbar-unlogged/navbar
 import { AuthService } from './app/services/auth.service';
 import { routes } from './app/app.routes';
 
+import { provideHttpClient, withFetch } from '@angular/common/http';
+
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [CommonModule, RouterOutlet, NavbarComponent, NavbarUnloggedComponent],
   template: `
     <div class="app">
-      <app-navbar *ngIf="!authService.isLoggedIn()"></app-navbar>
-      <!-- <app-navbar-unlogged *ngIf="!authService.isLoggedIn()"></app-navbar-unlogged> -->
+      <app-navbar *ngIf="authService.isLoggedIn()"></app-navbar>
+      <app-navbar-unlogged *ngIf="!authService.isLoggedIn()"></app-navbar-unlogged>
       <router-outlet></router-outlet>
     </div>
   `,
@@ -32,6 +34,8 @@ export class App {
 
 bootstrapApplication(App, {
   providers: [
-    provideRouter(routes)
+    provideRouter(routes),
+    provideHttpClient(withFetch()),
+    AuthService
   ]
 });

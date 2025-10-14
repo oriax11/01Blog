@@ -1,16 +1,16 @@
 <div class="auth-container">
   <div class="auth-form">
     <h2 class="auth-title">Login to <span class="accent">Student Voices</span></h2>
-    <form>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" class="form-control">
+        <label for="identifier">Email or Username</label>
+        <input type="text" id="usernameOrEmail" formControlName="usernameOrEmail" class="form-control">
       </div>
       <div class="form-group">
         <label for="password">Password</label>
-        <input type="password" id="password" name="password" class="form-control">
+        <input type="password" id="password" formControlName="password" class="form-control">
       </div>
-      <button type="submit" class="btn-submit">Login</button>
+      <button type="submit" class="btn-submit" [disabled]="!loginForm.valid">Login</button>
     </form>
     <p class="auth-switch">Don't have an account? <a routerLink="/register">Register</a></p>
   </div>

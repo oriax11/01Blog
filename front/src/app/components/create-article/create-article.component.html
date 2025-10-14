@@ -5,18 +5,18 @@
     <input type="text" id="title" [(ngModel)]="article.title" name="title" placeholder="Enter article title.." required>
   </div>
   <!-- Banner / Featured Image -->
-  <div class="form-group">
+  <!-- <div class="form-group">
     <label for="image" class="custom-file-label">
       <span *ngIf="!selectedImage">Select Banner</span>
       <span *ngIf="selectedImage">{{ selectedImage.name }}</span>
       <input type="file" id="image" (change)="onImageSelect($event)" accept="image/*" required>
-    </label>
-
+    </label> -->
+<!-- 
     <div class="image-preview" *ngIf="selectedImage">
       <img [src]="imagePreview" alt="Preview">
       <button type="button" (click)="removeImage()">✕</button>
     </div>
-  </div>
+  </div> -->
 
 
 
@@ -27,20 +27,20 @@
   </div>
 
   <div class="form-group-video">
-    <label for="videos" class="custom-file-label">
+    <!-- <label for="videos" class="custom-file-label">
       <span *ngIf="!selectedVideos.length">Select Video(s)</span>
       <span *ngIf="selectedVideos.length">
         {{ selectedVideos.length }} video(s) selected
       </span>
       <input type="file" id="videos" (change)="onVideoSelect($event)" accept="video/*" multiple required>
-    </label>
+    </label> -->
 
-    <div class="video-preview" *ngIf="selectedVideos.length">
+    <!-- <div class="video-preview" *ngIf="selectedVideos.length">
       <div class="video-container" *ngFor="let video of selectedVideos; let i = index">
         <video [src]="video.preview" controls></video>
         <button type="button" (click)="removeVideo(i)">✕</button>
       </div>
-    </div>
+    </div> -->
   </div>
 
 

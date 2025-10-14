@@ -5,10 +5,23 @@ import { Injectable } from '@angular/core';
 })
 export class AuthService {
 
+  private tokenKey = 'auth_token';
+
   constructor() { }
 
+  setToken(token: string): void {
+    localStorage.setItem(this.tokenKey, token);
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem(this.tokenKey);
+  }
+
   isLoggedIn(): boolean {
-    // For now, we will return false. In a real application, you would have logic to check if the user is logged in.
-    return false;
+    return !!this.getToken();
+  }
+
+  logout(): void {
+    localStorage.removeItem(this.tokenKey);
   }
 }

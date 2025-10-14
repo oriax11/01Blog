@@ -1,5 +1,8 @@
 package com.example.test.service.impl;
 
+import java.util.Map;
+import java.util.HashMap;
+
 import com.example.test.dto.LoginDto;
 import com.example.test.dto.RegisterDto;
 import com.example.test.exception.BlogAPIException;
@@ -30,10 +33,10 @@ public class AuthServiceImpl implements AuthService {
     private JwtTokenProvider jwtTokenProvider;
 
     public AuthServiceImpl(AuthenticationManager authenticationManager,
-                           UserRepository userRepository,
-                           RoleRepository roleRepository,
-                           PasswordEncoder passwordEncoder,
-                           JwtTokenProvider jwtTokenProvider) {
+            UserRepository userRepository,
+            RoleRepository roleRepository,
+            PasswordEncoder passwordEncoder,
+            JwtTokenProvider jwtTokenProvider) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
@@ -42,27 +45,29 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public String login(LoginDto loginDto) {
+    public Map<String, String> login(LoginDto loginDto) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 loginDto.getUsernameOrEmail(), loginDto.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String token = jwtTokenProvider.generateToken(authentication);
+        Map<String, String> response = new HashMap<>();
+        response.put("token", token);
+        return response;
 
-        return token;
     }
 
     @Override
-    public String register(RegisterDto registerDto) {
+    public Map<String, String> register(RegisterDto registerDto) {
 
         // Check for username exists in database
-        if(userRepository.existsByUsername(registerDto.getUsername())){
+        if (userRepository.existsByUsername(registerDto.getUsername())) {
             throw new BlogAPIException(HttpStatus.CONFLICT, "Username is already exists!.");
         }
 
         // Check for email exists in database
-        if(userRepository.existsByEmail(registerDto.getEmail())){
+        if (userRepository.existsByEmail(registerDto.getEmail())) {
             throw new BlogAPIException(HttpStatus.CONFLICT, "Email is already exists!.");
         }
 
@@ -73,13 +78,16 @@ public class AuthServiceImpl implements AuthService {
         user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
 
         Set<Role> roles = new HashSet<>();
-        // TODO: This is a temporary way to assign roles. You should create a /seed endpoint for the roles or something similar
+        // TODO: This is a temporary way to assign roles. You should create a /seed
+        // endpoint for the roles or something similar
         Role userRole = roleRepository.findByName("ROLE_USER").get();
         roles.add(userRole);
         user.setRoles(roles);
 
         userRepository.save(user);
 
-        return "User registered successfully!.";
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "User registered successfully!");
+        return response;
     }
 }
