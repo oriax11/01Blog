@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public CustomUserDetailsService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -27,14 +27,20 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .orElseThrow(() ->
                         new UsernameNotFoundException("User not found with username or email: " + usernameOrEmail));
 
-        Set<GrantedAuthority> authorities = user
-                .getRoles()
+        Set<GrantedAuthority> authorities = user.getRoles()
                 .stream()
-                .map((role) -> new SimpleGrantedAuthority(role.getName()))
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toSet());
 
-        return new org.springframework.security.core.userdetails.User(user.getEmail(),
+        String principal = user.getUsername(); 
+        // if (principal == null || principal.isEmpty()) {
+        //     principal = user.getEmail(); 
+        // }
+
+        return new org.springframework.security.core.userdetails.User(
+                principal,
                 user.getPassword(),
-                authorities);
+                authorities
+        );
     }
 }

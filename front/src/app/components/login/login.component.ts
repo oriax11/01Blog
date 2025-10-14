@@ -32,7 +32,7 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       this.http.post(`${environment.apiUrl}/api/auth/login`, this.loginForm.value).subscribe(
         (response: any) => {
-          this.authService.setToken(response.token);
+          this.authService.setToken(response.accessToken);
           this.router.navigate(['/home']);
         },
         (error) => {
