@@ -6,11 +6,16 @@
         <span class="brand-accent">Blog</span>
       </a>
     </div>
-    <a routerLink="/login">
-      <span>Login</span>
-    </a>
-    <a routerLink="/login">
-      <span>Register</span>
-    </a>
+
+    <div class="nav-search">
+      <input type="text" placeholder="Search..." class="search-input">
+    </div>
+
+    <div class="nav-user">
+      <div class="user-actions">
+        <a routerLink="/login" class="nav-link">Login</a>
+        <a routerLink="/register" class="nav-link">Register</a>
+      </div>
+    </div>
   </div>
 </nav>
