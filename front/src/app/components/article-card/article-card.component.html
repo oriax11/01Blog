@@ -1,4 +1,4 @@
-<div class="article-card" [routerLink]="['/article', article.id]">
+<div class="article-card" [routerLink]="['/article/', article.id]">
       <div class="article-image" *ngIf="article.imageUrl">
         <img [src]="article.imageUrl" [alt]="article.title">
       </div>
@@ -12,12 +12,12 @@
         
         <div class="article-footer">
           <div class="author">
-            <img [src]="article.author.avatarUrl" [alt]="article.author.username" class="author-avatar">
-            <span class="author-name">{{ article.author.username }}</span>
+            <img [src]="article.creator.avatarUrl" [alt]="article.creator.username" class="author-avatar">
+            <span class="author-name">{{ article.creator.username }}</span>
           </div>
           
           <div class="article-stats">
-            <span class="stat">❤️ {{ article.likesCount }}</span>
+            <span class="stat">❤️ {{ article.likeCount }}</span>
             <span class="stat">💬 {{ article.commentsCount }}</span>
           </div>
         </div>

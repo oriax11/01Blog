@@ -11,7 +11,7 @@ import { Article, User } from '../../models/article.model';
   standalone: true,
   imports: [CommonModule, ArticleCardComponent],
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css']
+  styleUrls: ['./profile.component.css'],
 })
 export class ProfileComponent implements OnInit {
   user: User | undefined;
@@ -26,9 +26,12 @@ export class ProfileComponent implements OnInit {
   ngOnInit() {
     const username = this.route.snapshot.paramMap.get('username');
     if (username) {
-      this.userService.getUserByUsername(username).subscribe(user => {
+      this.userService.getUserByUsername(username).subscribe((user) => {
+        console.log('hello');
         this.user = user;
-        this.articleService.getUserArticles(user.id).subscribe(articles => {
+        console.log(this.user.id);
+
+        this.articleService.getUserArticles(user.id).subscribe((articles) => {
           this.userArticles = articles;
         });
       });

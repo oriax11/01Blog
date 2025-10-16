@@ -11,7 +11,7 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  getUserByUsername(username: string): Observable<User> {
-    return this.http.get<User>(`${environment.apiUrl}/api/users/${username}`);
+  getUserByUsername(userUUID: string): Observable<User> {
+    return this.http.get<User>(`${environment.apiUrl}/api/users/${userUUID}`);
   }
 }
