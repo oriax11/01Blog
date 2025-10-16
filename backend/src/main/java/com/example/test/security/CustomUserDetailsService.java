@@ -1,4 +1,5 @@
 package com.example.test.security;
+import java.util.UUID;
 
 import com.example.test.model.User;
 import com.example.test.repository.UserRepository;
@@ -28,7 +29,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     // Add this new method
-    public UserDetails loadUserById(Long id) {
+    public UserDetails loadUserById(UUID id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + id));
         

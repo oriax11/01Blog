@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.example.test.dto.ArticleDTO;
+import com.example.test.dto.ArticleRequest;
 import com.example.test.model.Article;
 import com.example.test.repository.ArticleRepository;
 
@@ -20,7 +21,7 @@ public class ArticleService {
 
     // Create
     // public Article createArticle(Article article) {
-    //     return articleRepository.save(article);
+    // return articleRepository.save(article);
     // }
 
     public ArticleDTO createArticle(Article article) {
@@ -42,7 +43,7 @@ public class ArticleService {
         return articleRepository.findById(id);
     }
 
-    public Article updateArticle(Long id, Article updatedArticle, String username) {
+    public Article updateArticle(Long id, ArticleRequest updatedArticle, String username) {
         Article article = articleRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Article not found with id: " + id));
 
@@ -57,9 +58,15 @@ public class ArticleService {
     }
 
     // Delete
-    public void deleteArticle(Long id) {
+    public void deleteArticle(Long id, String username) {
+        Article article = articleRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Article not found with id: " + id));
+  
         if (!articleRepository.existsById(id)) {
             throw new RuntimeException("Article not found with id: " + id);
+        }
+        if (!article.getCreator().getUsername().equals(username)) {
+            throw new RuntimeException("You are not allowed to edit this article");
         }
         articleRepository.deleteById(id);
     }

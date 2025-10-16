@@ -43,8 +43,7 @@ public class Article {
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Comment> comments = new HashSet<>();
 
-    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Like> likes = new HashSet<>();
+
 
     // Constructors
     public Article() {
@@ -113,11 +112,5 @@ public class Article {
         this.comments = comments;
     }
 
-    public Set<Like> getLikes() {
-        return likes;
-    }
 
-    public void setLikes(Set<Like> likes) {
-        this.likes = likes;
-    }
 }

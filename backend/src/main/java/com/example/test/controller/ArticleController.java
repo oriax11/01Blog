@@ -3,7 +3,6 @@ package com.example.test.controller;
 import com.example.test.dto.ArticleDTO;
 import com.example.test.model.Article;
 import com.example.test.dto.ArticleRequest;
-
 import com.example.test.model.User;
 import com.example.test.service.ArticleService;
 import com.example.test.service.UserService;
@@ -16,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/articles")
@@ -34,6 +34,10 @@ public class ArticleController {
             Authentication authentication) {
         String username = authentication.getName();
         User user = userService.findByUsername(username);
+
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
         Article article = new Article();
         article.setTitle(request.getTitle());
@@ -58,18 +62,30 @@ public class ArticleController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Article> updateArticle(@PathVariable Long id,
-            @Valid @RequestBody Article article,
+            @Valid @RequestBody ArticleRequest article,
             Authentication authentication) {
         String username = authentication.getName();
+        User user = userService.findByUsername(username);
+
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
         Article updated = articleService.updateArticle(id, article, username);
         return ResponseEntity.ok(updated);
     }
 
-    // @DeleteMapping("/{id}")
-    // public ResponseEntity<Void> deleteArticle(@PathVariable Long id,
-    // Authentication authentication) {
-    // String username = authentication.getName();
-    // articleService.deleteArticle(id, username);
-    // return ResponseEntity.noContent().build();
-    // }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteArticle(@PathVariable Long id,
+            Authentication authentication) {
+        String username = authentication.getName();
+        User user = userService.findByUsername(username);
+
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        articleService.deleteArticle(id, username);
+        return ResponseEntity.noContent().build();
+    }
 }

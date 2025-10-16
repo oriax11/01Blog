@@ -1,15 +1,17 @@
 package com.example.test.dto;
 
+import java.util.UUID;
+
 public class ArticleDTO {
     private Long id;
     private String title;
     private String content;
-    private long authorId;
+    private UUID authorId;
 
     // Constructors
     public ArticleDTO() {}
 
-    public ArticleDTO(Long id, String title, String content, long authorId) {
+    public ArticleDTO(Long id, String title, String content, UUID authorId) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -42,11 +44,11 @@ public class ArticleDTO {
         this.content = content;
     }
 
-    public long getauthorId() {
+    public UUID getauthorId() {
         return authorId;
     }
 
-    public void setauthorId(long authorId) {
+    public void setauthorId(UUID authorId) {
         this.authorId = authorId;
     }
 }

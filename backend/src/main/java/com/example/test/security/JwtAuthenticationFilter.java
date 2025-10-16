@@ -12,6 +12,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+import java.util.UUID;
 
 import java.io.IOException;
 
@@ -40,7 +41,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String userId = jwtTokenProvider.getUsername(token); // This returns the ID as a string
 
             // Load the user by ID instead of username
-            UserDetails userDetails = userDetailsService.loadUserById(Long.parseLong(userId));
+            UserDetails userDetails = userDetailsService.loadUserById(UUID.fromString(userId));
+
 
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                     userDetails,
