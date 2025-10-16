@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
+import com.example.test.model.*;
 
 @Component
 public class JwtTokenProvider {
@@ -21,29 +22,28 @@ public class JwtTokenProvider {
     @Value("${app.jwt-expiration-milliseconds}")
     private long jwtExpirationDate;
 
-    // Generate JWT token
-    public String generateToken(Authentication authentication){
-        String username = authentication.getName();
-        Date currentDate = new Date();
-        Date expireDate = new Date(currentDate.getTime() + jwtExpirationDate);
+    public String generateToken(Authentication authentication) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        User user = userDetails.getUser();
 
-        String token = Jwts.builder()
-                .setSubject(username)
-                .setIssuedAt(new Date())
-                .setExpiration(expireDate)
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + jwtExpirationDate);
+
+        return Jwts.builder()
+                .setSubject(user.getId().toString()) 
+                .setIssuedAt(now)
+                .setExpiration(expiryDate)
                 .signWith(key())
                 .compact();
-        return token;
     }
 
-    private Key key(){
+    private Key key() {
         return Keys.hmacShaKeyFor(
-                Decoders.BASE64.decode(jwtSecret)
-        );
+                Decoders.BASE64.decode(jwtSecret));
     }
 
     // Get username from JWT token
-    public String getUsername(String token){
+    public String getUsername(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(key())
                 .build()
@@ -53,8 +53,8 @@ public class JwtTokenProvider {
     }
 
     // Validate JWT token
-    public boolean validateToken(String token){
-        try{
+    public boolean validateToken(String token) {
+        try {
             Jwts.parserBuilder()
                     .setSigningKey(key())
                     .build()

@@ -48,12 +48,13 @@ public class AuthServiceImpl implements AuthService {
     public Map<String, String> login(LoginDto loginDto) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 loginDto.getUsernameOrEmail(), loginDto.getPassword()));
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        String token = jwtTokenProvider.generateToken(authentication);
-        Map<String, String> response = new HashMap<>();
-        response.put("token", token);
+                
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                
+                System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+                String token = jwtTokenProvider.generateToken(authentication);
+                Map<String, String> response = new HashMap<>();
+                response.put("token", token);
         return response;
 
     }
