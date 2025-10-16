@@ -30,7 +30,7 @@ public class Article {
 
     @NotNull(message = "Creator is required")
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "author", nullable = false)
     private User creator;
 
     @CreationTimestamp
