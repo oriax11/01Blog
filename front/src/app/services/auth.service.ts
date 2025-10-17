@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -43,5 +44,13 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem(this.tokenKey);
+  }
+
+  getAuthHeaders(): { headers: HttpHeaders } {
+    const token = localStorage.getItem(this.tokenKey);
+    const headers = token
+      ? new HttpHeaders({ Authorization: `Bearer ${token}` })
+      : new HttpHeaders();
+    return { headers };
   }
 }

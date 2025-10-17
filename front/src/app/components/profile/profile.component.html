@@ -1,49 +1,52 @@
 <div class="profile-container">
-      <div class="profile-header">
-        <div class="profile-info">
-          <img [src]="user?.avatarUrl" [alt]="user?.username" class="profile-avatar">
-          <div class="profile-details">
-            <h1 class="profile-name">{{ user?.username }}</h1>
-            <div class="profile-stats">
-              <div class="stat">
-                <span class="stat-number">{{ user?.articlesCount }}</span>
-                <span class="stat-label">Articles</span>
-              </div>
-              <div class="stat">
-                <span class="stat-number">{{ user?.followersCount }}</span>
-                <span class="stat-label">Followers</span>
-              </div>
-              <div class="stat">
-                <span class="stat-number">{{ user?.followingCount }}</span>
-                <span class="stat-label">Following</span>
-              </div>
-            </div>
+  <div class="profile-header">
+    <div class="profile-info">
+      <img [src]="user?.avatarUrl" [alt]="user?.username" class="profile-avatar" />
+      <div class="profile-details">
+        <h1 class="profile-name">{{ user?.username }}</h1>
+        <div class="profile-stats">
+          <div class="stat">
+            <span class="stat-number">{{ user?.articlesCount }}</span>
+            <span class="stat-label">Articles</span>
           </div>
-        </div>
-        <button class="edit-profile-btn">EDIT PROFILE</button>
-      </div>
-
-      <div class="profile-content">
-        <div class="section-header">
-          <h2>My Articles</h2>
-          <div class="sort-options">
-            <button class="sort-btn active">Latest</button>
-            <button class="sort-btn">Popular</button>
-            <button class="sort-btn">Oldest</button>
+          <div class="stat">
+            <span class="stat-number">{{ user?.followersCount }}</span>
+            <span class="stat-label">Followers</span>
           </div>
-        </div>
-
-        <div class="articles-grid" *ngIf="userArticles.length > 0">
-          <app-article-card 
-            *ngFor="let article of userArticles" 
-            [article]="article">
-          </app-article-card>
-        </div>
-
-        <div class="no-articles" *ngIf="userArticles.length === 0">
-          <h3>No articles yet</h3>
-          <p>Start sharing your knowledge with the community!</p>
-          <button class="create-article-btn">CREATE YOUR FIRST ARTICLE</button>
+          <div class="stat">
+            <span class="stat-number">{{ user?.followingCount }}</span>
+            <span class="stat-label">Following</span>
+          </div>
         </div>
       </div>
     </div>
+    <button
+      (click)="toggleFollow()"
+      [ngClass]="{ 'follow-btn': !isFollowing, 'unfollow-btn': isFollowing }"
+    >
+      {{ isFollowing ? 'Unfollow' : 'Follow' }}
+    </button>
+  </div>
+
+  <div class="profile-content">
+    <div class="section-header">
+      <h2>My Articles</h2>
+      <div class="sort-options">
+        <button class="sort-btn active">Latest</button>
+        <button class="sort-btn">Popular</button>
+        <button class="sort-btn">Oldest</button>
+      </div>
+    </div>
+
+    <div class="articles-grid" *ngIf="userArticles.length > 0">
+      <app-article-card *ngFor="let article of userArticles" [article]="article">
+      </app-article-card>
+    </div>
+
+    <div class="no-articles" *ngIf="userArticles.length === 0">
+      <h3>No articles yet</h3>
+      <p>Start sharing your knowledge with the community!</p>
+      <button class="create-article-btn">CREATE YOUR FIRST ARTICLE</button>
+    </div>
+  </div>
+</div>

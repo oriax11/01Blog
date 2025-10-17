@@ -16,6 +16,7 @@ import { Article, User } from '../../models/article.model';
 export class ProfileComponent implements OnInit {
   user: User | undefined;
   userArticles: Article[] = [];
+  isFollowing: boolean = false; // track follow state
 
   constructor(
     private route: ActivatedRoute,
@@ -28,11 +29,28 @@ export class ProfileComponent implements OnInit {
     if (username) {
       this.userService.getUserByUsername(username).subscribe((user) => {
         this.user = user;
-        console.log(this.user.id);
+        // Check if current logged-in user is following this user
+        this.userService.isFollowing(user.id).subscribe((followStatus) => {
+          this.isFollowing = followStatus;
+        });
 
         this.articleService.getUserArticles(user.id).subscribe((articles) => {
           this.userArticles = articles;
         });
+      });
+    }
+  }
+
+  toggleFollow() {
+    if (!this.user) return;
+
+    if (this.isFollowing) {
+      this.userService.unfollowUser(this.user.id).subscribe(() => {
+        this.isFollowing = false;
+      });
+    } else {
+      this.userService.followUser(this.user.id).subscribe(() => {
+        this.isFollowing = true;
       });
     }
   }

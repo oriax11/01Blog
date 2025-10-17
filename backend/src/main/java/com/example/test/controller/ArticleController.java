@@ -5,6 +5,7 @@ import com.example.test.model.Article;
 import com.example.test.dto.ArticleRequest;
 import com.example.test.model.User;
 import com.example.test.service.ArticleService;
+import com.example.test.service.ArticleService.DeleteArticleResult;
 import com.example.test.service.UserService;
 
 import jakarta.validation.Valid;
@@ -76,7 +77,7 @@ public class ArticleController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteArticle(@PathVariable Long id,
+    public ResponseEntity<String> deleteArticle(@PathVariable Long id,
             Authentication authentication) {
         String username = authentication.getName();
         User user = userService.findByUsername(username);
@@ -85,8 +86,19 @@ public class ArticleController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        articleService.deleteArticle(id, username);
-        return ResponseEntity.noContent().build();
+        DeleteArticleResult result = articleService.deleteArticle(id, username);
+        switch (result) {
+            case NOT_FOUND:
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Article not found");
+            case UNAUTHORIZED:
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body("You are not allowed to delete this article");
+            case SUCCESS:
+                return ResponseEntity.ok("Article deleted successfully");
+            default:
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Unknown error");
+        }
+
     }
 
     // Get articles by user UUID
