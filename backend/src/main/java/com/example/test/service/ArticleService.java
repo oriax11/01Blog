@@ -19,10 +19,6 @@ public class ArticleService {
         this.articleRepository = articleRepository;
     }
 
-    // Create
-    // public Article createArticle(Article article) {
-    // return articleRepository.save(article);
-    // }
 
     public ArticleDTO createArticle(Article article) {
         Article saved = articleRepository.save(article);
@@ -70,4 +66,6 @@ public class ArticleService {
         }
         articleRepository.deleteById(id);
     }
+
+    
 }

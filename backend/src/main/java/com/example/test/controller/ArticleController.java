@@ -88,4 +88,13 @@ public class ArticleController {
         articleService.deleteArticle(id, username);
         return ResponseEntity.noContent().build();
     }
+
+    // Get articles by user UUID
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<Article>> getArticlesByUser(@PathVariable UUID userId) {
+
+        User user = userService.getUserEntityById(userId);
+        List<Article> articles = user.getArticles();
+        return ResponseEntity.ok(articles);
+    }
 }

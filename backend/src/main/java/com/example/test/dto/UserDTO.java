@@ -9,22 +9,24 @@ public class UserDTO {
     private String username;
     private String email;
     private Integer articlesCount;
-    private Integer commentsCount;
+    private Integer followersCount;
+    private Integer followingCount;
     private Set<String> roles;
 
     // Constructors
     public UserDTO() {
     }
 
-    public UserDTO(UUID id, String name, String username, String email, 
-                   Integer articlesCount, Integer commentsCount, Set<String> roles) {
+    public UserDTO(UUID id, String name, String username, String email,
+            Integer articlesCount, Integer followersCount, Integer followingCount, Set<String> roles) {
         this.id = id;
         this.name = name;
         this.username = username;
         this.email = email;
         this.articlesCount = articlesCount;
-        this.commentsCount = commentsCount;
         this.roles = roles;
+        this.followersCount = followersCount;
+        this.followingCount = followingCount;
     }
 
     // Getters and Setters
@@ -68,12 +70,20 @@ public class UserDTO {
         this.articlesCount = articlesCount;
     }
 
-    public Integer getcommentsCount() {
-        return commentsCount;
+    public Integer getFollowersCount() {
+        return followersCount;
     }
 
-    public void setcommentsCount(Integer commentsCount) {
-        this.commentsCount = commentsCount;
+    public void setFollowersCount(Integer followersCount) {
+        this.followersCount = followersCount;
+    }
+
+    public Integer getFollowingCount() {
+        return followingCount;
+    }
+
+    public void setFollowingCount(Integer followingCount) {
+        this.followingCount = followingCount;
     }
 
     public Set<String> getRoles() {

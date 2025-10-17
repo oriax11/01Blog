@@ -23,11 +23,15 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("User not found with username: " + username));
     }
 
-    public UserDTO getUserById(UUID id) {
-        User user = userRepository.findById(id)
+    public UserDTO getUserDTOById(UUID id) {
+        return userRepository.findById(id)
+                .map(this::convertToDTO)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+    }
 
-        return convertToDTO(user);
+    public User getUserEntityById(UUID id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
     }
 
     private UserDTO convertToDTO(User user) {
@@ -37,7 +41,8 @@ public class UserService {
                 user.getUsername(),
                 user.getEmail(),
                 user.getArticles() != null ? user.getArticles().size() : 0,
-                user.getComments() != null ? user.getComments().size() : 0,
+                user.getFollowers() != null ? user.getFollowers().size() : 0,
+                user.getFollowing() != null ? user.getFollowing().size() : 0,
                 user.getRoles().stream()
                         .map(Role::getName)
                         .collect(Collectors.toSet()));
