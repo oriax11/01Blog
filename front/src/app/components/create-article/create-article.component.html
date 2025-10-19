@@ -10,17 +10,23 @@
     <!-- Title -->
     <div class="form-group">
       <label for="title">Article Title</label>
-      <input 
-        type="text" 
-        id="title" 
-        placeholder="Enter article title.." 
-        required>
+      <input
+        type="text"
+        id="title"
+        placeholder="Enter article title.."
+        required
+        [(ngModel)]="article.title"
+      />
+      >
     </div>
 
     <!-- Upload Status -->
     <div class="upload-status" *ngIf="isUploading()">
       <span class="spinner"></span>
-      <span>Uploading {{ getUploadingCount() }} {{ getUploadingCount() === 1 ? 'file' : 'files' }}...</span>
+      <span
+        >Uploading {{ getUploadingCount() }}
+        {{ getUploadingCount() === 1 ? 'file' : 'files' }}...</span
+      >
     </div>
 
     <!-- Quill Editor -->
@@ -34,23 +40,15 @@
     <!-- File Counter -->
     <div class="file-info" *ngIf="extractFileUrls().length > 0">
       <span class="file-count">
-        📎 {{ extractFileUrls().length }} {{ extractFileUrls().length === 1 ? 'file' : 'files' }} attached
+        📎 {{ extractFileUrls().length }}
+        {{ extractFileUrls().length === 1 ? 'file' : 'files' }} attached
       </span>
     </div>
 
     <!-- Submit Actions -->
     <div class="form-actions">
-      <button 
-        type="button"
-        class="btn-secondary" 
-        (click)="clearEditor()">
-        CLEAR
-      </button>
-      <button 
-        type="button"
-        class="btn-primary" 
-        (click)="submitPost()"
-        [disabled]="isUploading()">
+      <button type="button" class="btn-secondary" (click)="clearEditor()">CLEAR</button>
+      <button type="button" class="btn-primary" (click)="submitPost()" [disabled]="isUploading()">
         SUBMIT
       </button>
     </div>

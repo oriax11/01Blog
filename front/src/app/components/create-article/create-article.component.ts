@@ -3,6 +3,10 @@ import Quill from 'quill';
 import { MediaUploadService, MediaUploadResponse } from '../../services/media.service';
 import { finalize } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
+import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import { ArticleService } from '../../services/article.service';
+import { FormsModule } from '@angular/forms';
 
 interface UploadingFile {
   id: string;
@@ -14,6 +18,7 @@ interface UploadingFile {
 
 @Component({
   selector: 'app-post-editor',
+  imports: [CommonModule, FormsModule],
   templateUrl: './create-article.component.html',
   styleUrls: ['./create-article.component.css'],
 })
@@ -25,7 +30,17 @@ export class PostEditorComponent implements OnInit, OnDestroy {
   uploadingFiles = new Map<string, UploadingFile>(); // Track uploading files
   uploadedFiles = new Map<string, string>(); // Map temp URL to server URL
 
-  constructor(private mediaUploadService: MediaUploadService) {}
+  constructor(
+    private mediaUploadService: MediaUploadService,
+    private articleService: ArticleService,
+    private router: Router
+  ) {}
+
+  article: any = {
+    title: '',
+    content: '',
+    author: null,
+  };
 
   ngOnInit() {
     this.initializeQuillEditor();
@@ -90,10 +105,12 @@ export class PostEditorComponent implements OnInit, OnDestroy {
 
       // Create temporary blob URL for immediate preview
       const tempUrl = URL.createObjectURL(file);
+      console.log(tempUrl);
       const uploadId = `upload_${Date.now()}_${Math.random()}`;
 
       // Insert media immediately with temp URL
-      this.quillEditor.insertEmbed(range.index, type, tempUrl);
+
+      this.quillEditor.insertEmbed(range.index, type, uploadId);
 
       // Move cursor after the inserted media
       this.quillEditor.setSelection(range.index + 1, 0);
@@ -126,13 +143,14 @@ export class PostEditorComponent implements OnInit, OnDestroy {
           console.log('Upload successful:', response);
 
           // Build full URL for media preview
-          const serverUrl = `${environment.apiUrl.replace('/api/media', '')}${response.fileUrl}`;
+          const serverUrl = `${environment.apiUrl}/api/media${response.fileUrl}`;
 
           // Store mapping from temp URL to server URL
           this.uploadedFiles.set(tempUrl, serverUrl);
+          console.log('link : ', serverUrl);
 
           // Replace temp URL with server URL in editor
-          this.replaceUrlInEditor(tempUrl, serverUrl, type);
+          this.replaceUrlInEditor(uploadId, serverUrl, type);
 
           // Clean up blob URL
           URL.revokeObjectURL(tempUrl);
@@ -158,6 +176,7 @@ export class PostEditorComponent implements OnInit, OnDestroy {
     const delta = this.quillEditor.getContents();
     let position = 0;
     let found = false;
+    console.log(delta);
 
     for (let i = 0; i < delta.ops!.length; i++) {
       const op = delta.ops![i];
@@ -173,6 +192,7 @@ export class PostEditorComponent implements OnInit, OnDestroy {
 
           // Insert new embed with server URL
           this.quillEditor.insertEmbed(position, type, newUrl, 'silent');
+          console.log('new here :' + newUrl);
 
           found = true;
           break;
@@ -420,14 +440,11 @@ export class CreateArticleComponent implements AfterViewInit, OnInit {
 
     console.log('Post content:', content);
     console.log('File URLs:', fileUrls);
+    this.article.content = content;
 
-    // TODO: Send to backend
-    // POST /api/posts
-    // {
-    //   content: content,
-    //   fileUrls: fileUrls
-    // }
-    // Backend will associate these URLs with the post
+    this.articleService.createArticle(this.article).subscribe(() => {
+      this.router.navigate(['/home']);
+    });
   }
 
   /**
