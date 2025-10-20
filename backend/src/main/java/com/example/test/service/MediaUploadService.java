@@ -157,4 +157,38 @@ public class MediaUploadService {
                 upload.getCreatedAt(),
                 upload.getTmp());
     }
+
+    public List<String> getFileUrlsByPostId(Long postId) {
+        return mediaUploadRepository.findByPostId(postId)
+                .stream()
+                .map(MediaUpload::getFileUrl)
+                .collect(Collectors.toList());
+    }
+
+    public void updateMediaForArticle(List<String> addedUrls, List<String> removedUrls, Long articleId, UUID userId)
+            throws IOException {
+        // Associate new files
+
+        if (addedUrls != null) {
+            for (String url : addedUrls) {
+                MediaUpload upload = mediaUploadRepository.findByFileUrl(url)
+                        .orElseThrow(() -> new IllegalArgumentException("File not found: " + url));
+                upload.setPostId(articleId);
+                upload.setUserId(userId);
+                mediaUploadRepository.save(upload);
+            }
+        }
+
+        // Remove disassociated files
+        if (removedUrls != null) {
+            for (String url : removedUrls) {
+                MediaUpload upload = mediaUploadRepository.findByFileUrl(url)
+                        .orElseThrow(() -> new IllegalArgumentException("File not found: " + url));
+                upload.setPostId(null);
+                upload.setTmp(true);
+                mediaUploadRepository.save(upload);
+            }
+        }
+    }
+
 }

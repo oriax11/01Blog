@@ -5,6 +5,7 @@ import { PostEditorComponent } from './components/create-article/create-article.
 import { ArticleDetailComponent } from './components/article-detail/article-detail.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
+import { EditArticleComponent } from './components/edit-article/edit-article.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -12,7 +13,8 @@ export const routes: Routes = [
   { path: 'profile/:username', component: ProfileComponent },
   { path: 'create', component: PostEditorComponent },
   { path: 'article/:id', component: ArticleDetailComponent },
+  { path: 'edit/:id', component: EditArticleComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: '**', redirectTo: '' }
+  { path: '**', redirectTo: '' },
 ];

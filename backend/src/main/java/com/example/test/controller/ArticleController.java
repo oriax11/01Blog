@@ -4,6 +4,7 @@ import com.example.test.dto.ArticleDTO;
 import com.example.test.model.Article;
 import com.example.test.dto.ArticleRequest;
 import com.example.test.model.User;
+import com.example.test.repository.MediaUploadRepository;
 import com.example.test.service.ArticleService;
 import com.example.test.service.ArticleService.DeleteArticleResult;
 import com.example.test.service.MediaUploadService;
@@ -18,7 +19,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import com.example.test.utils.MediaUtils;
 
 @RestController
 @RequestMapping("/api/articles")
@@ -89,7 +92,7 @@ public class ArticleController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Article> updateArticle(@PathVariable Long id,
-            @Valid @RequestBody ArticleRequest article,
+            @Valid @RequestBody ArticleRequest request,
             Authentication authentication) {
         String username = authentication.getName();
         User user = userService.findByUsername(username);
@@ -98,7 +101,27 @@ public class ArticleController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        Article updated = articleService.updateArticle(id, article, username);
+        Optional<Article> originalOpt = articleService.getArticleById(id);
+        if (originalOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        Article original = originalOpt.get();
+        Article updated = articleService.updateArticle(id, request, username);
+
+        List<String> oldUrls = mediaUploadService.getFileUrlsByPostId(original.getId());
+        List<String> newUrls = request.getFileUrls();
+
+        MediaUtils.UrlDiff diff = MediaUtils.diffUrls(oldUrls, newUrls);
+
+        try {
+            mediaUploadService.updateMediaForArticle(diff.getAdded(), diff.getRemoved(), updated.getId(), user.getId());
+        } catch (IOException e) {
+            System.err.println("Error updating media for article " + updated.getId() + ": " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+
         return ResponseEntity.ok(updated);
     }
 
