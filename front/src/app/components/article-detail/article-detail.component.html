@@ -1,25 +1,35 @@
 <div class="article-detail-container" *ngIf="article">
   <article class="article">
     <header class="article-header">
-      <div class="article-meta">
-        <span class="date">{{ article.createdAt | date : 'MMMM dd, yyyy' }}</span>
-      </div>
+      <div>
+        <div class="article-meta">
+          <span class="date">{{ article.createdAt | date : 'MMMM dd, yyyy' }}</span>
+        </div>
 
-      <h1 class="article-title">{{ article.title }}</h1>
+        <h1 class="article-title">{{ article.title }}</h1>
 
-      <div class="author-info">
-        <img
-          [src]="article.creator.avatarUrl"
-          [alt]="article.creator.username"
-          class="author-avatar"
-        />
-        <div class="author-details">
-          <span class="author-name">{{ article.creator.username }}</span>
-          <span class="read-time">5 min read</span>
+        <div class="author-info">
+          <img
+            [src]="article.creator.avatarUrl"
+            [alt]="article.creator.username"
+            class="author-avatar"
+          />
+          <div class="author-details">
+            <span class="author-name">{{ article.creator.username }}</span>
+            <span class="read-time">5 min read</span>
+          </div>
         </div>
       </div>
       <div class="dropdown">
-        <button class="dropdown-toggle" (click)="toggleDropdown($event)">...</button>
+        <button class="dropdown-toggle" (click)="toggleDropdown($event)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24">
+            <title>Three Dots Dropdown</title>
+            <circle cx="12" cy="12" r="10" fill="none" stroke="#00A550" stroke-width="2" />
+            <circle cx="8" cy="12" r="1.2" fill="#00A550" />
+            <circle cx="12" cy="12" r="1.2" fill="#00A550" />
+            <circle cx="16" cy="12" r="1.2" fill="#00A550" />
+          </svg>
+        </button>
         <div class="dropdown-menu" *ngIf="isDropdownOpen">
           <a class="dropdown-item" *ngIf="isAuthor()" (click)="edit($event)">Edit</a>
           <a class="dropdown-item" *ngIf="isAuthor()" (click)="delete($event)">Delete</a>

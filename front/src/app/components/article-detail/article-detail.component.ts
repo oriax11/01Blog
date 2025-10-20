@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { ArticleService } from '../../services/article.service';
@@ -25,6 +25,7 @@ export class ArticleDetailComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.currentUserId = this.authService.getUserId();
     const articleId = this.route.snapshot.paramMap.get('id');
     if (articleId) {
       this.articleService.getArticleById(articleId).subscribe((article) => {
@@ -32,9 +33,16 @@ export class ArticleDetailComponent implements OnInit {
       });
     }
   }
+  // This listens for clicks anywhere in the document
+  @HostListener('document:click', ['$event'])
+  closeDropdown(event: MouseEvent) {
+    // Close only if it's open and the click is *outside* the dropdown
+    if (this.isDropdownOpen) {
+      this.isDropdownOpen = false;
+    }
+  }
 
   isAuthor(): boolean {
-    console.log(this.currentUserId, this.article.creator.id);
     if (!this.currentUserId || !this.article.creator) {
       return false;
     }

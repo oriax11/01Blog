@@ -15,8 +15,12 @@
 }
 
 .article-header {
+  display: flex;
+  align-items: center; /* vertically center items */
+  justify-content: space-between; /* optional: space between left and right */
   margin-bottom: 2rem;
 }
+
 
 .article-meta {
   display: flex;
