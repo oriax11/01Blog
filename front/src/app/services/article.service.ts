@@ -39,4 +39,11 @@ export class ArticleService {
       this.authService.getAuthHeaders()
     );
   }
+  updateArticle(id: string, updatedArticle: Partial<Article>): Observable<Article> {
+    return this.http.put<Article>(
+      `${environment.apiUrl}/api/articles/${id}`,
+      updatedArticle,
+      this.authService.getAuthHeaders()
+    );
+  }
 }

@@ -1,8 +1,8 @@
 <div class="create-container">
   <!-- Header -->
   <div class="create-header">
-    <h1>Create <span class="accent">Article</span></h1>
-    <p>Share your thoughts with the world</p>
+    <h1>Edit <span class="accent">Article</span></h1>
+    <p>Refine your thoughts and share them with the world</p>
   </div>
 
   <!-- Form -->
@@ -48,8 +48,8 @@
     <!-- Submit Actions -->
     <div class="form-actions">
       <button type="button" class="btn-secondary" (click)="clearEditor()">CLEAR</button>
-      <button type="button" class="btn-primary" (click)="submitPost()" [disabled]="isUploading()">
-        SUBMIT
+      <button type="button" class="btn-primary" (click)="updatePost()" [disabled]="isUploading()">
+        UPDATE
       </button>
     </div>
   </div>
