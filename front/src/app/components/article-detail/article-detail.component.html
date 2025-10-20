@@ -2,22 +2,34 @@
   <article class="article">
     <header class="article-header">
       <div class="article-meta">
-        <span class="date">{{ article.createdAt | date:'MMMM dd, yyyy' }}</span>
+        <span class="date">{{ article.createdAt | date : 'MMMM dd, yyyy' }}</span>
       </div>
 
       <h1 class="article-title">{{ article.title }}</h1>
 
       <div class="author-info">
-        <img [src]="article.creator.avatarUrl" [alt]="article.creator.username" class="author-avatar">
+        <img
+          [src]="article.creator.avatarUrl"
+          [alt]="article.creator.username"
+          class="author-avatar"
+        />
         <div class="author-details">
           <span class="author-name">{{ article.creator.username }}</span>
           <span class="read-time">5 min read</span>
         </div>
       </div>
+      <div class="dropdown">
+        <button class="dropdown-toggle" (click)="toggleDropdown($event)">...</button>
+        <div class="dropdown-menu" *ngIf="isDropdownOpen">
+          <a class="dropdown-item" *ngIf="isAuthor()" (click)="edit($event)">Edit</a>
+          <a class="dropdown-item" *ngIf="isAuthor()" (click)="delete($event)">Delete</a>
+          <a class="dropdown-item" *ngIf="!isAuthor()" (click)="report($event)">Report</a>
+        </div>
+      </div>
     </header>
 
     <div class="article-image" *ngIf="article.imageUrl">
-      <img [src]="article.imageUrl" [alt]="article.title">
+      <img [src]="article.imageUrl" [alt]="article.title" />
     </div>
 
     <div class="article-content" class="ql-editor" [innerHTML]="article.content"></div>
@@ -28,8 +40,6 @@
         <button class="stat-btn">💬 {{ article.commentsCount }}</button>
         <button class="stat-btn">🔗 Share</button>
       </div>
-
-
     </footer>
   </article>
 </div>

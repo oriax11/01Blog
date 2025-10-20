@@ -1,25 +1,29 @@
 <div class="article-card" [routerLink]="['/article/', article.id]">
-      <div class="article-image" *ngIf="article.imageUrl">
-        <img [src]="article.imageUrl" [alt]="article.title">
+  <div class="article-image" *ngIf="article.imageUrl">
+    <img [src]="article.imageUrl" [alt]="article.title" />
+  </div>
+
+  <div class="article-content">
+    <div class="article-meta">
+      <span class="date">{{ article.createdAt | date : 'MMM dd, yyyy' }}</span>
+    </div>
+
+    <h3 class="article-title">{{ article.title }}</h3>
+
+    <div class="article-footer">
+      <div class="author">
+        <img
+          [src]="article.creator.avatarUrl"
+          [alt]="article.creator.username"
+          class="author-avatar"
+        />
+        <span class="author-name">{{ article.creator.username }}</span>
       </div>
-      
-      <div class="article-content">
-        <div class="article-meta">
-          <span class="date">{{ article.createdAt | date:'MMM dd, yyyy' }}</span>
-        </div>
-        
-        <h3 class="article-title">{{ article.title }}</h3>
-        
-        <div class="article-footer">
-          <div class="author">
-            <img [src]="article.creator.avatarUrl" [alt]="article.creator.username" class="author-avatar">
-            <span class="author-name">{{ article.creator.username }}</span>
-          </div>
-          
-          <div class="article-stats">
-            <span class="stat">❤️ {{ article.likeCount }}</span>
-            <span class="stat">💬 {{ article.commentsCount }}</span>
-          </div>
-        </div>
+
+      <div class="article-stats">
+        <span class="stat">❤️ {{ article.likeCount }}</span>
+        <span class="stat">💬 {{ article.commentsCount }}</span>
       </div>
     </div>
+  </div>
+</div>
