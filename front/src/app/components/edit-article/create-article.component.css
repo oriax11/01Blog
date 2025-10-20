@@ -1,0 +1,363 @@
+.create-container {
+  min-height: 100vh;
+  background-color: #1a1a1a;
+  padding: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.create-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.create-header h1 {
+  font-family: 'Courier New', monospace;
+  font-size: 3rem;
+  font-weight: bold;
+  color: #ffffff;
+  margin: 0 0 1rem 0;
+}
+
+.accent {
+  color: #22c55e;
+}
+
+.create-header p {
+  color: #d1d5db;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.create-form {
+  background-color: #1f1f1f;
+  border-radius: 1rem;
+  padding: 3rem;
+  border: 1px solid #333333;
+}
+
+.form-group {
+  margin-bottom: 2rem;
+}
+
+label {
+  display: block;
+  color: #22c55e;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.9rem;
+}
+
+input[type='text'] {
+  width: 100%;
+  background-color: #2d2d2d;
+  border: 2px solid #333333;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  color: #ffffff;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+input[type='text']:focus {
+  outline: none;
+  border-color: #22c55e;
+}
+
+input[type='text']::placeholder {
+  color: #9ca3af;
+}
+
+/* Upload Status */
+.upload-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #22c55e;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 12px 20px;
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(34, 197, 94, 0.3);
+  border-top: 2px solid #22c55e;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Quill Editor Wrapper */
+.editor-wrapper {
+  background-color: #2d2d2d;
+  border: 2px solid #333333;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  transition: border-color 0.3s ease;
+}
+
+.editor-wrapper:focus-within {
+  border-color: #22c55e;
+}
+
+.quill-editor {
+  min-height: 400px;
+  background-color: #2d2d2d;
+}
+
+/* File Info */
+.file-info {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.file-count {
+  display: inline-block;
+  font-size: 14px;
+  color: #d1d5db;
+  padding: 8px 16px;
+  background-color: #2d2d2d;
+  border: 1px solid #333333;
+  border-radius: 0.5rem;
+}
+
+/* Form Actions */
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 3rem;
+}
+
+.btn-secondary,
+.btn-primary {
+  padding: 1rem 2rem;
+  border-radius: 0.5rem;
+  font-weight: bold;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 140px;
+}
+
+.btn-secondary {
+  background-color: #2d2d2d;
+  color: #e5e7eb;
+  border: 2px solid #333333;
+}
+
+.btn-secondary:hover {
+  border-color: #22c55e;
+  color: #22c55e;
+  transform: translateY(-2px);
+}
+
+.btn-primary {
+  background-color: #22c55e;
+  color: #000000;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: #16a34a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);
+}
+
+.btn-primary:disabled {
+  background-color: #4b5563;
+  color: #9ca3af;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.btn-spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(0, 0, 0, 0.3);
+  border-top: 2px solid #000000;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  margin-right: 8px;
+}
+
+/* Quill Toolbar Customization */
+:host ::ng-deep .ql-toolbar.ql-snow {
+  background-color: #1f1f1f;
+  border: none;
+  border-bottom: 1px solid #333333;
+  padding: 12px 8px;
+}
+
+:host ::ng-deep .ql-toolbar .ql-stroke {
+  stroke: #9ca3af;
+}
+
+:host ::ng-deep .ql-toolbar .ql-fill {
+  fill: #9ca3af;
+}
+
+:host ::ng-deep .ql-toolbar .ql-picker-label {
+  color: #9ca3af;
+}
+
+:host ::ng-deep .ql-toolbar button:hover .ql-stroke,
+:host ::ng-deep .ql-toolbar button:focus .ql-stroke,
+:host ::ng-deep .ql-toolbar button.ql-active .ql-stroke {
+  stroke: #22c55e;
+}
+
+:host ::ng-deep .ql-toolbar button:hover .ql-fill,
+:host ::ng-deep .ql-toolbar button:focus .ql-fill,
+:host ::ng-deep .ql-toolbar button.ql-active .ql-fill {
+  fill: #22c55e;
+}
+
+:host ::ng-deep .ql-toolbar button:hover,
+:host ::ng-deep .ql-toolbar button:focus {
+  color: #22c55e;
+}
+
+/* Quill Container */
+:host ::ng-deep .ql-container.ql-snow {
+  border: none;
+  background-color: #2d2d2d;
+}
+
+:host ::ng-deep .ql-editor {
+  min-height: 400px;
+  padding: 20px;
+  color: #ffffff;
+  font-size: 16px;
+  line-height: 1.6;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+:host ::ng-deep .ql-editor.ql-blank::before {
+  color: #6b7280;
+  font-style: italic;
+}
+
+/* Media in Editor */
+:host ::ng-deep .ql-editor img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 10px 0;
+  display: block;
+  border: 2px solid #333333;
+  transition: border-color 0.3s ease;
+}
+
+:host ::ng-deep .ql-editor img:hover {
+  border-color: #22c55e;
+}
+
+:host ::ng-deep .ql-editor video {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 10px 0;
+  display: block;
+  border: 2px solid #333333;
+  background-color: #000000;
+}
+
+/* Loading state for uploading media */
+:host ::ng-deep .ql-editor img[src^="blob:"],
+:host ::ng-deep .ql-editor video[src^="blob:"] {
+  opacity: 0.6;
+  border-color: #22c55e;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { 
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 0.4;
+    transform: scale(0.98);
+  }
+}
+
+/* Quill Dropdown Menus */
+:host ::ng-deep .ql-picker-options {
+  background-color: #2d2d2d;
+  border: 1px solid #333333;
+  border-radius: 0.5rem;
+}
+
+:host ::ng-deep .ql-picker-item {
+  color: #9ca3af;
+}
+
+:host ::ng-deep .ql-picker-item:hover {
+  color: #22c55e;
+}
+
+/* Scrollbar Customization */
+:host ::ng-deep .ql-editor::-webkit-scrollbar {
+  width: 8px;
+}
+
+:host ::ng-deep .ql-editor::-webkit-scrollbar-track {
+  background: #1f1f1f;
+}
+
+:host ::ng-deep .ql-editor::-webkit-scrollbar-thumb {
+  background: #333333;
+  border-radius: 4px;
+}
+
+:host ::ng-deep .ql-editor::-webkit-scrollbar-thumb:hover {
+  background: #22c55e;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .create-container {
+    padding: 1rem;
+  }
+
+  .create-header h1 {
+    font-size: 2rem;
+  }
+
+  .create-form {
+    padding: 1.5rem;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .btn-secondary,
+  .btn-primary {
+    width: 100%;
+  }
+
+  :host ::ng-deep .ql-editor {
+    min-height: 300px;
+    padding: 15px;
+  }
+}

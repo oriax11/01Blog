@@ -6,6 +6,7 @@ import com.example.test.dto.ArticleRequest;
 import com.example.test.model.User;
 import com.example.test.service.ArticleService;
 import com.example.test.service.ArticleService.DeleteArticleResult;
+import com.example.test.service.MediaUploadService;
 import com.example.test.service.UserService;
 
 import jakarta.validation.Valid;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,29 +26,53 @@ public class ArticleController {
 
     private final ArticleService articleService;
     private final UserService userService;
+    private final MediaUploadService mediaUploadService;
 
-    public ArticleController(ArticleService articleService, UserService userService) {
+    public ArticleController(ArticleService articleService, UserService userService,
+            MediaUploadService mediaUploadService) {
         this.articleService = articleService;
         this.userService = userService;
+        this.mediaUploadService = mediaUploadService;
     }
 
     @PostMapping
     public ResponseEntity<ArticleDTO> createArticle(@Valid @RequestBody ArticleRequest request,
             Authentication authentication) {
-        String username = authentication.getName();
-        User user = userService.findByUsername(username);
+        // Ensure the user is authenticated
+        String username = authentication != null ? authentication.getName() : null;
+        if (username == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
+        User user = userService.findByUsername(username);
         if (user == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
+        // Build the article entity
         Article article = new Article();
         article.setTitle(request.getTitle());
         article.setContent(request.getContent());
         article.setCreator(user);
 
+        // Save the article
         ArticleDTO saved = articleService.createArticle(article);
-        return new ResponseEntity<>(saved, HttpStatus.CREATED);
+
+        // Associate uploaded files (if any)
+        List<String> fileUrls = request.getFileUrls();
+        if (fileUrls != null && !fileUrls.isEmpty()) {
+            try {
+                mediaUploadService.associateFilesWithPost(fileUrls, saved.getId(), user.getId());
+            } catch (IOException e) {
+                // Log the error instead of swallowing it silently
+                System.err.println("Error associating media with article " + saved.getId() + ": " + e.getMessage());
+                e.printStackTrace();
+                // Optional: return an error response instead
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
     @GetMapping
