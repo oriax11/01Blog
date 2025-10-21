@@ -1,16 +1,26 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private tokenKey = 'auth_token';
+  public currentUser: BehaviorSubject<any | null>;
 
-  constructor() {}
+  constructor() {
+    this.currentUser = new BehaviorSubject<any | null>(null);
+    if (this.isLoggedIn()) {
+      const userId = this.getUserId();
+      this.currentUser.next({ username: userId });
+    }
+  }
 
   setToken(token: string): void {
     localStorage.setItem(this.tokenKey, token);
+    const userId = this.getUserId();
+    this.currentUser.next({ username: userId });
   }
 
   getToken(): string | null {
@@ -58,6 +68,7 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem(this.tokenKey);
+    this.currentUser.next(null);
   }
 
   getAuthHeaders(): { headers: HttpHeaders } {

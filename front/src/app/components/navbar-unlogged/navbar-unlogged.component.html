@@ -1,21 +1,17 @@
-<nav class="navbar">
-  <div class="nav-container">
-    <div class="nav-brand">
-      <a routerLink="/" class="brand-link">
-        <span class="brand-text">01</span>
-        <span class="brand-accent">Blog</span>
-      </a>
-    </div>
-<!-- 
-    <div class="nav-search">
-      <input type="text" placeholder="Search..." class="search-input">
-    </div> -->
+<mat-toolbar color="primary" class="navbar">
+  <button mat-icon-button class="menu-icon" (click)="toggleSidenav.emit()">
+    <mat-icon>menu</mat-icon>
+  </button>
 
-    <div class="nav-user">
-      <div class="user-actions">
-        <a routerLink="/login" class="nav-link">Login</a>
-        <a routerLink="/register" class="nav-link">Register</a>
-      </div>
-    </div>
-  </div>
-</nav>
+  <span class="nav-brand">
+    <a routerLink="/" class="brand-link">
+      <span class="brand-text">01</span>
+      <span class="brand-accent">Blog</span>
+    </a>
+  </span>
+
+  <span class="nav-user">
+    <button mat-button routerLink="/login" class="nav-link">Login</button>
+    <button mat-button routerLink="/register" class="nav-link">Register</button>
+  </span>
+</mat-toolbar>
