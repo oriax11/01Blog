@@ -62,11 +62,13 @@ public class User {
     private Set<Role> roles = new HashSet<>();
 
     // Users this user is following
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "user_follows", joinColumns = @JoinColumn(name = "follower_id"), inverseJoinColumns = @JoinColumn(name = "following_id"))
     private Set<User> following = new HashSet<>();
 
     // Users following this user
+    @JsonIgnore
     @ManyToMany(mappedBy = "following")
     private Set<User> followers = new HashSet<>();
 

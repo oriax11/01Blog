@@ -73,4 +73,8 @@ export class ArticleDetailComponent implements OnInit {
     event.stopPropagation();
     alert('This article has been reported.');
   }
+
+  goToAuthorProfile() {
+    this.router.navigate(['/profile', this.article.creator.id]);
+  }
 }

@@ -20,10 +20,7 @@
         </div>
       </div>
     </div>
-    <button
-      (click)="toggleFollow()"
-      [ngClass]="{ 'follow-btn': !isFollowing, 'unfollow-btn': isFollowing }"
-    >
+    <button (click)="toggleFollow()" class="follow-btn">
       {{ isFollowing ? 'Unfollow' : 'Follow' }}
     </button>
   </div>

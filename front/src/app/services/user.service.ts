@@ -21,10 +21,9 @@ export class UserService {
     );
   }
 
-  unfollowUser(userId: string): Observable<any> {
-    return this.http.post(
+  unfollowUser(userId: string): Observable<void> {
+    return this.http.delete<void>(
       `${environment.apiUrl}/api/users/${userId}/unfollow`,
-      {},
       this.authService.getAuthHeaders()
     );
   }

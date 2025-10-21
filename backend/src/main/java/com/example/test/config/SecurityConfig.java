@@ -71,7 +71,9 @@ public class SecurityConfig {
                 .headers(headers -> headers
                         .frameOptions(frame -> frame.sameOrigin()) // <-- allow iframes from same origin
                 )
-                .authorizeHttpRequests((authorize) -> authorize.requestMatchers(HttpMethod.GET, "/api/**").permitAll()
+                .authorizeHttpRequests((authorize) -> authorize
+                        .requestMatchers(HttpMethod.GET, "/api/articles/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/users/{id:[0-9a-fA-F\\-]+}").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(exception -> exception

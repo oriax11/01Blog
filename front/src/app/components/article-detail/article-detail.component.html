@@ -8,7 +8,7 @@
 
         <h1 class="article-title">{{ article.title }}</h1>
 
-        <div class="author-info">
+        <div class="author-info" (click)="goToAuthorProfile()" style="cursor: pointer;">
           <img
             [src]="article.creator.avatarUrl"
             [alt]="article.creator.username"
