@@ -54,6 +54,9 @@ public class UserService {
     public void unfollow(String followerUsername, UUID followeeId) {
         User follower = findByUsername(followerUsername);
         User followee = getUserEntityById(followeeId);
+        if (follower.getId().equals(followee.getId())) {
+            throw new IllegalArgumentException("You cannot unfollow yourself.");
+        }
 
         follower.getFollowing().remove(followee);
         followee.getFollowers().remove(follower);
