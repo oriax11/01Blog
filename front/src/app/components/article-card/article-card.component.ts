@@ -28,7 +28,6 @@ export class ArticleCardComponent implements OnInit {
   }
 
   isAuthor(): boolean {
-    console.log(this.currentUserId, this.article.creator.id);
     if (!this.currentUserId || !this.article.creator) {
       return false;
     }

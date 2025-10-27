@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -37,14 +39,9 @@ public class Article {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "like_count", nullable = false)
-    private Integer likeCount = 0;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Comment> comments = new HashSet<>();
-    
-
-
 
     // Constructors
     public Article() {
@@ -97,14 +94,6 @@ public class Article {
         this.createdAt = createdAt;
     }
 
-    public Integer getLikeCount() {
-        return likeCount;
-    }
-
-    public void setLikeCount(Integer likeCount) {
-        this.likeCount = likeCount;
-    }
-
     public Set<Comment> getComments() {
         return comments;
     }
@@ -112,6 +101,5 @@ public class Article {
     public void setComments(Set<Comment> comments) {
         this.comments = comments;
     }
-
 
 }

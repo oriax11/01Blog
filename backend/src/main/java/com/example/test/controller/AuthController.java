@@ -8,7 +8,6 @@ import com.example.test.dto.RegisterDto;
 import com.example.test.service.AuthService;
 
 import jakarta.validation.Valid;
-import lombok.val;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,6 +42,4 @@ public class AuthController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    // TODO: Create a seed endpoint to populate the database with initial data, like
-    // roles.
 }

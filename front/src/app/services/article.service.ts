@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Article } from '../models/article.model';
-import { Observable } from 'rxjs';
+import { Observable, Observer } from 'rxjs';
 import { environment } from '../../../src/environments/environment';
 import { AuthService } from './auth.service';
+import { Comment } from '../models/article.model';
 
 @Injectable({
   providedIn: 'root',
@@ -14,6 +15,12 @@ export class ArticleService {
   getArticles(): Observable<Article[]> {
     return this.http.get<Article[]>(
       `${environment.apiUrl}/api/articles`,
+      this.authService.getAuthHeaders()
+    );
+  }
+  getComments(id: string): Observable<Comment[]> {
+    return this.http.get<Comment[]>(
+      `${environment.apiUrl}/api/articles/${id}/comments`,
       this.authService.getAuthHeaders()
     );
   }
@@ -36,6 +43,14 @@ export class ArticleService {
     return this.http.post<Article>(
       `${environment.apiUrl}/api/articles`,
       article,
+      this.authService.getAuthHeaders()
+    );
+  }
+
+  addComment(postId: String, content: String): Observable<Comment> {
+    return this.http.post<Comment>(
+      `${environment.apiUrl}/api/articles/${postId}/comments`,
+      {content},
       this.authService.getAuthHeaders()
     );
   }

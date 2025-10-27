@@ -4,11 +4,12 @@ import { ActivatedRoute, Route, Router } from '@angular/router';
 import { ArticleService } from '../../services/article.service';
 import { Article } from '../../models/article.model';
 import { AuthService } from '../../services/auth.service';
+import { CommentSectionComponent } from '../comment-section/comment-section.component';
 
 @Component({
   selector: 'app-article-detail',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CommentSectionComponent],
   templateUrl: './article-detail.component.html',
   styleUrls: ['./article-detail.component.css'],
 })

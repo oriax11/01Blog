@@ -79,7 +79,6 @@ public class AuthServiceImpl implements AuthService {
         user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
 
         Set<Role> roles = new HashSet<>();
-        // TODO: This is a temporary way to assign roles. You should create a /seed
         // endpoint for the roles or something similar
         Role userRole = roleRepository.findByName("ROLE_USER").get();
         roles.add(userRole);

@@ -59,7 +59,7 @@ public class ArticleController {
         article.setCreator(user);
 
         // Save the article
-        ArticleDTO saved = articleService.createArticle(article);
+        ArticleDTO saved = articleService.createArticle(article, user.getId());
 
         // Associate uploaded files (if any)
         List<String> fileUrls = request.getFileUrls();
@@ -79,13 +79,26 @@ public class ArticleController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Article>> getAllArticles() {
-        return ResponseEntity.ok(articleService.getAllArticles());
+    public ResponseEntity<List<Article>> getSubscribedArticles(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        String username = authentication.getName();
+        List<Article> response = articleService.getArticlesFromSubscribedUsers(username);
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Article> getArticleById(@PathVariable Long id) {
-        return articleService.getArticleById(id)
+    public ResponseEntity<ArticleDTO> getArticleById(@PathVariable Long id, Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        String username = authentication.getName();
+
+        return articleService.getArticleById(id, username)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }

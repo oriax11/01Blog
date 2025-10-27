@@ -57,6 +57,10 @@ public class User {
     private Set<Like> likes = new HashSet<>();
 
     @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<CommentLike> commentLikes = new HashSet<>();
+
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Set<Role> roles = new HashSet<>();
@@ -154,6 +158,14 @@ public class User {
 
     public void setLikes(Set<Like> likes) {
         this.likes = likes;
+    }
+
+    public Set<CommentLike> getCommentLikes() {
+        return commentLikes;
+    }
+
+    public void setCommentLikes(Set<CommentLike> commentLikes) {
+        this.commentLikes = commentLikes;
     }
 
     public Set<User> getFollowers() {

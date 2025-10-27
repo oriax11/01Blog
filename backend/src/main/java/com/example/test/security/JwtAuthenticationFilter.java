@@ -43,7 +43,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             // Load the user by ID instead of username
             UserDetails userDetails = userDetailsService.loadUserById(UUID.fromString(userId));
 
-
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                     userDetails,
                     null,

@@ -8,6 +8,7 @@ export interface Article {
   updatedAt: Date;
   likeCount: number;
   commentsCount: number;
+  isLiked?: boolean;
 }
 
 export interface User {
@@ -22,8 +23,11 @@ export interface User {
 
 export interface Comment {
   id: string;
+  commenterUsername: string;
+  commenterId: string;
+  avatarUrl?: string;
   content: string;
-  author: User;
-  articleId: string;
-  createdAt: Date;
+  timestamp: Date;
+  likes: number;
+  isLiked?: boolean;
 }

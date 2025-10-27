@@ -1,54 +1,35 @@
 package com.example.test.dto;
 
-import java.util.UUID;
+import java.time.LocalDateTime;
+import java.util.Date;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class ArticleDTO {
     private Long id;
     private String title;
     private String content;
-    private UUID authorId;
+    private UserDTO creator;
+    private LocalDateTime createdAt;
+    private int likeCount;
+    private int commentsCount;
+    private Boolean isLiked;
 
-    // Constructors
-    public ArticleDTO() {}
+    public ArticleDTO() {
+    }
 
-    public ArticleDTO(Long id, String title, String content, UUID authorId) {
+    public ArticleDTO(Long id, String title, String content, UserDTO creator,
+            LocalDateTime createdAt, int likeCount, int commentsCount, Boolean isLiked) {
         this.id = id;
         this.title = title;
         this.content = content;
-        this.authorId = authorId;
-    }
-    
-
-    // Getters and Setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public UUID getauthorId() {
-        return authorId;
-    }
-
-    public void setauthorId(UUID authorId) {
-        this.authorId = authorId;
+        this.creator = creator;
+        this.createdAt = createdAt;
+        this.likeCount = likeCount;
+        this.commentsCount = commentsCount;
+        this.isLiked = isLiked;
     }
 }

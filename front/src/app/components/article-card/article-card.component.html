@@ -1,6 +1,6 @@
 <div class="article-card" [routerLink]="['/article/', article.id]">
   <div class="article-image" *ngIf="article.imageUrl">
-    <img [src]="article.imageUrl" [alt]="article.title" />
+    <!-- <img [src]="article.imageUrl" [alt]="article.title" /> -->
   </div>
 
   <div class="article-content">
@@ -13,7 +13,7 @@
     <div class="article-footer">
       <div class="author">
         <img
-          [src]="article.creator.avatarUrl"
+          src="https://api.dicebear.com/9.x/identicon/svg?seed=Caleb"
           [alt]="article.creator.username"
           class="author-avatar"
         />

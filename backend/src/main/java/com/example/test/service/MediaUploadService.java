@@ -93,7 +93,7 @@ public class MediaUploadService {
      * Delete temporary file
      */
     @Transactional
-    public void deleteTemporaryFile(String fileUrl, Long userId) {
+    public void deleteTemporaryFile(String fileUrl, UUID userId) {
         MediaUpload upload = mediaUploadRepository.findByFileUrl(fileUrl)
                 .orElseThrow(() -> new IllegalArgumentException("File not found: " + fileUrl));
 
