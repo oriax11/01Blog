@@ -4,9 +4,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
-
-import org.hibernate.type.spi.CompositeTypeImplementor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +12,6 @@ import com.example.test.dto.ArticleRequest;
 import com.example.test.dto.UserDTO;
 import com.example.test.model.Article;
 import com.example.test.model.Like;
-import com.example.test.model.Role;
 import com.example.test.model.User;
 import com.example.test.repository.ArticleRepository;
 import com.example.test.repository.CommentRepository;
@@ -45,7 +41,7 @@ public class ArticleService {
 
     public ArticleDTO createArticle(Article article, UUID currentUserId) {
         Article saved = articleRepository.save(article);
-        User user = userRepository.getById(currentUserId);
+        User user = userRepository.getReferenceById(currentUserId);
 
         // Count likes from the Like table
         UserDTO creatorDTO = new UserDTO(
@@ -56,9 +52,7 @@ public class ArticleService {
                 user.getArticles() != null ? user.getArticles().size() : 0,
                 user.getFollowers() != null ? user.getFollowers().size() : 0,
                 user.getFollowing() != null ? user.getFollowing().size() : 0,
-                user.getRoles().stream()
-                        .map(Role::getName)
-                        .collect(Collectors.toSet()));
+                user.getRole());
 
         return new ArticleDTO(
                 saved.getId(),
@@ -147,7 +141,7 @@ public class ArticleService {
         return likeRepository.countByArticle(article);
     }
 
-    public List<Article> getArticlesFromSubscribedUsers(String username) {
+    public List<ArticleDTO> getArticlesFromSubscribedUsers(String username) {
         // 1. Find the logged-in user
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
@@ -156,7 +150,37 @@ public class ArticleService {
         Set<User> subscriptions = user.getFollowing();
 
         // 3. Fetch articles from those users
-        return articleRepository.findByCreatorIn(subscriptions);
+        List<Article> articles = articleRepository.findByCreatorIn(subscriptions);
+
+        // 4. Convert each Article to ArticleDTO
+        List<ArticleDTO> articleDTOs = articles.stream().map(article -> {
+            boolean isLiked = likeRepository.existsByArticleIdAndUserUsername(article.getId(), username);
+            int likeCount = likeRepository.countByArticleId(article.getId());
+            int commentsCount = commentRepository.countByArticleId(article.getId());
+
+            User creator = article.getCreator();
+            UserDTO creatorDTO = new UserDTO(
+                    creator.getId(),
+                    creator.getName(),
+                    creator.getUsername(),
+                    creator.getEmail(),
+                    creator.getArticles() != null ? creator.getArticles().size() : 0,
+                    creator.getFollowers() != null ? creator.getFollowers().size() : 0,
+                    creator.getFollowing() != null ? creator.getFollowing().size() : 0,
+                    creator.getRole());
+
+            return new ArticleDTO(
+                    article.getId(),
+                    article.getTitle(),
+                    article.getContent(),
+                    creatorDTO,
+                    article.getCreatedAt(),
+                    likeCount,
+                    commentsCount,
+                    isLiked);
+        }).toList();
+
+        return articleDTOs;
     }
 
     public Optional<ArticleDTO> getArticleById(Long id, String username) {
@@ -180,9 +204,7 @@ public class ArticleService {
                 user.getArticles() != null ? user.getArticles().size() : 0,
                 user.getFollowers() != null ? user.getFollowers().size() : 0,
                 user.getFollowing() != null ? user.getFollowing().size() : 0,
-                user.getRoles().stream()
-                        .map(Role::getName)
-                        .collect(Collectors.toSet()));
+                user.getRole());
 
         ArticleDTO dto = new ArticleDTO(
                 article.getId(),
@@ -195,6 +217,35 @@ public class ArticleService {
                 isLiked);
 
         return Optional.of(dto);
+    }
+
+    public List<ArticleDTO> getArticlesByUser(User user, String loggedUsername) {
+        return user.getArticles().stream().map(article -> {
+            boolean isLiked = likeRepository.existsByArticleIdAndUserUsername(article.getId(), loggedUsername);
+            int likeCount = likeRepository.countByArticleId(article.getId());
+            int commentsCount = commentRepository.countByArticleId(article.getId());
+
+            User creator = article.getCreator();
+            UserDTO creatorDTO = new UserDTO(
+                    creator.getId(),
+                    creator.getName(),
+                    creator.getUsername(),
+                    creator.getEmail(),
+                    creator.getArticles() != null ? creator.getArticles().size() : 0,
+                    creator.getFollowers() != null ? creator.getFollowers().size() : 0,
+                    creator.getFollowing() != null ? creator.getFollowing().size() : 0,
+                    creator.getRole());
+
+            return new ArticleDTO(
+                    article.getId(),
+                    article.getTitle(),
+                    article.getContent(),
+                    creatorDTO,
+                    article.getCreatedAt(),
+                    likeCount,
+                    commentsCount,
+                    isLiked);
+        }).toList();
     }
 
 }

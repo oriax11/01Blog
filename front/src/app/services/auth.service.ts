@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root',
@@ -34,11 +35,17 @@ export class AuthService {
       return false;
     }
 
-    if (this.isTokenExpired(token)) {
+    try {
+      const decodedToken: any = jwtDecode(token);
+      if (this.isTokenExpired(token)) {
+        this.logout();
+        return false;
+      }
+    } catch (error) {
+      // Invalid JWT: malformed or signature-tampered
       this.logout();
       return false;
     }
-
     return true;
   }
 
@@ -59,7 +66,6 @@ export class AuthService {
     }
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
-      console.log(payload);
       return payload.sub;
     } catch {
       return null;

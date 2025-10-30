@@ -12,13 +12,22 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterModule, MatToolbarModule, MatButtonModule, MatIconModule, MatInputModule, MatFormFieldModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatIconModule,
+    MatInputModule,
+    MatFormFieldModule,
+  ],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css'],
 })
 export class NavbarComponent implements OnInit {
   @Output() toggleSidenav = new EventEmitter<void>();
   username: string | null = null;
+  userId: string | null = null;
 
   constructor(private authService: AuthService, private router: Router) {}
 
@@ -26,7 +35,8 @@ export class NavbarComponent implements OnInit {
     const token = this.authService.getToken();
     if (token) {
       const decodedToken: any = jwtDecode(token);
-      this.username = decodedToken.sub;
+      this.userId = decodedToken.sub;
+      this.username = decodedToken.username;
     }
   }
 

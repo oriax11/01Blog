@@ -31,3 +31,37 @@ export interface Comment {
   likes: number;
   isLiked?: boolean;
 }
+export interface Report {
+  id: string;
+  type: 'user' | 'post';
+  targetId: string;
+  targetTitle: string;
+  reportedBy: string;
+  reason: string;
+  description: string;
+  status: 'pending' | 'resolved' | 'dismissed';
+  createdAt: Date;
+  resolvedAt?: Date;
+}
+
+export interface AdminStats {
+  totalUsers: number;
+  totalPosts: number;
+  totalReports: number;
+  activeUsers: number;
+  postsToday: number;
+  reportsToday: number;
+}
+
+export interface AdminUser extends User {
+  status: 'active' | 'banned' | 'suspended';
+  joinedAt: Date;
+  lastActive: Date;
+  reportCount: number;
+}
+
+export interface AdminPost extends Article {
+  status: 'published' | 'hidden' | 'deleted';
+  reportCount: number;
+  views: number;
+}

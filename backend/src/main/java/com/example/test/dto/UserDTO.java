@@ -1,7 +1,8 @@
 package com.example.test.dto;
 
-import java.util.Set;
 import java.util.UUID;
+
+import com.example.test.model.Role;
 
 public class UserDTO {
     private UUID id;
@@ -11,20 +12,20 @@ public class UserDTO {
     private Integer articlesCount;
     private Integer followersCount;
     private Integer followingCount;
-    private Set<String> roles;
+    private com.example.test.model.Role role;
 
     // Constructors
     public UserDTO() {
     }
 
     public UserDTO(UUID id, String name, String username, String email,
-            Integer articlesCount, Integer followersCount, Integer followingCount, Set<String> roles) {
+            Integer articlesCount, Integer followersCount, Integer followingCount, Role role) {
         this.id = id;
         this.name = name;
         this.username = username;
         this.email = email;
         this.articlesCount = articlesCount;
-        this.roles = roles;
+        this.role = role;
         this.followersCount = followersCount;
         this.followingCount = followingCount;
     }
@@ -86,11 +87,11 @@ public class UserDTO {
         this.followingCount = followingCount;
     }
 
-    public Set<String> getRoles() {
-        return roles;
+    public Role getRole() {
+        return role;
     }
 
-    public void setRoles(Set<String> roles) {
-        this.roles = roles;
+    public void setRoles(Role role) {
+        this.role = role;
     }
 }

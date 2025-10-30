@@ -1,14 +1,12 @@
 package com.example.test.service;
 
 import com.example.test.dto.UserDTO;
-import com.example.test.model.Role;
 import com.example.test.model.User;
 import com.example.test.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -82,8 +80,6 @@ public class UserService {
                 user.getArticles() != null ? user.getArticles().size() : 0,
                 user.getFollowers() != null ? user.getFollowers().size() : 0,
                 user.getFollowing() != null ? user.getFollowing().size() : 0,
-                user.getRoles().stream()
-                        .map(Role::getName)
-                        .collect(Collectors.toSet()));
+                user.getRole());
     }
 }

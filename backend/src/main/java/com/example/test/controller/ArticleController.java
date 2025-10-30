@@ -4,7 +4,6 @@ import com.example.test.dto.ArticleDTO;
 import com.example.test.model.Article;
 import com.example.test.dto.ArticleRequest;
 import com.example.test.model.User;
-import com.example.test.repository.MediaUploadRepository;
 import com.example.test.service.ArticleService;
 import com.example.test.service.ArticleService.DeleteArticleResult;
 import com.example.test.service.MediaUploadService;
@@ -79,13 +78,13 @@ public class ArticleController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Article>> getSubscribedArticles(Authentication authentication) {
+    public ResponseEntity<List<ArticleDTO>> getSubscribedArticles(Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
         String username = authentication.getName();
-        List<Article> response = articleService.getArticlesFromSubscribedUsers(username);
+        List<ArticleDTO> response = articleService.getArticlesFromSubscribedUsers(username);
 
         return ResponseEntity.ok(response);
     }
@@ -165,10 +164,15 @@ public class ArticleController {
 
     // Get articles by user UUID
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Article>> getArticlesByUser(@PathVariable UUID userId) {
+    public ResponseEntity<List<ArticleDTO>> getArticlesByUser(
+            @PathVariable UUID userId, Authentication authentication) {
 
         User user = userService.getUserEntityById(userId);
-        List<Article> articles = user.getArticles();
-        return ResponseEntity.ok(articles);
+        String loggedUsername = authentication.getName();
+
+        List<ArticleDTO> articleDTOs = articleService.getArticlesByUser(user, loggedUsername);
+
+        return ResponseEntity.ok(articleDTOs);
     }
+
 }

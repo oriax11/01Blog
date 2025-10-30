@@ -30,7 +30,9 @@ public class JwtTokenProvider {
         Date expiryDate = new Date(now.getTime() + jwtExpirationDate);
 
         return Jwts.builder()
-                .setSubject(user.getId().toString()) 
+                .setSubject(user.getId().toString())
+                .claim("username", user.getUsername())
+                .claim("role",user.getRole())
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(key())

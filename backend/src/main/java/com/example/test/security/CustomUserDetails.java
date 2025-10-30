@@ -7,22 +7,19 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.Collections;
 
 public class CustomUserDetails implements UserDetails {
-    
+
     private final User user;
     private final Set<GrantedAuthority> authorities;
 
     public CustomUserDetails(User user) {
         this.user = user;
-        this.authorities = user.getRoles()
-                .stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName()))
-                .collect(Collectors.toSet());
+        this.authorities = Collections.singleton(
+                new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
     }
 
-    // Add this method to access your User entity
     public User getUser() {
         return user;
     }
