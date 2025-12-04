@@ -64,7 +64,7 @@ public class ArticleService {
                         follower,
                         user,
                         "POST",
-                        user.getUsername() + " published a new article: " + saved.getTitle(),
+                        user.getUsername() + " published a new article",
                         saved.getId().toString());
             }
         }

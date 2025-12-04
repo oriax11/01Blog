@@ -12,7 +12,7 @@ export interface Notification {
   type: string;
   message: string;
   relatedEntityId: string;
-  isRead: boolean;
+  read: boolean;
   createdAt: Date;
 }
 
@@ -34,7 +34,8 @@ export class NotificationService {
       this.authService.getAuthHeaders()
     ).pipe(
       tap(notifications => {
-        const unreadCount = notifications.filter(n => !n.isRead).length;
+        const unreadCount = notifications.filter(n => !n.read).length;
+        console.log('Fetched notifications, unread count:', unreadCount);
         this.unreadCountSubject.next(unreadCount);
       })
     );

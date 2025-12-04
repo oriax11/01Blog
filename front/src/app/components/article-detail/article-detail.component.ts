@@ -32,15 +32,20 @@ export class ArticleDetailComponent implements OnInit {
     private notificationService: NotificationService
   ) {}
 
-  ngOnInit() {
-    this.currentUserId = this.authService.getUserId();
-    const articleId = this.route.snapshot.paramMap.get('id');
+ngOnInit() {
+  this.currentUserId = this.authService.getUserId();
+
+  this.route.paramMap.subscribe(params => {
+    const articleId = params.get('id');
+
     if (articleId) {
-      this.articleService.getArticleById(articleId).subscribe((article) => {
+      this.articleService.getArticleById(articleId).subscribe(article => {
         this.article = article;
       });
     }
-  }
+  });
+}
+
   // This listens for clicks anywhere in the document
   @HostListener('document:click', ['$event'])
   closeDropdown(event: MouseEvent) {

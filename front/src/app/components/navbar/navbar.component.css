@@ -1,11 +1,11 @@
 .navbar {
   background-color: #111111;
   border-bottom: 2px solid #22c55e;
-  padding: 0 20px; /* Add some horizontal padding */
+  padding: 0 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 64px; /* Standard Material toolbar height */
+  height: 64px;
 }
 
 .menu-icon {
@@ -19,6 +19,10 @@
   font-weight: bold;
   display: flex;
   align-items: center;
+}
+.brand-link:focus {
+  outline: none;
+
 }
 
 .brand-text {
@@ -104,7 +108,3 @@
     gap: 5px;
   }
 }
-  
-
-
-

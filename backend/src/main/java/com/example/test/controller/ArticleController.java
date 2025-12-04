@@ -69,7 +69,6 @@ public class ArticleController {
             } catch (IOException e) {
                 // Log the error instead of swallowing it silently
                 System.err.println("Error associating media with article " + saved.getId() + ": " + e.getMessage());
-                e.printStackTrace();
                 // Optional: return an error response instead
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
             }
@@ -131,7 +130,6 @@ public class ArticleController {
             mediaUploadService.updateMediaForArticle(diff.getAdded(), diff.getRemoved(), updated.getId(), user.getId());
         } catch (IOException e) {
             System.err.println("Error updating media for article " + updated.getId() + ": " + e.getMessage());
-            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
 

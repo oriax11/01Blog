@@ -52,9 +52,9 @@ export class NotificationDropdownComponent implements OnInit, OnDestroy {
 
   markAsRead(notification: Notification, event: Event) {
     event.stopPropagation();
-    if (!notification.isRead) {
+    if (!notification.read) {
       this.notificationService.markAsRead(notification.id).subscribe(() => {
-        notification.isRead = true;
+        notification.read = true;
         this.loadNotifications();
       });
     }

@@ -30,22 +30,26 @@ export class ProfileComponent implements OnInit {
     private reportService: ReportService
   ) {}
 
-  ngOnInit() {
-    const userId = this.route.snapshot.paramMap.get('userId');
+ngOnInit() {
+  this.route.paramMap.subscribe(params => {
+    const userId = params.get('userId');
+
     if (userId) {
-      this.userService.getUserByUsername(userId).subscribe((user) => {
+      this.userService.getUserByUsername(userId).subscribe(user => {
         this.user = user;
-        // Check if current logged-in user is following this user
-        this.userService.isFollowing(user.id).subscribe((followStatus) => {
+
+        this.userService.isFollowing(user.id).subscribe(followStatus => {
           this.isFollowing = followStatus;
         });
 
-        this.articleService.getUserArticles(user.id).subscribe((articles) => {
+        this.articleService.getUserArticles(user.id).subscribe(articles => {
           this.userArticles = articles;
         });
       });
     }
-  }
+  });
+}
+
 
   toggleFollow() {
     if (!this.user) return;
