@@ -62,7 +62,7 @@ public class CommentService {
         commentRepository.delete(comment);
     }
 
-    public void likeComment(Long commentId, String username) {
+    public void likeComment(long commentId, String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         Comment comment = commentRepository.findById(commentId)
@@ -79,7 +79,7 @@ public class CommentService {
         commentRepository.save(comment);
     }
 
-    public void unlikeComment(Long commentId, String username) {
+    public void unlikeComment(long commentId, String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         Comment comment = commentRepository.findById(commentId)
