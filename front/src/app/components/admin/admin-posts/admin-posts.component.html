@@ -1,0 +1,95 @@
+    <div class="admin-container">
+      <div class="admin-header">
+        <h1 class="admin-title">POST <span class="accent">MANAGEMENT</span></h1>
+        <p class="admin-subtitle">Moderate and manage all user posts</p>
+      </div>
+
+      <div class="admin-nav">
+        <a routerLink="/admin" class="nav-item"> DASHBOARD</a>
+        <a routerLink="/admin/users" class="nav-item"> USERS</a>
+        <a routerLink="/admin/posts" routerLinkActive="active" class="nav-item"> POSTS</a>
+        <a routerLink="/admin/reports" class="nav-item"> REPORTS</a>
+      </div>
+
+      <div class="controls">
+        <div class="search-bar">
+          <input
+            type="text"
+            [(ngModel)]="searchQuery"
+            (input)="filterPosts()"
+            placeholder="Search posts by title, author, or content..."
+            class="search-input"
+          />
+        </div>
+
+        <div class="filters">
+          <select [(ngModel)]="categoryFilter" (change)="filterPosts()" class="filter-select">
+            <option value="">All Categories</option>
+            <option value="Technology">Technology</option>
+            <option value="Web Development">Web Development</option>
+            <option value="Security">Security</option>
+            <option value="Mobile Development">Mobile Development</option>
+          </select>
+
+          <select [(ngModel)]="statusFilter" (change)="filterPosts()" class="filter-select">
+            <option value="">All Status</option>
+            <option value="published">Published</option>
+            <option value="hidden">Hidden</option>
+            <option value="deleted">Deleted</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="posts-grid">
+        <div class="post-card" *ngFor="let post of filteredPosts">
+
+
+          <div class="post-content">
+            <div class="post-header">
+              <div class="post-meta">
+                <!-- <span class="category">{{ post.category }}</span> -->
+                <span class="date">{{ post.createdAt | date : 'MMM dd, yyyy' }}</span>
+              </div>
+              <div class="post-status">
+                <span class="status-badge published">Published</span>
+              </div>
+            </div>
+
+            <h3 class="post-title">{{ post.title }}</h3>
+            <!-- <p class="post-excerpt">{{ post.excerpt }}</p> -->
+
+            <div class="post-author">
+              <!-- <img
+                [src]="post.author.avatarUrl"
+                [alt]="post.author.username"
+                class="author-avatar"
+              /> -->
+              <!-- <span class="author-name">{{ post.author.username }}</span> -->
+            </div>
+
+            <div class="post-stats">
+              <!-- <span class="stat">❤️ {{ post.likesCount }}</span> -->
+              <span class="stat">💬 {{ post.commentsCount }}</span>
+              <span class="stat">👁️ 1.2k views</span>
+            </div>
+
+            <div class="post-actions">
+              <button class="action-btn view" [routerLink]="['/article', post.id]">👁️ View</button>
+              <button class="action-btn hide" (click)="hidePost(post.id)">🙈 Hide</button>
+              <button class="action-btn delete" (click)="deletePost(post.id)">🗑️ Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pagination">
+        <button class="page-btn" [disabled]="currentPage === 1" (click)="previousPage()">
+          ← Previous
+        </button>
+        <span class="page-info">Page {{ currentPage }} of {{ totalPages }}</span>
+        <button class="page-btn" [disabled]="currentPage === totalPages" (click)="nextPage()">
+          Next →
+        </button>
+      </div>
+    </div>
+  

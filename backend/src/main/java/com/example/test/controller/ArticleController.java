@@ -14,6 +14,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -173,6 +174,18 @@ public class ArticleController {
         List<ArticleDTO> articleDTOs = articleService.getArticlesByUser(user, loggedUsername);
 
         return ResponseEntity.ok(articleDTOs);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<ArticleDTO>> getAllArticles() {
+        return ResponseEntity.ok(articleService.getAllArticlesDTO());
+    }
+
+    @PutMapping("/{id}/hide")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> hideArticle(@PathVariable Long id) {
+        articleService.hideArticle(id);
+        return ResponseEntity.ok().build();
     }
 
 }

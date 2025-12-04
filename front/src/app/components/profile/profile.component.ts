@@ -6,11 +6,13 @@ import { ArticleService } from '../../services/article.service';
 import { UserService } from '../../services/user.service';
 import { Article, User } from '../../models/article.model';
 import { NotificationService } from '../../services/toast.service';
+import { ReportService } from '../../services/report.service';
+import { ReportModalComponent } from '../report-modal/report-modal.component';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, ArticleCardComponent],
+  imports: [CommonModule, ArticleCardComponent, ReportModalComponent],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css'],
 })
@@ -18,12 +20,14 @@ export class ProfileComponent implements OnInit {
   user: User | undefined;
   userArticles: Article[] = [];
   isFollowing: boolean = false;
+  showReportModal = false;
 
   constructor(
     private route: ActivatedRoute,
     private articleService: ArticleService,
     private userService: UserService,
-    private notificationService : NotificationService
+    private notificationService : NotificationService,
+    private reportService: ReportService
   ) {}
 
   ngOnInit() {
@@ -64,5 +68,28 @@ export class ProfileComponent implements OnInit {
         error: (err) => console.error('Failed to follow:', err),
       });
     }
+  }
+
+  reportUser() {
+    this.showReportModal = true;
+  }
+
+  onReportSubmit(reason: string) {
+    if (!this.user) return;
+    this.reportService.createReport({
+      type: 'user',
+      targetId: this.user.id,
+      targetTitle: this.user.username,
+      reason: reason,
+      reportedBy: 'currentUser',
+      status: 'pending'
+    }).subscribe(() => {
+      this.notificationService.success('User reported successfully');
+      this.showReportModal = false;
+    });
+  }
+
+  onReportClose() {
+    this.showReportModal = false;
   }
 }

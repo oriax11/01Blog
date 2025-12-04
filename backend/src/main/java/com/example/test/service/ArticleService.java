@@ -30,13 +30,16 @@ public class ArticleService {
     private final LikeRepository likeRepository;
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
+    private final NotificationService notificationService;
 
     public ArticleService(ArticleRepository articleRepository, LikeRepository likeRepository,
-            UserRepository userRepository, CommentRepository commentRepository) {
+            UserRepository userRepository, CommentRepository commentRepository,
+            NotificationService notificationService) {
         this.articleRepository = articleRepository;
         this.likeRepository = likeRepository;
         this.userRepository = userRepository;
         this.commentRepository = commentRepository;
+        this.notificationService = notificationService;
     }
 
     public ArticleDTO createArticle(Article article, UUID currentUserId) {
@@ -54,6 +57,18 @@ public class ArticleService {
                 user.getFollowing() != null ? user.getFollowing().size() : 0,
                 user.getRole());
 
+        // Notify followers
+        if (user.getFollowers() != null) {
+            for (User follower : user.getFollowers()) {
+                notificationService.createNotification(
+                        follower,
+                        user,
+                        "POST",
+                        user.getUsername() + " published a new article: " + saved.getTitle(),
+                        saved.getId().toString());
+            }
+        }
+
         return new ArticleDTO(
                 saved.getId(),
                 saved.getTitle(),
@@ -68,6 +83,35 @@ public class ArticleService {
     // Get all
     public List<Article> getAllArticles() {
         return articleRepository.findAll();
+    }
+
+    public List<ArticleDTO> getAllArticlesDTO() {
+        return articleRepository.findAll().stream().map(article -> {
+            boolean isLiked = false; // Admin view doesn't need personal like status
+            int likeCount = likeRepository.countByArticleId(article.getId());
+            int commentsCount = commentRepository.countByArticleId(article.getId());
+
+            User creator = article.getCreator();
+            UserDTO creatorDTO = new UserDTO(
+                    creator.getId(),
+                    creator.getName(),
+                    creator.getUsername(),
+                    creator.getEmail(),
+                    creator.getArticles() != null ? creator.getArticles().size() : 0,
+                    creator.getFollowers() != null ? creator.getFollowers().size() : 0,
+                    creator.getFollowing() != null ? creator.getFollowing().size() : 0,
+                    creator.getRole());
+
+            return new ArticleDTO(
+                    article.getId(),
+                    article.getTitle(),
+                    article.getContent(),
+                    creatorDTO,
+                    article.getCreatedAt(),
+                    likeCount,
+                    commentsCount,
+                    isLiked);
+        }).toList();
     }
 
     // Get by ID
@@ -99,6 +143,13 @@ public class ArticleService {
         }
         articleRepository.deleteById(id);
         return DeleteArticleResult.SUCCESS;
+    }
+
+    public void hideArticle(Long id) {
+        Article article = articleRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Article not found"));
+        article.setStatus("hidden");
+        articleRepository.save(article);
     }
 
     public boolean likeArticle(Long articleId, UUID userId) {

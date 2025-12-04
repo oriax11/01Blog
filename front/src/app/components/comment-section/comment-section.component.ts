@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Comment } from '../../models/article.model';
 import { ArticleService } from '../../services/article.service';
+import { CommentService } from '../../services/comment.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -15,7 +16,11 @@ import { Router } from '@angular/router';
 export class CommentSectionComponent {
   @Input() postId!: string;
   @Input() comments: Comment[] = [];
-  constructor(private articleService: ArticleService, private router: Router) {}
+  constructor(
+    private articleService: ArticleService, 
+    private router: Router,
+    private commentService: CommentService
+  ) {}
 
   ngOnInit() {
     this.articleService.getComments(this.postId).subscribe((comments) => {
@@ -49,8 +54,25 @@ export class CommentSectionComponent {
   }
 
   toggleLike(comment: Comment) {
-    comment.isLiked = !comment.isLiked;
-    comment.likes += comment.isLiked ? 1 : -1;
+    if (comment.isLiked) {
+      // Unlike
+      this.commentService.unlikeComment(Number(this.postId), comment.id).subscribe({
+        next: () => {
+          comment.isLiked = false;
+          comment.likes--;
+        },
+        error: (err) => console.error('Failed to unlike comment', err)
+      });
+    } else {
+      // Like
+      this.commentService.likeComment(Number(this.postId), comment.id).subscribe({
+        next: () => {
+          comment.isLiked = true;
+          comment.likes++;
+        },
+        error: (err) => console.error('Failed to like comment', err)
+      });
+    }
   }
 
   getTimeAgo(date: Date): string {

@@ -48,15 +48,11 @@ export interface AdminStats {
   totalUsers: number;
   totalPosts: number;
   totalReports: number;
-  activeUsers: number;
-  postsToday: number;
-  reportsToday: number;
 }
 
 export interface AdminUser extends User {
-  status: 'active' | 'banned' | 'suspended';
+  status: 'active' | 'banned' ;
   joinedAt: Date;
-  lastActive: Date;
   reportCount: number;
 }
 

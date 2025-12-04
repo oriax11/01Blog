@@ -13,23 +13,23 @@ import { RegisterComponent } from './components/register/register.component';
 import { EditArticleComponent } from './components/edit-article/edit-article.component';
 
 // 👇 import your functional guards
-import { authGuard } from './guards/auth-guard';
-import { guestGuard } from './guards/guest-guard';
+import { AuthGuard } from './guards/auth-guard';
+import { GuestGuard } from './guards/guest-guard';
 import { AdminGuard } from './guards/admin-guard';
 
 export const routes: Routes = [
   // Public (guest) routes
-  { path: 'login', component: LoginComponent, canActivate: [guestGuard] },
-  { path: 'register', component: RegisterComponent, canActivate: [guestGuard] },
+  { path: 'login', component: LoginComponent, canActivate: [GuestGuard] },
+  { path: 'register', component: RegisterComponent, canActivate: [GuestGuard] },
 
   // Protected routes (require login)
-  { path: '', component: HomeComponent, canActivate: [authGuard] },
-  { path: 'home', component: HomeComponent, canActivate: [authGuard] },
-  { path: 'search', component: SearchComponent, canActivate: [authGuard] },
-  { path: 'profile/:userId', component: ProfileComponent, canActivate: [authGuard] },
-  { path: 'create', component: PostEditorComponent, canActivate: [authGuard] },
-  { path: 'article/:id', component: ArticleDetailComponent, canActivate: [authGuard] },
-  { path: 'edit/:id', component: EditArticleComponent, canActivate: [authGuard] },
+  { path: '', component: HomeComponent, canActivate: [AuthGuard] },
+  { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
+  { path: 'search', component: SearchComponent, canActivate: [AuthGuard] },
+  { path: 'profile/:userId', component: ProfileComponent, canActivate: [AuthGuard] },
+  { path: 'create', component: PostEditorComponent, canActivate: [AuthGuard] },
+  { path: 'article/:id', component: ArticleDetailComponent, canActivate: [AuthGuard] },
+  { path: 'edit/:id', component: EditArticleComponent, canActivate: [AuthGuard] },
 
   // Admin routes
   { path: 'admin', component: AdminDashboardComponent, canActivate: [AdminGuard] },

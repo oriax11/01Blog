@@ -34,4 +34,11 @@ export class UserService {
       this.authService.getAuthHeaders()
     );
   }
+
+  getUsers(): Observable<User[]> {
+    return this.http.get<User[]>(
+      `${environment.apiUrl}/api/users`,
+      this.authService.getAuthHeaders()
+    );
+  }
 }

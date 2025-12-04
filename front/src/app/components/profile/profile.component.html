@@ -23,6 +23,9 @@
     <button (click)="toggleFollow()" class="follow-btn">
       {{ isFollowing ? 'Unfollow' : 'Follow' }}
     </button>
+    <button (click)="reportUser()" class="report-btn" style="margin-left: 10px; background-color: #ff4444; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">
+      Report
+    </button>
   </div>
 
   <div class="profile-content">
@@ -47,3 +50,11 @@
     </div>
   </div>
 </div>
+
+<app-report-modal
+  [isOpen]="showReportModal"
+  [reportType]="'user'"
+  [targetTitle]="user?.username || ''"
+  (close)="onReportClose()"
+  (submit)="onReportSubmit($event)">
+</app-report-modal>

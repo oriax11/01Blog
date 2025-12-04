@@ -4,11 +4,14 @@ import { Router, RouterModule } from '@angular/router';
 import { Article } from '../../models/article.model';
 import { AuthService } from '../../services/auth.service';
 import { ArticleService } from '../../services/article.service';
+import { ReportService } from '../../services/report.service';
+import { NotificationService } from '../../services/toast.service';
+import { ReportModalComponent } from '../report-modal/report-modal.component';
 
 @Component({
   selector: 'app-article-card',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, ReportModalComponent],
   templateUrl: './article-card.component.html',
   styleUrls: ['./article-card.component.css'],
 })
@@ -16,11 +19,14 @@ export class ArticleCardComponent implements OnInit {
   @Input() article!: Article;
   isDropdownOpen = false;
   currentUserId: string | null = null;
+  showReportModal = false;
 
   constructor(
     private authService: AuthService,
     private articleService: ArticleService,
-    private router: Router
+    private router: Router,
+    private reportService: ReportService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -56,6 +62,24 @@ export class ArticleCardComponent implements OnInit {
 
   report(event: MouseEvent) {
     event.stopPropagation();
-    alert('This article has been reported.');
+    this.showReportModal = true;
+  }
+
+  onReportSubmit(reason: string) {
+    this.reportService.createReport({
+      type: 'post',
+      targetId: this.article.id.toString(),
+      targetTitle: this.article.title,
+      reason: reason,
+      reportedBy: 'currentUser',
+      status: 'pending'
+    }).subscribe(() => {
+      this.notificationService.success('Post reported successfully');
+      this.showReportModal = false;
+    });
+  }
+
+  onReportClose() {
+    this.showReportModal = false;
   }
 }

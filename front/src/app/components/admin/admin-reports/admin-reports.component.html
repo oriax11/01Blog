@@ -1,0 +1,103 @@
+    <div class="admin-container">
+      <div class="admin-header">
+        <h1 class="admin-title">REPORT <span class="accent">MANAGEMENT</span></h1>
+        <p class="admin-subtitle">Handle user reports and take appropriate action</p>
+      </div>
+
+      <div class="admin-nav">
+        <a routerLink="/admin" class="nav-item"> DASHBOARD</a>
+        <a routerLink="/admin/users" class="nav-item"> USERS</a>
+        <a routerLink="/admin/posts" class="nav-item"> POSTS</a>
+        <a routerLink="/admin/reports" routerLinkActive="active" class="nav-item"> REPORTS</a>
+      </div>
+
+      <div class="controls">
+        <div class="filters">
+          <select [(ngModel)]="statusFilter" (change)="filterReports()" class="filter-select">
+            <option value="">All Status</option>
+            <option value="pending">Pending</option>
+            <option value="resolved">Resolved</option>
+            <option value="dismissed">Dismissed</option>
+          </select>
+          
+          <select [(ngModel)]="typeFilter" (change)="filterReports()" class="filter-select">
+            <option value="">All Types</option>
+            <option value="user">User Reports</option>
+            <option value="post">Post Reports</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="reports-list">
+        <div class="report-card" *ngFor="let report of filteredReports" [class.resolved]="report.status === 'resolved'">
+          <div class="report-header">
+            <div class="report-type">
+              <span class="type-badge" [class]="report.type">
+                 {{ report.type | titlecase }}
+              </span>
+              <span class="status-badge" [class]="report.status">
+                {{ report.status | titlecase }}
+              </span>
+            </div>
+            <div class="report-date">
+              {{ report.createdAt | date:'MMM dd, yyyy HH:mm' }}
+            </div>
+          </div>
+
+          <div class="report-content">
+            <h3 class="report-target">{{ report.targetTitle }}</h3>
+            <div class="report-details">
+              <p><strong>Reported by:</strong> {{ report.reportedBy }}</p>
+              <p><strong>Reason:</strong> {{ report.reason }}</p>
+              <p><strong>Description:</strong> {{ report.description }}</p>
+            </div>
+          </div>
+
+          <div class="report-actions" *ngIf="report.status === 'pending'">
+            <button class="action-btn view" (click)="viewTarget(report)">
+              👁️ View {{ report.type === 'user' ? 'Profile' : 'Post' }}
+            </button>
+            
+            <div class="action-group" *ngIf="report.type === 'user'">
+              <button class="action-btn warn" (click)="warnUser(report)">
+                ⚠️ Warn User
+              </button>
+              <button class="action-btn ban" (click)="banUser(report)">
+                🚫 Ban User
+              </button>
+              <button class="action-btn delete" (click)="deleteUser(report)">
+                🗑️ Delete User
+              </button>
+            </div>
+
+            <div class="action-group" *ngIf="report.type === 'post'">
+              <button class="action-btn warn" (click)="warnAuthor(report)">
+                ⚠️ Warn Author
+              </button>
+              <button class="action-btn hide" (click)="hidePost(report)">
+                🙈 Hide Post
+              </button>
+              <button class="action-btn delete" (click)="deletePost(report)">
+                🗑️ Delete Post
+              </button>
+            </div>
+
+            <button class="action-btn dismiss" (click)="dismissReport(report.id)">
+              ❌ Dismiss Report
+            </button>
+          </div>
+
+          <div class="report-resolved" *ngIf="report.status === 'resolved'">
+            <p class="resolved-text">
+              ✅ Resolved on {{ report.resolvedAt | date:'MMM dd, yyyy HH:mm' }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="no-reports" *ngIf="filteredReports.length === 0">
+        <h3>No reports found</h3>
+        <p>All reports have been handled or no reports match your filters.</p>
+      </div>
+    </div>
+  

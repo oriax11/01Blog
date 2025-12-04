@@ -1,0 +1,44 @@
+<div class="admin-container">
+  <div class="admin-header">
+    <h1 class="admin-title">ADMIN <span class="accent">DASHBOARD</span></h1>
+    <p class="admin-subtitle">Manage your student blogging platform</p>
+  </div>
+
+  <div class="admin-nav">
+    <a
+      routerLink="/admin"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      class="nav-item"
+    >
+       DASHBOARD
+    </a>
+    <a routerLink="/admin/users" routerLinkActive="active" class="nav-item">  USERS </a>
+    <a routerLink="/admin/posts" routerLinkActive="active" class="nav-item">  POSTS </a>
+    <a routerLink="/admin/reports" routerLinkActive="active" class="nav-item">  REPORTS </a>
+  </div>
+
+  <div class="stats-grid" *ngIf="stats">
+    <div class="stat-card">
+      <div class="stat-content">
+        <p class="stat-label">Total Users</p>
+        <h3 class="stat-number">{{ stats.totalUsers }}</h3>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-content">
+        <p class="stat-label">Total Posts</p>
+        <h3 class="stat-number">{{ stats.totalPosts }}</h3>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-content">
+        <p class="stat-label">Total Reports</p>
+        <h3 class="stat-number">{{ stats.totalReports }}</h3>
+      </div>
+    </div>
+  </div>
+</div>
+t

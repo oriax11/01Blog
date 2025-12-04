@@ -22,9 +22,8 @@
       <span>Write</span>
     </button>
 
-    <button mat-icon-button class="hide-on-small">
-      <mat-icon>notifications</mat-icon>
-    </button>
+    <app-notification-dropdown class="hide-on-small"></app-notification-dropdown>
+
 
     <a [routerLink]="['/profile', userId]" class="hide-on-small">
       <button mat-icon-button>

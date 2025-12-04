@@ -3,11 +3,13 @@ package com.example.test.controller;
 import com.example.test.dto.UserDTO;
 import com.example.test.service.UserService;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +23,11 @@ public class UserController {
         this.userService = userService;
     }
 
+    @GetMapping
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        return ResponseEntity.ok(userService.getAllUsers());
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getUserById(@PathVariable UUID id) {
         UserDTO user = userService.getUserDTOById(id);
@@ -29,7 +36,6 @@ public class UserController {
 
     @PostMapping("/{id}/follow")
     public ResponseEntity<Void> followUser(@PathVariable UUID id, @AuthenticationPrincipal UserDetails userDetails) {
-
 
         userService.follow(userDetails.getUsername(), id);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -46,5 +52,12 @@ public class UserController {
             @AuthenticationPrincipal UserDetails userDetails) {
         boolean isFollowing = userService.isFollowing(userDetails.getUsername(), id);
         return new ResponseEntity<>(isFollowing, HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}/ban")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> banUser(@PathVariable UUID id) {
+        userService.banUser(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

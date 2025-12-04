@@ -69,4 +69,11 @@ export class ArticleService {
       this.authService.getAuthHeaders()
     );
   }
+
+  getAllArticles(): Observable<Article[]> {
+    return this.http.get<Article[]>(
+      `${environment.apiUrl}/api/articles/all`,
+      this.authService.getAuthHeaders()
+    );
+  }
 }

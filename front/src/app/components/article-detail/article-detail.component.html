@@ -53,4 +53,12 @@
     </footer>
     <app-comment-section [postId]="article.id"></app-comment-section>
   </article>
+
+  <app-report-modal
+    [isOpen]="showReportModal"
+    reportType="post"
+    [targetTitle]="article.title"
+    (close)="onReportClose()"
+    (submit)="onReportSubmit($event)"
+  ></app-report-modal>
 </div>

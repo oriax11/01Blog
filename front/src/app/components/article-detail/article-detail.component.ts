@@ -5,11 +5,14 @@ import { ArticleService } from '../../services/article.service';
 import { Article } from '../../models/article.model';
 import { AuthService } from '../../services/auth.service';
 import { CommentSectionComponent } from '../comment-section/comment-section.component';
+import { ReportModalComponent } from '../report-modal/report-modal.component';
+import { ReportService } from '../../services/report.service';
+import { NotificationService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-article-detail',
   standalone: true,
-  imports: [CommonModule, CommentSectionComponent],
+  imports: [CommonModule, CommentSectionComponent, ReportModalComponent],
   templateUrl: './article-detail.component.html',
   styleUrls: ['./article-detail.component.css'],
 })
@@ -17,12 +20,15 @@ export class ArticleDetailComponent implements OnInit {
   @Input() article!: Article;
   isDropdownOpen = false;
   currentUserId: string | null = null;
+  showReportModal = false;
 
   constructor(
     private authService: AuthService,
     private articleService: ArticleService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private reportService: ReportService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit() {
@@ -72,7 +78,26 @@ export class ArticleDetailComponent implements OnInit {
 
   report(event: MouseEvent) {
     event.stopPropagation();
-    alert('This article has been reported.');
+    this.showReportModal = true;
+    this.isDropdownOpen = false; // Close dropdown when opening modal
+  }
+
+  onReportSubmit(reason: string) {
+    this.reportService.createReport({
+      type: 'post',
+      targetId: this.article.id.toString(),
+      targetTitle: this.article.title,
+      reason: reason,
+      reportedBy: 'currentUser',
+      status: 'pending'
+    }).subscribe(() => {
+      this.notificationService.success('Article reported successfully');
+      this.showReportModal = false;
+    });
+  }
+
+  onReportClose() {
+    this.showReportModal = false;
   }
 
   goToAuthorProfile() {

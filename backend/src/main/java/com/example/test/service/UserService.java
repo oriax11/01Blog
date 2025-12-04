@@ -6,7 +6,9 @@ import com.example.test.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -69,6 +71,18 @@ public class UserService {
         User followee = getUserEntityById(followeeId);
 
         return follower.getFollowing().contains(followee);
+    }
+
+    public List<UserDTO> getAllUsers() {
+        return userRepository.findAll().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    public void banUser(UUID id) {
+        User user = getUserEntityById(id);
+        user.setRole(com.example.test.model.Role.BANNED);
+        userRepository.save(user);
     }
 
     private UserDTO convertToDTO(User user) {
