@@ -22,7 +22,7 @@ export interface User {
 }
 
 export interface Comment {
-  id: string;
+  id: number;
   commenterUsername: string;
   commenterId: string;
   avatarUrl?: string;

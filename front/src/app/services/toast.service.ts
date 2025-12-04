@@ -34,7 +34,6 @@ export class NotificationService {
   }
 
   success(message: string, duration?: number) {
-    console.log("hhhhhhhhhhhhhh")
     this.show(message, 'success', duration);
   }
 

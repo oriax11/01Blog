@@ -5,6 +5,8 @@ import { Comment } from '../../models/article.model';
 import { ArticleService } from '../../services/article.service';
 import { CommentService } from '../../services/comment.service';
 import { Router } from '@angular/router';
+import { jwtDecode } from 'jwt-decode';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-comment-section',
@@ -14,15 +16,23 @@ import { Router } from '@angular/router';
   styleUrls: ['./comment-section.component.css'],
 })
 export class CommentSectionComponent {
+  username: string | null = null;
   @Input() postId!: string;
   @Input() comments: Comment[] = [];
+
   constructor(
-    private articleService: ArticleService, 
+    private articleService: ArticleService,
     private router: Router,
+    private authService: AuthService,
     private commentService: CommentService
   ) {}
 
   ngOnInit() {
+    const token = this.authService.getToken();
+    if (token) {
+      const decodedToken: any = jwtDecode(token);
+      this.username = decodedToken.username;
+    }
     this.articleService.getComments(this.postId).subscribe((comments) => {
       this.comments = comments;
     });
@@ -61,7 +71,7 @@ export class CommentSectionComponent {
           comment.isLiked = false;
           comment.likes--;
         },
-        error: (err) => console.error('Failed to unlike comment', err)
+        error: (err) => console.error('Failed to unlike comment', err),
       });
     } else {
       // Like
@@ -70,7 +80,7 @@ export class CommentSectionComponent {
           comment.isLiked = true;
           comment.likes++;
         },
-        error: (err) => console.error('Failed to like comment', err)
+        error: (err) => console.error('Failed to like comment', err),
       });
     }
   }

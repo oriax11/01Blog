@@ -12,11 +12,11 @@
 
     <div class="article-footer">
       <div class="author">
-        <img
-          src="https://api.dicebear.com/9.x/identicon/svg?seed=Caleb"
-          [alt]="article.creator.username"
-          class="author-avatar"
-        />
+        <img [src]="
+    article.creator.avatarUrl ||
+    'https://api.dicebear.com/7.x/avataaars/svg?seed=' + article.creator.username
+  " [alt]="article.creator.username" class="author-avatar" />
+
         <span class="author-name">{{ article.creator.username }}</span>
       </div>
 
@@ -28,10 +28,6 @@
   </div>
 </div>
 
-<app-report-modal
-  [isOpen]="showReportModal"
-  [reportType]="'post'"
-  [targetTitle]="article.title"
-  (close)="onReportClose()"
-  (submit)="onReportSubmit($event)">
+<app-report-modal [isOpen]="showReportModal" [reportType]="'post'" [targetTitle]="article.title"
+  (close)="onReportClose()" (submit)="onReportSubmit($event)">
 </app-report-modal>

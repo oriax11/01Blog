@@ -21,6 +21,7 @@ export class ArticleDetailComponent implements OnInit {
   isDropdownOpen = false;
   currentUserId: string | null = null;
   showReportModal = false;
+  showDeleteModal = false;
 
   constructor(
     private authService: AuthService,
@@ -68,12 +69,18 @@ export class ArticleDetailComponent implements OnInit {
 
   delete(event: MouseEvent) {
     event.stopPropagation();
-    if (confirm('Are you sure you want to delete this article?')) {
-      this.articleService.deleteArticle(this.article.id.toString()).subscribe(() => {
-        // Optionally, refresh the list of articles or emit an event
-        window.location.reload();
-      });
-    }
+    this.showDeleteModal = true;
+  }
+
+  confirmDelete() {
+    this.articleService.deleteArticle(this.article.id.toString()).subscribe(() => {
+      window.location.reload();
+    });
+    this.showDeleteModal = false;
+  }
+
+  cancelDelete() {
+    this.showDeleteModal = false;
   }
 
   report(event: MouseEvent) {
@@ -83,17 +90,19 @@ export class ArticleDetailComponent implements OnInit {
   }
 
   onReportSubmit(reason: string) {
-    this.reportService.createReport({
-      type: 'post',
-      targetId: this.article.id.toString(),
-      targetTitle: this.article.title,
-      reason: reason,
-      reportedBy: 'currentUser',
-      status: 'pending'
-    }).subscribe(() => {
-      this.notificationService.success('Article reported successfully');
-      this.showReportModal = false;
-    });
+    this.reportService
+      .createReport({
+        type: 'post',
+        targetId: this.article.id.toString(),
+        targetTitle: this.article.title,
+        reason: reason,
+        reportedBy: 'currentUser',
+        status: 'pending',
+      })
+      .subscribe(() => {
+        this.notificationService.success('Article reported successfully');
+        this.showReportModal = false;
+      });
   }
 
   onReportClose() {

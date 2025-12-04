@@ -9,11 +9,10 @@
         <h1 class="article-title">{{ article.title }}</h1>
 
         <div class="author-info" (click)="goToAuthorProfile()" style="cursor: pointer">
-          <img
-            [src]="article.creator.avatarUrl"
-            [alt]="article.creator.username"
-            class="author-avatar"
-          />
+          <img (click)="goToAuthorProfile()" [src]="
+    article.creator.avatarUrl ||
+    'https://api.dicebear.com/7.x/avataaars/svg?seed=' + article.creator.username
+  " [alt]="article.creator.username" class="author-avatar" />
           <div class="author-details">
             <span class="author-name">{{ article.creator.username }}</span>
             <span class="read-time">5 min read</span>
@@ -38,9 +37,7 @@
       </div>
     </header>
 
-    <div class="article-image" *ngIf="article.imageUrl">
-      <img [src]="article.imageUrl" [alt]="article.title" />
-    </div>
+
 
     <div class="article-content" class="ql-editor" [innerHTML]="article.content"></div>
 
@@ -54,11 +51,43 @@
     <app-comment-section [postId]="article.id"></app-comment-section>
   </article>
 
-  <app-report-modal
-    [isOpen]="showReportModal"
-    reportType="post"
-    [targetTitle]="article.title"
-    (close)="onReportClose()"
-    (submit)="onReportSubmit($event)"
-  ></app-report-modal>
+  <div class="modal-backdrop" *ngIf="showDeleteModal">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h2 class="modal-title">
+          Delete <span class="accent">Article</span>
+        </h2>
+        <button class="close-btn" (click)="cancelDelete()" type="button">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <p class="modal-description">
+          Are you sure you want to delete this Post?
+        </p>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-cancel" (click)="cancelDelete()">
+            Cancel
+          </button>
+          <button type="button" class="btn btn-submit" (click)="confirmDelete()">
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+  <app-report-modal [isOpen]="showReportModal" reportType="post" [targetTitle]="article.title" (close)="onReportClose()"
+    (submit)="onReportSubmit($event)"></app-report-modal>
 </div>
