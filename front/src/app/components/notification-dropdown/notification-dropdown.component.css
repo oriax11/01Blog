@@ -17,6 +17,7 @@
 
 .notification-bell:hover,
 .notification-bell:focus {
+  outline: none;
   color: #00A550;
 }
 
@@ -38,7 +39,6 @@
   text-align: center;
 }
 
-/* === DROPDOWN (Dark Mode) === */
 .dropdown-menu {
   position: absolute;
   right: 0;

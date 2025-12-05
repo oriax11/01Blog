@@ -84,4 +84,8 @@ export class AuthService {
       : new HttpHeaders();
     return { headers };
   }
+
+  getCurrentUser() {
+    return this.currentUser.value;
+  }
 }

@@ -1,6 +1,10 @@
 <div class="auth-container">
   <div class="auth-form">
     <h2 class="auth-title">Login to <span class="accent">Student Voices</span></h2>
+    <div class="Error" *ngIf="ErrorMessage">
+      {{ ErrorMessage }}
+    </div>
+
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <div class="form-group">
         <label for="identifier">Email or Username</label>

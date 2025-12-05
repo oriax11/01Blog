@@ -1,22 +1,20 @@
 package com.example.test.service;
 
-import com.example.test.model.Article;
-import com.example.test.model.Notification;
-import com.example.test.model.User;
-import com.example.test.repository.ArticleRepository;
-import com.example.test.repository.NotificationRepository;
-import com.example.test.repository.UserRepository;
+import java.util.HashSet;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import com.example.test.model.Article;
+import com.example.test.model.Notification;
+import com.example.test.model.User;
+import com.example.test.repository.NotificationRepository;
+import com.example.test.repository.UserRepository;
 
 @SpringBootTest
 @Transactional

@@ -29,11 +29,7 @@
   color: #000000;
 }
 
-/* Focus styling */
-*:focus {
-  outline: 2px solid #22c55e;
-  outline-offset: 2px;
-}
+
 
 /* Button base styling */
 button {

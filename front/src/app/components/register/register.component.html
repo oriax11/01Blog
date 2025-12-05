@@ -1,6 +1,9 @@
 <div class="auth-container">
   <div class="auth-form">
     <h2 class="auth-title">Create your <span class="accent">Account</span></h2>
+    <div class="Error" *ngIf="ErrorMessage">
+      {{ ErrorMessage }}
+    </div>
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
       <div class="form-group">
         <label for="username">Username</label>

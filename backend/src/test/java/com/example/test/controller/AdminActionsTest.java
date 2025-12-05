@@ -1,21 +1,19 @@
 package com.example.test.controller;
 
-import com.example.test.service.ArticleService;
-import com.example.test.service.UserService;
+import java.util.UUID;
+
 import org.junit.jupiter.api.Test;
+import static org.mockito.Mockito.verify;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.UUID;
-
-import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import com.example.test.service.ArticleService;
+import com.example.test.service.UserService;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -24,10 +22,8 @@ public class AdminActionsTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
     private ArticleService articleService;
 
-    @MockBean
     private UserService userService;
 
     @Test

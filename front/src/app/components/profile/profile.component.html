@@ -1,14 +1,8 @@
 <div class="profile-container">
   <div class="profile-header">
     <div class="profile-info">
-<img
-  [src]="
-    user?.avatarUrl ||
-    'https://api.dicebear.com/7.x/avataaars/svg?seed=' + user?.username
-  "
-  [alt]="user?.username"
-  class="profile-avatar"
-/>
+      <img [src]="user?.avatarUrl || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + user?.username"
+        [alt]="user?.username" class="profile-avatar" />
       <div class="profile-details">
         <h1 class="profile-name">{{ user?.username }}</h1>
         <div class="profile-stats">
@@ -27,12 +21,15 @@
         </div>
       </div>
     </div>
-    <button (click)="toggleFollow()" class="follow-btn">
-      {{ isFollowing ? 'Unfollow' : 'Follow' }}
-    </button>
-    <button (click)="reportUser()" class="report-btn" style="margin-left: 10px; background-color: #ff4444; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">
-      Report
-    </button>
+    <div class="action-buttons" *ngIf="!isOwnProfile">
+      <button (click)="toggleFollow()" class="follow-btn" [disabled]="loadingFollow">
+        {{ isFollowing ? 'Unfollow' : 'Follow' }}
+      </button>
+      <button (click)="reportUser()" class="report-btn" [disabled]="loadingReport">
+        Report
+      </button>
+    </div>
+
   </div>
 
   <div class="profile-content">
@@ -46,8 +43,7 @@
     </div>
 
     <div class="articles-grid" *ngIf="userArticles.length > 0">
-      <app-article-card *ngFor="let article of userArticles" [article]="article">
-      </app-article-card>
+      <app-article-card *ngFor="let article of userArticles" [article]="article"></app-article-card>
     </div>
 
     <div class="no-articles" *ngIf="userArticles.length === 0">
@@ -58,10 +54,5 @@
   </div>
 </div>
 
-<app-report-modal
-  [isOpen]="showReportModal"
-  [reportType]="'user'"
-  [targetTitle]="user?.username || ''"
-  (close)="onReportClose()"
-  (submit)="onReportSubmit($event)">
-</app-report-modal>
+<app-report-modal [isOpen]="showReportModal" [reportType]="'user'" [targetTitle]="user?.username || ''"
+  (close)="onReportClose()" (submit)="onReportSubmit($event)"></app-report-modal>

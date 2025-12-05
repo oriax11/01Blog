@@ -1,7 +1,15 @@
 package com.example.test.service.impl;
 
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import com.example.test.dto.LoginDto;
 import com.example.test.dto.RegisterDto;
@@ -10,13 +18,6 @@ import com.example.test.model.User;
 import com.example.test.repository.UserRepository;
 import com.example.test.security.JwtTokenProvider;
 import com.example.test.service.AuthService;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 
 
 @Service
@@ -56,12 +57,12 @@ public class AuthServiceImpl implements AuthService {
 
         // Check for username exists in database
         if (userRepository.existsByUsername(registerDto.getUsername())) {
-            throw new BlogAPIException(HttpStatus.CONFLICT, "Username is already exists!.");
+            throw new BlogAPIException(HttpStatus.CONFLICT, "Username is already taken!.");
         }
 
         // Check for email exists in database
         if (userRepository.existsByEmail(registerDto.getEmail())) {
-            throw new BlogAPIException(HttpStatus.CONFLICT, "Email is already exists!.");
+            throw new BlogAPIException(HttpStatus.CONFLICT, "Email is already used!.");
         }
 
         User user = new User();
