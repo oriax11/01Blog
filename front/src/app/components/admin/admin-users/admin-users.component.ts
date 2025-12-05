@@ -67,10 +67,10 @@ export class AdminUsersComponent implements OnInit {
 
   deleteUser(userId: string) {
     if (confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
-      // this.userService.deleteUser(userId).subscribe(() => {
-      //   alert('User has been deleted successfully');
-      //   this.loadUsers();
-      // });
+      this.adminService.deleteUser(userId).subscribe(() => {
+        alert('User has been deleted successfully');
+        this.loadUsers();
+      });
     }
   }
 

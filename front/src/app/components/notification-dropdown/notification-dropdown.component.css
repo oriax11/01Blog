@@ -45,7 +45,7 @@
   top: 45px;
   width: 360px;
   max-width: 90vw;
-  background: #111;               /* Dark background */
+  background: #111111;               /* Dark background */
   border: 1px solid #00A55033;    /* Subtle green border */
   border-radius: 12px;
   box-shadow: 0 4px 25px rgba(0, 0, 0, 0.6);
@@ -125,7 +125,7 @@
   flex-shrink: 0;
   width: 40px;
   height: 40px;
-  background: #00A550;
+  background: #035e2f;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -133,7 +133,7 @@
 }
 
 .notification-icon svg {
-  color: white;
+  color: rgb(164, 168, 165);
 }
 
 .notification-text {

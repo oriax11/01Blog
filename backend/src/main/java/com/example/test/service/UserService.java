@@ -1,14 +1,15 @@
 package com.example.test.service;
 
-import com.example.test.dto.UserDTO;
-import com.example.test.model.User;
-import com.example.test.repository.UserRepository;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.example.test.dto.UserDTO;
+import com.example.test.model.User;
+import com.example.test.repository.UserRepository;
 
 @Service
 public class UserService {
@@ -83,6 +84,11 @@ public class UserService {
         User user = getUserEntityById(id);
         user.setRole(com.example.test.model.Role.BANNED);
         userRepository.save(user);
+    }
+
+    public void deleteUser(UUID id) {
+        User user = getUserEntityById(id);
+        userRepository.delete(user);
     }
 
     private UserDTO convertToDTO(User user) {

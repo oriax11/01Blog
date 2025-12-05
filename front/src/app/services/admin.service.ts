@@ -74,7 +74,7 @@ export class AdminService {
       {},
       {
         ...this.authService.getAuthHeaders(),
-        params: { action }
+        params: { action },
       }
     );
   }
@@ -91,6 +91,12 @@ export class AdminService {
     return this.http.put<boolean>(
       `${environment.apiUrl}/api/users/${userId}/ban`,
       {},
+      this.authService.getAuthHeaders()
+    );
+  }
+  deleteUser(userId: string): Observable<boolean> {
+    return this.http.delete<boolean>(
+      `${environment.apiUrl}/api/users/${userId}/delete`,
       this.authService.getAuthHeaders()
     );
   }
