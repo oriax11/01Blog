@@ -22,11 +22,12 @@
 }
 .brand-link:focus {
   outline: none;
-
 }
 
 .brand-text {
   color: #ffffff;
+  font-weight: 700;
+  font-size: 1em;
 }
 
 .brand-accent {
@@ -102,4 +103,11 @@
   .nav-user {
     gap: 5px;
   }
+}
+
+.neon {
+  font-family: 'Orbitron', sans-serif;
+  color: #1fa34f;
+  font-weight: 700;
+  font-size: 1em;
 }

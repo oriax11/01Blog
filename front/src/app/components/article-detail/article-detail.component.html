@@ -43,9 +43,8 @@
 
     <footer class="article-footer">
       <div class="article-stats">
-        <button class="stat-btn">❤️ {{ article.likeCount }}</button>
-        <button class="stat-btn">💬 {{ article.commentsCount }}</button>
-        <button class="stat-btn">🔗 Share</button>
+        <button class="stat-btn"> {{ article.likeCount }}</button>
+        <button class="stat-btn"> {{ article.commentsCount }}</button>
       </div>
     </footer>
     <app-comment-section [postId]="article.id"></app-comment-section>

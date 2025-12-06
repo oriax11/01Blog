@@ -33,6 +33,12 @@
   display: flex;
   align-items: center;
   gap: 10px;
+
+    font-family: 'Orbitron', sans-serif;
+  color: #0ff;
+  font-weight: 700;
+  font-size: 1em;
+  text-shadow: 0 0 3px #0ff, 0 0 6px #0ff, 0 0 10px #0ff, 0 0 20px #0ff;
 }
 
 .mat-button {
@@ -65,4 +71,3 @@
     gap: 5px;
   }
 }
-
