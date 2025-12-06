@@ -28,7 +28,7 @@ public class Notification {
 
     @ManyToOne
     @JoinColumn(name = "sender_id")
-    @OnDelete(action = OnDeleteAction.SET_NULL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User sender;
 
     @Column(nullable = false)
