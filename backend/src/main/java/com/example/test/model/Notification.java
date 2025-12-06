@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 @Entity
 @Table(name = "notifications")
 @Data
@@ -18,13 +21,14 @@ public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-
     @ManyToOne
     @JoinColumn(name = "recipient_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User recipient;
 
     @ManyToOne
     @JoinColumn(name = "sender_id")
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     private User sender;
 
     @Column(nullable = false)

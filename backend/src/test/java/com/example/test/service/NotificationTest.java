@@ -11,8 +11,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.test.model.Article;
+import com.example.test.model.Follow;
 import com.example.test.model.Notification;
 import com.example.test.model.User;
+import com.example.test.repository.FollowRepository;
 import com.example.test.repository.NotificationRepository;
 import com.example.test.repository.UserRepository;
 
@@ -28,6 +30,8 @@ public class NotificationTest {
 
     @Autowired
     private NotificationRepository notificationRepository;
+    @Autowired
+    private FollowRepository followRepository;
 
     @Test
     public void testNotificationOnPostCreation() {
@@ -51,8 +55,8 @@ public class NotificationTest {
         // 2. Follower follows author
         // We need to establish the relationship manually for the test since we are not
         // using the controller
-        author.getFollowers().add(follower);
-        follower.getFollowing().add(author);
+        Follow follow = new Follow(follower, author);
+        followRepository.save(follow);
         userRepository.save(author);
         userRepository.save(follower);
 

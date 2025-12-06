@@ -15,9 +15,6 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
@@ -81,16 +78,15 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<CommentLike> commentLikes = new HashSet<>();
 
-    // Users this user is following
+    // Follow relationships - user is the follower
     @JsonIgnore
-    @ManyToMany
-    @JoinTable(name = "user_follows", joinColumns = @JoinColumn(name = "follower_id"), inverseJoinColumns = @JoinColumn(name = "following_id"))
-    private Set<User> following = new HashSet<>();
+    @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Follow> following = new HashSet<>();
 
-    // Users following this user
+    // Follow relationships - user is being followed
     @JsonIgnore
-    @ManyToMany(mappedBy = "following")
-    private Set<User> followers = new HashSet<>();
+    @OneToMany(mappedBy = "following", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Follow> followers = new HashSet<>();
 
     // Constructors
     public User() {
@@ -176,20 +172,19 @@ public class User {
         this.commentLikes = commentLikes;
     }
 
-    public Set<User> getFollowers() {
+    public Set<Follow> getFollowers() {
         return followers;
     }
 
-    public void setFollowers(Set<User> followers) {
+    public void setFollowers(Set<Follow> followers) {
         this.followers = followers;
     }
 
-    public Set<User> getFollowing() {
+    public Set<Follow> getFollowing() {
         return following;
     }
 
-    public void setFollowing(Set<User> following) {
+    public void setFollowing(Set<Follow> following) {
         this.following = following;
     }
-
 }

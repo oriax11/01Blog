@@ -8,16 +8,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.test.dto.UserDTO;
+import com.example.test.model.Follow;
 import com.example.test.model.User;
 import com.example.test.repository.UserRepository;
+import com.example.test.repository.FollowRepository;
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
+    private final FollowRepository followRepository;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, FollowRepository followRepository) {
         this.userRepository = userRepository;
+        this.followRepository = followRepository;
     }
 
     public User findByUsername(String username) {
@@ -44,8 +48,8 @@ public class UserService {
             throw new IllegalArgumentException("You cannot follow yourself.");
         }
 
-        follower.getFollowing().add(followee);
-        followee.getFollowers().add(follower);
+        Follow follow = new Follow(follower, followee);
+        followRepository.save(follow);
 
         userRepository.save(follower);
         userRepository.save(followee);

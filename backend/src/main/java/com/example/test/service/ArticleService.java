@@ -1,9 +1,12 @@
 package com.example.test.service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +14,7 @@ import com.example.test.dto.ArticleDTO;
 import com.example.test.dto.ArticleRequest;
 import com.example.test.dto.UserDTO;
 import com.example.test.model.Article;
+import com.example.test.model.Follow;
 import com.example.test.model.Like;
 import com.example.test.model.User;
 import com.example.test.repository.ArticleRepository;
@@ -58,15 +62,15 @@ public class ArticleService {
                 user.getRole());
 
         // Notify followers
-        if (user.getFollowers() != null) {
-            for (User follower : user.getFollowers()) {
+        if (user.getFollowers() != null && !user.getFollowers().isEmpty()) {
+            user.getFollowers().forEach(follow -> {
                 notificationService.createNotification(
-                        follower,
+                        follow.getFollower(),
                         user,
                         "POST",
                         user.getUsername() + " published a new article",
                         saved.getId().toString());
-            }
+            });
         }
 
         return new ArticleDTO(
@@ -198,8 +202,13 @@ public class ArticleService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         // 2. Get the list of subscribed users
-        Set<User> subscriptions = user.getFollowing();
-
+        // Get users this user is following
+        Set<User> subscriptions = user.getFollowing() != null
+                ? user.getFollowing().stream()
+                        .map(Follow::getFollowing)
+                        .collect(Collectors.toSet())
+                : new HashSet<>();
+                
         // 3. Fetch articles from those users
         List<Article> articles = articleRepository.findByCreatorIn(subscriptions);
 
