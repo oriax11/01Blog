@@ -34,12 +34,8 @@
 
   <div class="profile-content">
     <div class="section-header">
-      <h2>My Articles</h2>
-      <div class="sort-options">
-        <button class="sort-btn active">Latest</button>
-        <button class="sort-btn">Popular</button>
-        <button class="sort-btn">Oldest</button>
-      </div>
+      <h2>Posts</h2>
+
     </div>
 
     <div class="articles-grid" *ngIf="userArticles.length > 0">
@@ -49,7 +45,7 @@
     <div class="no-articles" *ngIf="userArticles.length === 0">
       <h3>No articles yet</h3>
       <p>Start sharing your knowledge with the community!</p>
-      <button class="create-article-btn">CREATE YOUR FIRST ARTICLE</button>
+      <button class="create-article-btn" routerLink="/create">CREATE YOUR FIRST ARTICLE</button>
     </div>
   </div>
 </div>

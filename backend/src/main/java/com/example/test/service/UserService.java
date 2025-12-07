@@ -10,8 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.test.dto.UserDTO;
 import com.example.test.model.Follow;
 import com.example.test.model.User;
-import com.example.test.repository.UserRepository;
 import com.example.test.repository.FollowRepository;
+import com.example.test.repository.UserRepository;
 
 @Service
 public class UserService {
@@ -68,6 +68,14 @@ public class UserService {
 
         userRepository.save(follower);
         userRepository.save(followee);
+    }
+
+    public List<UserDTO> searchUsers(String query) {
+        // Search by username, email, or display name
+        return userRepository.findByUsernameContainingIgnoreCase(query)
+                .stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)

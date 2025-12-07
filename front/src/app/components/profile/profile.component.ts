@@ -11,11 +11,11 @@ import { ReportModalComponent } from '../report-modal/report-modal.component';
 import { forkJoin } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { AuthService } from '../../services/auth.service';
-
+import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, ArticleCardComponent, ReportModalComponent],
+  imports: [CommonModule, ArticleCardComponent, ReportModalComponent,RouterModule],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css'],
 })

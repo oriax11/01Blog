@@ -7,7 +7,7 @@
 
   <span class="nav-brand">
     <a routerLink="/" class="brand-link">
-      <span class="brand-text" >01</span>
+      <span class="brand-text">01</span>
       <span class="brand-accent">Blog</span>
     </a>
   </span>
@@ -32,9 +32,9 @@
         <mat-icon>account_circle</mat-icon>
       </button>
     </a>
+    <span class="neon" [routerLink]="['/profile', userId]">{{ username }}</span>
 
     <div *ngIf="username" class="hide-on-small">
-      <span class="neon">{{ username }}</span>
 
       <button mat-button (click)="logout()"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
           width="20px" height="20px" viewBox="0 0 113.525 122.879" xml:space="preserve">
