@@ -18,6 +18,7 @@ export class ArticleService {
       this.authService.getAuthHeaders()
     );
   }
+
   getComments(id: string): Observable<Comment[]> {
     return this.http.get<Comment[]>(
       `${environment.apiUrl}/api/articles/${id}/comments`,
@@ -73,6 +74,22 @@ export class ArticleService {
   getAllArticles(): Observable<Article[]> {
     return this.http.get<Article[]>(
       `${environment.apiUrl}/api/articles/all`,
+      this.authService.getAuthHeaders()
+    );
+  }
+
+  // Like functionality
+  likeArticle(articleId: string): Observable<any> {
+    return this.http.post(
+      `${environment.apiUrl}/api/articles/${articleId}/like`,
+      {},
+      this.authService.getAuthHeaders()
+    );
+  }
+
+  unlikeArticle(articleId: string): Observable<any> {
+    return this.http.delete(
+      `${environment.apiUrl}/api/articles/${articleId}/like`,
       this.authService.getAuthHeaders()
     );
   }

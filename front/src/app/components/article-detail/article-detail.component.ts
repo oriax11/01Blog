@@ -32,19 +32,19 @@ export class ArticleDetailComponent implements OnInit {
     private notificationService: NotificationService
   ) {}
 
-ngOnInit() {
-  this.currentUserId = this.authService.getUserId();
+  ngOnInit() {
+    this.currentUserId = this.authService.getUserId();
 
-  this.route.paramMap.subscribe(params => {
-    const articleId = params.get('id');
+    this.route.paramMap.subscribe(params => {
+      const articleId = params.get('id');
 
-    if (articleId) {
-      this.articleService.getArticleById(articleId).subscribe(article => {
-        this.article = article;
-      });
-    }
-  });
-}
+      if (articleId) {
+        this.articleService.getArticleById(articleId).subscribe(article => {
+          this.article = article;
+        });
+      }
+    });
+  }
 
   // This listens for clicks anywhere in the document
   @HostListener('document:click', ['$event'])
@@ -116,5 +116,49 @@ ngOnInit() {
 
   goToAuthorProfile() {
     this.router.navigate(['/profile', this.article.creator.id]);
+  }
+
+  // Like functionality
+  toggleLike(event?: MouseEvent): void {
+    if (event) {
+      event.stopPropagation();
+    }
+
+    if (!this.currentUserId) {
+      this.notificationService.error('Please login to like articles');
+      return;
+    }
+
+    if (this.article.isLiked) {
+      this.unlikePost();
+    } else {
+      this.likePost();
+    }
+  }
+
+  private likePost(): void {
+    this.articleService.likeArticle(this.article.id.toString()).subscribe({
+      next: () => {
+        this.article.isLiked = true;
+        this.article.likeCount++;
+      },
+      error: (error) => {
+        console.error('Error liking post:', error);
+        this.notificationService.error('Failed to like article');
+      }
+    });
+  }
+
+  private unlikePost(): void {
+    this.articleService.unlikeArticle(this.article.id.toString()).subscribe({
+      next: () => {
+        this.article.isLiked = false;
+        this.article.likeCount--;
+      },
+      error: (error) => {
+        console.error('Error unliking post:', error);
+        this.notificationService.error('Failed to unlike article');
+      }
+    });
   }
 }
