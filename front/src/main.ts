@@ -17,53 +17,93 @@ import { MatButtonModule } from '@angular/material/button';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, NavbarComponent, NavbarUnloggedComponent, MatSidenavModule, MatListModule, MatIconModule, MatButtonModule, RouterLink],
+  imports: [
+    CommonModule,
+    RouterOutlet,
+    NavbarComponent,
+    NavbarUnloggedComponent,
+    MatSidenavModule,
+    MatListModule,
+    MatIconModule,
+    MatButtonModule,
+    RouterLink,
+  ],
   template: `
     <mat-sidenav-container class="sidenav-container">
-      <mat-sidenav #sidenav mode="over" [fixedInViewport]="true" [opened]="false" class="custom-sidenav">
+      <mat-sidenav
+        #sidenav
+        mode="over"
+        [fixedInViewport]="true"
+        [opened]="false"
+        class="custom-sidenav"
+      >
         <mat-nav-list>
           <a mat-list-item routerLink="/" (click)="sidenav.close()">Home</a>
           <a mat-list-item routerLink="/create" (click)="sidenav.close()">Write</a>
-          <a mat-list-item [routerLink]="['/profile', username]" (click)="sidenav.close()">Profile</a>
+          <a mat-list-item [routerLink]="['/profile', username]" (click)="sidenav.close()"
+            >Profile</a
+          >
           <a mat-list-item (click)="logout(); sidenav.close()">Logout</a>
         </mat-nav-list>
       </mat-sidenav>
       <mat-sidenav-content>
         <div class="app">
-          <app-navbar *ngIf="authService.isLoggedIn()" (toggleSidenav)="sidenav.toggle()"></app-navbar>
-          <app-navbar-unlogged *ngIf="!authService.isLoggedIn()" (toggleSidenav)="sidenav.toggle()"></app-navbar-unlogged>
+          <app-navbar
+            *ngIf="authService.isLoggedIn()"
+            (toggleSidenav)="sidenav.toggle()"
+          ></app-navbar>
+          <app-navbar-unlogged
+            *ngIf="!authService.isLoggedIn()"
+            (toggleSidenav)="sidenav.toggle()"
+          ></app-navbar-unlogged>
           <router-outlet></router-outlet>
         </div>
-      </mat-sidenav-content> 
+      </mat-sidenav-content>
     </mat-sidenav-container>
   `,
-  styles: [`
-    .sidenav-container {
-      height: 100vh;
-      background-color: #1a1a1a;
-      color: #ffffff;
-    }
+  styles: [
+    `
+      .sidenav-container {
+        height: 100vh;
+        background-color: #1a1a1a;
+        color: #ffffff;
+      }
 
-    .custom-sidenav {
-      width: 250px;
-      background-color: #111111;
-      color: #ffffff;
-    }
+      .custom-sidenav {
+        width: 250px;
+        background-color: #111111;
+        color: #ffffff;
+      }
 
-    .mat-list-item {
-      color: #ffffff;
-    }
+      /* This is what controls the menu items */
+      .custom-sidenav ::ng-deep .mat-mdc-list-item {
+        font-family: 'Orbitron', sans-serif !important;
+        color: #ffffff !important;
+        font-weight: 700 !important;
+        font-size: 1em !important;
+      }
 
-    .mat-list-item:hover {
-      background-color: rgba(34, 197, 94, 0.1);
-      color: #22c55e;
-    }
+      .custom-sidenav ::ng-deep .mat-mdc-list-item:hover {
+        background-color: rgba(34, 197, 94, 0.1) !important;
+      }
 
-    .app {
-      min-height: 100vh;
-      background-color: #1a1a1a;
-    }
-  `]
+      .custom-sidenav ::ng-deep .mat-mdc-list-item:hover .mdc-list-item__primary-text {
+        color: #ffffff !important;
+      }
+
+      .custom-sidenav ::ng-deep .mdc-list-item__primary-text {
+        font-family: 'Orbitron', sans-serif;
+        color: #1fa34f;
+        font-weight: 700;
+        font-size: 1em;
+      }
+
+      .app {
+        min-height: 100vh;
+        background-color: #1a1a1a;
+      }
+    `,
+  ],
 })
 export class App {
   username: string | null = null;
@@ -85,6 +125,6 @@ bootstrapApplication(App, {
     provideRouter(routes),
     provideHttpClient(withFetch()),
     AuthService,
-    provideAnimations()
-  ]
+    provideAnimations(),
+  ],
 });
