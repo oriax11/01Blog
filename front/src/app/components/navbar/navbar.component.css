@@ -1,3 +1,4 @@
+/* ===== NAVBAR CONTAINER ===== */
 .navbar {
   background-color: #111111;
   border-bottom: 1px solid #0a6d2e;
@@ -8,10 +9,7 @@
   height: 64px;
 }
 
-.menu-icon {
-  display: none; /* Hidden by default */
-}
-
+/* ===== BRAND/LOGO ===== */
 .brand-link {
   text-decoration: none;
   font-family: 'Courier New', monospace;
@@ -20,6 +18,7 @@
   display: flex;
   align-items: center;
 }
+
 .brand-link:focus {
   outline: none;
 }
@@ -34,32 +33,67 @@
   color: #22c55e;
 }
 
+.neon {
+  font-family: 'Orbitron', sans-serif;
+  color: #1fa34f;
+  font-weight: 700;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+/* ===== SEARCH INPUT (YOUR SECTION TO MODIFY) ===== */
 .nav-search {
   flex-grow: 1;
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
-.search-input-field {
+.search-container {
   width: 90%;
   max-width: 400px;
-}
-
-.search-input {
+  display: flex;
+  align-items: center;
   background-color: #2d3748;
-  color: #e2e8f0;
+  border-radius: 16px;
   padding: 0.5rem 1rem;
   transition: all 0.3s ease;
 }
 
-.search-input:focus {
-  outline: none;
+.search-container:focus-within {
+  box-shadow: 0 0 0 2px #22c55e;
 }
 
+.search-icon {
+  color: #94a3b8;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+.search-input {
+  background-color: transparent;
+  color: #e2e8f0;
+  border: none;
+  flex: 1;
+  outline: none;
+  font-size: 14px;
+}
+
+.search-input::placeholder {
+  color: #94a3b8;
+}
+/* ===== END SEARCH INPUT ===== */
+
+/* ===== USER SECTION ===== */
 .nav-user {
   display: flex;
   align-items: center;
   gap: 10px;
+}
+
+.nav-user span {
+  color: #ffffff;
+  margin-right: 5px;
 }
 
 .write-btn {
@@ -74,11 +108,12 @@
   color: #22c55e;
 }
 
-.nav-user span {
-  color: #ffffff;
-  margin-right: 5px;
+/* ===== MOBILE MENU ===== */
+.menu-icon {
+  display: none; /* Hidden by default */
 }
 
+/* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .navbar {
     padding: 0 10px;
@@ -104,13 +139,3 @@
     gap: 5px;
   }
 }
-
-.neon {
-  font-family: 'Orbitron', sans-serif;
-  color: #1fa34f;
-  font-weight: 700;
-  font-size: 1em;
-  cursor: pointer;
-}
-
-
