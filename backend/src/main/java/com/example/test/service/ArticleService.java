@@ -46,6 +46,13 @@ public class ArticleService {
         this.notificationService = notificationService;
     }
 
+    // public String getArticleTitleById(Long id) {
+    //     Article article = articleRepository.findById(id)
+    //             .orElseThrow(() -> new RuntimeException("Article not found with id: " + id));
+
+    //     return article.getTitle();
+    // }
+
     public ArticleDTO createArticle(Article article, UUID currentUserId) {
         Article saved = articleRepository.save(article);
         User user = userRepository.getReferenceById(currentUserId);
@@ -208,7 +215,7 @@ public class ArticleService {
                         .map(Follow::getFollowing)
                         .collect(Collectors.toSet())
                 : new HashSet<>();
-                
+
         // 3. Fetch articles from those users
         List<Article> articles = articleRepository.findByCreatorIn(subscriptions);
 

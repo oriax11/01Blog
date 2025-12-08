@@ -38,7 +38,6 @@ export interface Report {
   targetTitle: string;
   reportedBy: string;
   reason: string;
-  description: string;
   status: 'pending' | 'resolved' | 'dismissed';
   createdAt: Date;
   resolvedAt?: Date;

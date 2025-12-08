@@ -1,0 +1,68 @@
+<div class="error-container">
+    <div class="error-content">
+        <div class="error-code">403</div>
+        <h1 class="error-title">ACCESS <span class="accent">DENIED</span></h1>
+        <p class="error-message">
+            You don't have permission to access this resource. Please contact an administrator if you believe this is an
+            error.
+        </p>
+
+        <div class="error-illustration">
+            <div class="terminal">
+                <div class="terminal-header">
+                    <div class="terminal-buttons">
+                        <span class="btn red"></span>
+                        <span class="btn yellow"></span>
+                        <span class="btn green"></span>
+                    </div>
+                    <span class="terminal-title">student&#64;blog:~$</span>
+                </div>
+                <div class="terminal-body">
+                    <div class="terminal-line">
+                        <span class="prompt">$</span> sudo access /admin/dashboard
+                    </div>
+                    <div class="terminal-line error">
+                        Permission denied: You are not authorized to access this resource
+                    </div>
+                    <div class="terminal-line">
+                        <span class="prompt">$</span> whoami
+                    </div>
+                    <div class="terminal-line">
+                        guest_user
+                    </div>
+                    <div class="terminal-line">
+                        <span class="prompt">$</span> groups
+                    </div>
+                    <div class="terminal-line">
+                        students
+                    </div>
+                    <div class="terminal-line">
+                        <span class="prompt">$</span> <span class="cursor">_</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn-secondary" (click)="goBack()">
+                ← GO BACK
+            </button>
+        </div>
+
+        <div class="helpful-links">
+            <h3>AVAILABLE SECTIONS</h3>
+            <div class="links-grid">
+                <a routerLink="/home" class="help-link">
+                    <span class="link-text">Latest Articles</span>
+                </a>
+                <a routerLink="/create" class="help-link">
+                    <span class="link-text">Create Article</span>
+                </a>
+
+
+            </div>
+        </div>
+
+
+    </div>
+</div>

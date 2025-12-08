@@ -40,6 +40,7 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
     }
 
+
     @Transactional
     public void follow(String followerUsername, UUID followeeId) {
         User follower = findByUsername(followerUsername);

@@ -15,6 +15,8 @@ import { EditArticleComponent } from './components/edit-article/edit-article.com
 import { AuthGuard } from './guards/auth-guard';
 import { GuestGuard } from './guards/guest-guard';
 import { AdminGuard } from './guards/admin-guard';
+import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
+import { NotFoundComponent } from './components/not-found/not-found.component';
 
 export const routes: Routes = [
   // Public (guest) routes
@@ -35,6 +37,9 @@ export const routes: Routes = [
   { path: 'admin/posts', component: AdminPostsComponent, canActivate: [AdminGuard] },
   { path: 'admin/reports', component: AdminReportsComponent, canActivate: [AdminGuard] },
 
+  // Redirect empty path to home
+  { path: 'forbidden', component: UnauthorizedComponent },
+
   // Wildcard route
-  { path: '**', redirectTo: 'home' },
+  { path: '**', component: NotFoundComponent },
 ];

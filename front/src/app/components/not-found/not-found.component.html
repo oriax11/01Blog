@@ -1,0 +1,68 @@
+<div class="error-container">
+      <div class="error-content">
+        <div class="error-code">404</div>
+        <h1 class="error-title">PAGE <span class="accent">NOT FOUND</span></h1>
+        <p class="error-message">
+          Oops! The page you're looking for doesn't exist or has been moved.
+        </p>
+        
+        <div class="error-illustration">
+          <div class="terminal">
+            <div class="terminal-header">
+              <div class="terminal-buttons">
+                <span class="btn red"></span>
+                <span class="btn yellow"></span>
+                <span class="btn green"></span>
+              </div>
+              <span class="terminal-title">student&#64;blog:~$</span>
+            </div>
+            <div class="terminal-body">
+              <div class="terminal-line">
+                <span class="prompt">$</span> cd /page-you-were-looking-for
+              </div>
+              <div class="terminal-line error">
+                bash: cd: /page-you-were-looking-for: No such file or directory
+              </div>
+              <div class="terminal-line">
+                <span class="prompt">$</span> ls -la
+              </div>
+              <div class="terminal-line">
+                total 0
+              </div>
+              <div class="terminal-line">
+                drwxr-xr-x 2 student student 4096 Jan 15 12:34 .
+              </div>
+              <div class="terminal-line">
+                drwxr-xr-x 3 student student 4096 Jan 15 12:34 ..
+              </div>
+              <div class="terminal-line">
+                <span class="prompt">$</span> <span class="cursor">_</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn-secondary" (click)="goBack()">
+              ← GO BACK
+            </button>
+          <button class="btn-primary" routerLink="/">
+             GO HOME
+          </button>
+
+        </div>
+
+        <div class="helpful-links">
+          <h3>POPULAR PAGES</h3>
+          <div class="links-grid">
+            <a routerLink="/home" class="help-link">
+              <span class="link-text">Latest Articles</span>
+            </a>
+            <a routerLink="/create" class="help-link">
+              <span class="link-text">Create Article</span>
+            </a>
+
+          </div>
+        </div>
+      </div>
+    </div>

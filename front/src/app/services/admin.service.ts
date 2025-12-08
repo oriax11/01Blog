@@ -15,42 +15,6 @@ export class AdminService {
     totalReports: 23,
   };
 
-  private mockReports: Report[] = [
-    {
-      id: '1',
-      type: 'post',
-      targetId: '1',
-      targetTitle: 'Getting Started with Machine Learning',
-      reportedBy: 'user123',
-      reason: 'Inappropriate Content',
-      description: 'Contains misleading information about ML algorithms',
-      status: 'pending',
-      createdAt: new Date('2024-01-15T10:30:00'),
-    },
-    {
-      id: '2',
-      type: 'user',
-      targetId: '2',
-      targetTitle: 'sarah_tech',
-      reportedBy: 'user456',
-      reason: 'Spam',
-      description: 'User is posting spam comments on multiple articles',
-      status: 'pending',
-      createdAt: new Date('2024-01-14T15:45:00'),
-    },
-    {
-      id: '3',
-      type: 'post',
-      targetId: '3',
-      targetTitle: 'Cybersecurity Best Practices',
-      reportedBy: 'user789',
-      reason: 'Copyright Violation',
-      description: 'Content appears to be copied from another source',
-      status: 'resolved',
-      createdAt: new Date('2024-01-13T09:15:00'),
-      resolvedAt: new Date('2024-01-13T14:20:00'),
-    },
-  ];
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 

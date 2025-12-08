@@ -2,10 +2,12 @@ package com.example.test.service;
 
 import java.util.List;
 
+import com.example.test.dto.ReportDTO;
 import com.example.test.model.Report;
 
 public interface ReportService {
-    Report createReport(Report report , String reportedByUsername);
+    Report createReportPost(ReportDTO report, String reportedByUsername);
+    Report createReportUser(ReportDTO report, String reportedByUsername);
 
     List<Report> getAllReports();
 
