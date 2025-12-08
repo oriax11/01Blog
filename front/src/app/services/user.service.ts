@@ -41,4 +41,10 @@ export class UserService {
       this.authService.getAuthHeaders()
     );
   }
+  searchUsers(query: string): Observable<User[]> {
+    return this.http.get<User[]>(`${environment.apiUrl}/api/users/search`, {
+      params: { query },
+      ...this.authService.getAuthHeaders(),
+    });
+  }
 }

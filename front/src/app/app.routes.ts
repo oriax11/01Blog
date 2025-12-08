@@ -3,7 +3,6 @@ import { HomeComponent } from './components/home/home.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { PostEditorComponent } from './components/create-article/create-article.component';
 import { ArticleDetailComponent } from './components/article-detail/article-detail.component';
-import { SearchComponent } from './components/search/search.component';
 import { AdminDashboardComponent } from './components/admin/admin-dashboard/admin-dashboard.component';
 import { AdminUsersComponent } from './components/admin/admin-users/admin-users.component';
 import { AdminPostsComponent } from './components/admin/admin-posts/admin-posts.component';
@@ -25,7 +24,6 @@ export const routes: Routes = [
   // Protected routes (require login)
   { path: '', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
-  { path: 'search', component: SearchComponent, canActivate: [AuthGuard] },
   { path: 'profile/:userId', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'create', component: PostEditorComponent, canActivate: [AuthGuard] },
   { path: 'article/:id', component: ArticleDetailComponent, canActivate: [AuthGuard] },
