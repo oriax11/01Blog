@@ -35,14 +35,16 @@ export class LoginComponent {
       this.http.post(`${environment.apiUrl}/api/auth/login`, this.loginForm.value).subscribe(
         (response: any) => {
           const token = response.accessToken;
-
           const decoded: any = jwtDecode(token);
-          if (decoded.role === 'BANNED') {
+
+          // Check status instead of role
+          if (decoded.status === 'BANNED') {
             this.ErrorMessage = 'Your account has been banned.';
             return;
           }
 
-          this.authService.setToken(response.accessToken);
+          // Save token and navigate
+          this.authService.setToken(token);
           this.router.navigate(['/home']);
         },
         (error) => {

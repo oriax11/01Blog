@@ -66,7 +66,7 @@ public class ArticleService {
                 user.getArticles() != null ? user.getArticles().size() : 0,
                 user.getFollowers() != null ? user.getFollowers().size() : 0,
                 user.getFollowing() != null ? user.getFollowing().size() : 0,
-                user.getRole() , user.getStatus());
+                user.getRole(), user.getStatus());
 
         // Notify followers
         if (user.getFollowers() != null && !user.getFollowers().isEmpty()) {
@@ -111,7 +111,7 @@ public class ArticleService {
                     creator.getArticles() != null ? creator.getArticles().size() : 0,
                     creator.getFollowers() != null ? creator.getFollowers().size() : 0,
                     creator.getFollowing() != null ? creator.getFollowing().size() : 0,
-                    creator.getRole() , creator.getStatus());
+                    creator.getRole(), creator.getStatus());
 
             return new ArticleDTO(
                     article.getId(),
@@ -144,11 +144,15 @@ public class ArticleService {
         return articleRepository.save(article);
     }
 
-    public DeleteArticleResult deleteArticle(Long id, String username) {
+    public DeleteArticleResult deleteArticle(Long id, String username, boolean isAdmin) {
         Article article = articleRepository.findById(id).orElse(null);
         if (article == null) {
             return DeleteArticleResult.NOT_FOUND;
         }
+        if (article.getStatus().equals("hidden") && !isAdmin) {
+            return DeleteArticleResult.NOT_FOUND;
+        }
+
         if (!article.getCreator().getUsername().equals(username)) {
             return DeleteArticleResult.UNAUTHORIZED;
         }
@@ -160,6 +164,13 @@ public class ArticleService {
         Article article = articleRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Article not found"));
         article.setStatus("hidden");
+        articleRepository.save(article);
+    }
+
+    public void unhideArticle(Long id) {
+        Article article = articleRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Article not found"));
+        article.setStatus("published");
         articleRepository.save(article);
     }
 
@@ -253,7 +264,7 @@ public class ArticleService {
         }).toList();
     }
 
-    public Optional<ArticleDTO> getArticleById(Long id, String username) {
+    public Optional<ArticleDTO> getArticleById(Long id, String username, boolean isAdmin) {
         Optional<Article> articleOpt = articleRepository.findById(id);
 
         if (articleOpt.isEmpty()) {
@@ -261,7 +272,7 @@ public class ArticleService {
         }
 
         Article article = articleOpt.get();
-        if (article.getStatus().equals("hidden")) {
+        if (article.getStatus().equals("hidden") && !isAdmin) {
             return Optional.empty();
         }
 
@@ -277,7 +288,7 @@ public class ArticleService {
                 user.getArticles() != null ? user.getArticles().size() : 0,
                 user.getFollowers() != null ? user.getFollowers().size() : 0,
                 user.getFollowing() != null ? user.getFollowing().size() : 0,
-                user.getRole() , user.getStatus());
+                user.getRole(), user.getStatus());
 
         ArticleDTO dto = new ArticleDTO(
                 article.getId(),
@@ -292,49 +303,46 @@ public class ArticleService {
         return Optional.of(dto);
     }
 
-public List<ArticleDTO> getArticlesByUser(User user, String loggedUsername) {
+    public List<ArticleDTO> getArticlesByUser(User user, String loggedUsername) {
 
-    return user.getArticles()
-            .stream()
-            .filter(article -> !"hidden".equals(article.getStatus()))
-            .map(article -> {
+        return user.getArticles()
+                .stream()
+                .filter(article -> !"hidden".equals(article.getStatus()))
+                .map(article -> {
 
-                boolean isLiked = likeRepository
-                        .existsByArticleIdAndUserUsername(article.getId(), loggedUsername);
+                    boolean isLiked = likeRepository
+                            .existsByArticleIdAndUserUsername(article.getId(), loggedUsername);
 
-                int likeCount = likeRepository
-                        .countByArticleId(article.getId());
+                    int likeCount = likeRepository
+                            .countByArticleId(article.getId());
 
-                int commentsCount = commentRepository
-                        .countByArticleId(article.getId());
+                    int commentsCount = commentRepository
+                            .countByArticleId(article.getId());
 
-                User creator = article.getCreator();
+                    User creator = article.getCreator();
 
-                UserDTO creatorDTO = new UserDTO(
-                        creator.getId(),
-                        creator.getName(),
-                        creator.getUsername(),
-                        creator.getEmail(),
-                        creator.getArticles() != null ? creator.getArticles().size() : 0,
-                        creator.getFollowers() != null ? creator.getFollowers().size() : 0,
-                        creator.getFollowing() != null ? creator.getFollowing().size() : 0,
-                        creator.getRole() , 
-                        creator.getStatus()
-                );
+                    UserDTO creatorDTO = new UserDTO(
+                            creator.getId(),
+                            creator.getName(),
+                            creator.getUsername(),
+                            creator.getEmail(),
+                            creator.getArticles() != null ? creator.getArticles().size() : 0,
+                            creator.getFollowers() != null ? creator.getFollowers().size() : 0,
+                            creator.getFollowing() != null ? creator.getFollowing().size() : 0,
+                            creator.getRole(),
+                            creator.getStatus());
 
-                return new ArticleDTO(
-                        article.getId(),
-                        article.getTitle(),
-                        article.getContent(),
-                        creatorDTO,
-                        article.getCreatedAt(),
-                        likeCount,
-                        commentsCount,
-                        isLiked
-                );
+                    return new ArticleDTO(
+                            article.getId(),
+                            article.getTitle(),
+                            article.getContent(),
+                            creatorDTO,
+                            article.getCreatedAt(),
+                            likeCount,
+                            commentsCount,
+                            isLiked);
 
-            }).toList();
-}
-
+                }).toList();
+    }
 
 }

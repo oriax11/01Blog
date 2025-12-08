@@ -103,8 +103,10 @@ public class ArticleController {
         }
 
         String username = authentication.getName();
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
 
-        return articleService.getArticleById(id, username)
+        return articleService.getArticleById(id, username, isAdmin)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -126,6 +128,9 @@ public class ArticleController {
         }
 
         Article original = originalOpt.get();
+        if (original.getStatus().equals("hidden")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         Article updated = articleService.updateArticle(id, request, username);
 
         List<String> oldUrls = mediaUploadService.getFileUrlsByPostId(original.getId());
@@ -152,8 +157,13 @@ public class ArticleController {
         if (user == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
 
-        DeleteArticleResult result = articleService.deleteArticle(id, username);
+
+
+        DeleteArticleResult result = articleService.deleteArticle(id, username, isAdmin);
+
         switch (result) {
             case NOT_FOUND:
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Article not found");

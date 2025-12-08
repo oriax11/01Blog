@@ -1,17 +1,23 @@
 package com.example.test.security;
 
-import com.example.test.exception.BlogAPIException;
-import io.jsonwebtoken.*;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
+import java.security.Key;
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
-import java.security.Key;
-import java.util.Date;
-import com.example.test.model.*;
+import com.example.test.exception.BlogAPIException;
+import com.example.test.model.User;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 
 @Component
 public class JwtTokenProvider {
@@ -33,6 +39,7 @@ public class JwtTokenProvider {
                 .setSubject(user.getId().toString())
                 .claim("username", user.getUsername())
                 .claim("role",user.getRole())
+                .claim("status", user.getStatus())
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(key())
