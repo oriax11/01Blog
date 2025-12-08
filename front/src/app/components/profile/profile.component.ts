@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ArticleCardComponent } from '../article-card/article-card.component';
 import { ArticleService } from '../../services/article.service';
 import { UserService } from '../../services/user.service';
@@ -12,10 +12,11 @@ import { forkJoin } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { AuthService } from '../../services/auth.service';
 import { RouterModule } from '@angular/router';
+
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, ArticleCardComponent, ReportModalComponent,RouterModule],
+  imports: [CommonModule, ArticleCardComponent, ReportModalComponent, RouterModule],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css'],
 })
@@ -34,38 +35,40 @@ export class ProfileComponent implements OnInit {
     private userService: UserService,
     private notificationService: NotificationService,
     private reportService: ReportService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
 
-isOwnProfile = false;
+  isOwnProfile = false;
 
-ngOnInit() {
-  // Assuming you have currentUser from AuthService
-  this.currentUser = this.authService.getCurrentUser(); 
-  console.log('Current User:', this.currentUser);
+  ngOnInit() {
+    // Assuming you have currentUser from AuthService
+    this.currentUser = this.authService.getCurrentUser();
 
-  this.route.paramMap
-    .pipe(
-      switchMap(params => {
-        const userId = params.get('userId');
-        if (!userId) throw new Error('User ID not found');
-        return forkJoin([
-          this.userService.getUserByUsername(userId),
-          this.userService.isFollowing(userId),
-        ]);
-      })
-    )
-    .subscribe({
-      next: ([user, followStatus]) => {
-        console.log('Profile User:', user);
-        this.user = user;
-        this.isOwnProfile = this.user?.id === this.currentUser?.username;
-        this.isFollowing = followStatus;
-        this.fetchUserArticles();
-      }
-    });
-}
-
+    this.route.paramMap
+      .pipe(
+        switchMap((params) => {
+          const userId = params.get('userId');
+          if (!userId) throw new Error('User ID not found');
+          return forkJoin([
+            this.userService.getUserByUsername(userId),
+            this.userService.isFollowing(userId),
+          ]);
+        })
+      )
+      .subscribe({
+        next: ([user, followStatus]) => {
+          console.log('Profile User:', user);
+          this.user = user;
+          this.isOwnProfile = this.user?.id === this.currentUser?.username;
+          this.isFollowing = followStatus;
+          this.fetchUserArticles();
+        },
+        error: (err) => {
+          this.router.navigate(['/not-found']);
+        },
+      });
+  }
 
   fetchUserArticles() {
     if (!this.user) return;

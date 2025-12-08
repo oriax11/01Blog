@@ -19,6 +19,7 @@ export interface User {
   articlesCount: number;
   followersCount: number;
   followingCount: number;
+  status: 'ACTIVE' | 'BANNED';
 }
 
 export interface Comment {
@@ -50,7 +51,7 @@ export interface AdminStats {
 }
 
 export interface AdminUser extends User {
-  status: 'active' | 'banned' ;
+  status: 'ACTIVE' | 'BANNED';
   joinedAt: Date;
   reportCount: number;
 }

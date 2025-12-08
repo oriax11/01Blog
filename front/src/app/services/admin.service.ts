@@ -15,7 +15,6 @@ export class AdminService {
     totalReports: 23,
   };
 
-
   constructor(private http: HttpClient, private authService: AuthService) {}
 
   getAdminStats(): Observable<AdminStats> {
@@ -54,6 +53,14 @@ export class AdminService {
   banUser(userId: string): Observable<boolean> {
     return this.http.put<boolean>(
       `${environment.apiUrl}/api/users/${userId}/ban`,
+      {},
+      this.authService.getAuthHeaders()
+    );
+  }
+
+  unbanUser(userId: string): Observable<boolean> {
+    return this.http.put<boolean>(
+      `${environment.apiUrl}/api/users/${userId}/unban`,
       {},
       this.authService.getAuthHeaders()
     );

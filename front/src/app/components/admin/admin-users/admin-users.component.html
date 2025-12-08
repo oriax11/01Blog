@@ -1,88 +1,87 @@
-    <div class="admin-container">
-      <div class="admin-header">
-        <h1 class="admin-title">USER <span class="accent">MANAGEMENT</span></h1>
-        <p class="admin-subtitle">Manage all registered users</p>
-      </div>
+<div class="admin-container">
+  <div class="admin-header">
+    <h1 class="admin-title">USER <span class="accent">MANAGEMENT</span></h1>
+    <p class="admin-subtitle">Manage all registered users</p>
+  </div>
 
-      <div class="admin-nav">
-        <a routerLink="/admin" class="nav-item"> DASHBOARD</a>
-        <a routerLink="/admin/users" routerLinkActive="active" class="nav-item"> USERS</a>
-        <a routerLink="/admin/posts" class="nav-item"> POSTS</a>
-        <a routerLink="/admin/reports" class="nav-item"> REPORTS</a>
-      </div>
+  <div class="admin-nav">
+    <a routerLink="/admin" class="nav-item"> DASHBOARD</a>
+    <a routerLink="/admin/users" routerLinkActive="active" class="nav-item"> USERS</a>
+    <a routerLink="/admin/posts" class="nav-item"> POSTS</a>
+    <a routerLink="/admin/reports" class="nav-item"> REPORTS</a>
+  </div>
 
-      <div class="controls">
-        <div class="search-bar">
-          <input
-            type="text"
-            [(ngModel)]="searchQuery"
-            (input)="filterUsers()"
-            placeholder="Search users by name or email..."
-            class="search-input"
-          />
-        </div>
+  <div class="controls">
+    <div class="search-bar">
+      <input type="text" [(ngModel)]="searchQuery" (input)="filterUsers()"
+        placeholder="Search users by name or email..." class="search-input" />
+    </div>
 
-        <div class="filters">
-          <select [(ngModel)]="statusFilter" (change)="filterUsers()" class="filter-select">
-            <option value="">All Status</option>
-            <option value="active">Active</option>
-            <option value="banned">Banned</option>
-            <option value="suspended">Suspended</option>
-          </select>
-        </div>
-      </div>
+    <div class="filters">
+      <select [(ngModel)]="statusFilter" (change)="filterUsers()" class="filter-select">
+        <option value="">All Status</option>
+        <option value="active">Active</option>
+        <option value="banned">Banned</option>
+        <option value="suspended">Suspended</option>
+      </select>
+    </div>
+  </div>
 
-      <div class="users-table">
-        <div class="table-header">
-          <div class="header-cell">User</div>
-          <div class="header-cell">Email</div>
-          <div class="header-cell">Articles</div>
-          <div class="header-cell">Followers</div>
-          <div class="header-cell">Status</div>
-          <div class="header-cell">Actions</div>
-        </div>
+  <div class="users-table">
+    <div class="table-header">
+      <div class="header-cell">User</div>
+      <div class="header-cell">Email</div>
+      <div class="header-cell">Articles</div>
+      <div class="header-cell">Followers</div>
+      <div class="header-cell">Status</div>
+      <div class="header-cell">Actions</div>
+    </div>
 
-        <div class="table-body">
-          <div class="table-row" *ngFor="let user of filteredUsers">
-            <div class="cell user-cell">
-              <img [src]="user.avatarUrl" [alt]="user.username" class="user-avatar" />
-              <div class="user-info">
-                <h3 class="user-name">{{ user.username }}</h3>
-                <!-- <p class="user-bio">{{ user.bio }}</p> -->
-              </div>
-            </div>
-
-            <div class="cell">{{ user.email }}</div>
-
-            <div class="cell">
-              <span class="stat-badge">{{ user.articlesCount }}</span>
-            </div>
-
-            <div class="cell">
-              <span class="stat-badge">{{ user.followersCount }}</span>
-            </div>
-
-            <div class="cell">
-              <span class="status-badge active">Active</span>
-            </div>
-
-            <div class="cell actions-cell">
-              <button class="action-btn view" [routerLink]="['/profile', user.id]">👁️ View</button>
-              <button class="action-btn ban" (click)="banUser(user.id)">🚫 Ban</button>
-              <button class="action-btn delete" (click)="deleteUser(user.id)">🗑️ Delete</button>
-            </div>
+    <div class="table-body">
+      <div class="table-row" *ngFor="let user of filteredUsers">
+        <div class="cell user-cell">
+          <img [src]="user.avatarUrl" [alt]="user.username" class="user-avatar" />
+          <div class="user-info">
+            <h3 class="user-name">{{ user.username }}</h3>
+            <!-- <p class="user-bio">{{ user.bio }}</p> -->
           </div>
         </div>
-      </div>
 
-      <div class="pagination">
-        <button class="page-btn" [disabled]="currentPage === 1" (click)="previousPage()">
-          ← Previous
-        </button>
-        <span class="page-info">Page {{ currentPage }} of {{ totalPages }}</span>
-        <button class="page-btn" [disabled]="currentPage === totalPages" (click)="nextPage()">
-          Next →
-        </button>
+        <div class="cell">{{ user.email }}</div>
+
+        <div class="cell">
+          <span class="stat-badge">{{ user.articlesCount }}</span>
+        </div>
+
+        <div class="cell">
+          <span class="stat-badge">{{ user.followersCount }}</span>
+        </div>
+
+        <div class="cell">
+          <span class="status-badge" [ngClass]="user.status?.toLowerCase()">
+            {{ user.status }}
+          </span>
+        </div>
+
+
+        <div class="cell actions-cell">
+          <button class="action-btn view" [routerLink]="['/profile', user.id]">👁️ View</button>
+          <button class="action-btn" [ngClass]="user.status === 'ACTIVE' ? 'ban' : 'unban'" (click)="toggleBan(user)">
+            {{ user.status === 'ACTIVE' ? 'Ban' : 'Unban' }}
+          </button>
+          <button class="action-btn delete" (click)="deleteUser(user.id)">🗑️ Delete</button>
+        </div>
       </div>
     </div>
-  
+  </div>
+
+  <div class="pagination">
+    <button class="page-btn" [disabled]="currentPage === 1" (click)="previousPage()">
+      ← Previous
+    </button>
+    <span class="page-info">Page {{ currentPage }} of {{ totalPages }}</span>
+    <button class="page-btn" [disabled]="currentPage === totalPages" (click)="nextPage()">
+      Next →
+    </button>
+  </div>
+</div>

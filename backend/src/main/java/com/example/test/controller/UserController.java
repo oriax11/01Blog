@@ -74,6 +74,13 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PutMapping("/{id}/unban")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> unbanUser(@PathVariable UUID id) {
+        userService.unbanUser(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @DeleteMapping("/{id}/delete")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteUser(@PathVariable UUID id) {

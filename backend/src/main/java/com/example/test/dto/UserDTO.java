@@ -13,13 +13,14 @@ public class UserDTO {
     private Integer followersCount;
     private Integer followingCount;
     private com.example.test.model.Role role;
+    private com.example.test.model.Status status;
 
     // Constructors
     public UserDTO() {
     }
 
     public UserDTO(UUID id, String name, String username, String email,
-            Integer articlesCount, Integer followersCount, Integer followingCount, Role role) {
+            Integer articlesCount, Integer followersCount, Integer followingCount, Role role  , com.example.test.model.Status status) {
         this.id = id;
         this.name = name;
         this.username = username;
@@ -28,6 +29,7 @@ public class UserDTO {
         this.role = role;
         this.followersCount = followersCount;
         this.followingCount = followingCount;
+        this.status = status;
     }
 
     // Getters and Setters
@@ -93,5 +95,11 @@ public class UserDTO {
 
     public void setRoles(Role role) {
         this.role = role;
+    }
+    public com.example.test.model.Status getStatus() {
+        return status;
+    }
+    public void setStatus(com.example.test.model.Status status) {
+        this.status = status;
     }
 }

@@ -41,6 +41,12 @@ public class User {
     @Column(nullable = false)
     private Role role = Role.USER;
 
+    @Getter
+    @Setter
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Status status = Status.ACTIVE;
+    
     @NotBlank(message = "Name is required")
     @Size(min = 2, max = 100, message = "Name must be between 2 and 100 characters")
     @Column(nullable = false)

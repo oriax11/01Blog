@@ -34,7 +34,23 @@ export class AdminUsersComponent implements OnInit {
       this.filterUsers();
     });
   }
-
+  toggleBan(user: User) {
+    if (user.status === 'ACTIVE') {
+      if (confirm('Are you sure you want to ban this user?')) {
+        this.adminService.banUser(user.id).subscribe(() => {
+          alert('User has been banned successfully');
+          this.loadUsers();
+        });
+      }
+    } else {
+      if (confirm('Are you sure you want to unban this user?')) {
+        this.adminService.unbanUser(user.id).subscribe(() => {
+          alert('User has been unbanned successfully');
+          this.loadUsers();
+        });
+      }
+    }
+  }
   filterUsers() {
     let filtered = this.users;
 

@@ -47,10 +47,10 @@ public class ArticleService {
     }
 
     // public String getArticleTitleById(Long id) {
-    //     Article article = articleRepository.findById(id)
-    //             .orElseThrow(() -> new RuntimeException("Article not found with id: " + id));
+    // Article article = articleRepository.findById(id)
+    // .orElseThrow(() -> new RuntimeException("Article not found with id: " + id));
 
-    //     return article.getTitle();
+    // return article.getTitle();
     // }
 
     public ArticleDTO createArticle(Article article, UUID currentUserId) {
@@ -66,7 +66,7 @@ public class ArticleService {
                 user.getArticles() != null ? user.getArticles().size() : 0,
                 user.getFollowers() != null ? user.getFollowers().size() : 0,
                 user.getFollowing() != null ? user.getFollowing().size() : 0,
-                user.getRole());
+                user.getRole() , user.getStatus());
 
         // Notify followers
         if (user.getFollowers() != null && !user.getFollowers().isEmpty()) {
@@ -111,7 +111,7 @@ public class ArticleService {
                     creator.getArticles() != null ? creator.getArticles().size() : 0,
                     creator.getFollowers() != null ? creator.getFollowers().size() : 0,
                     creator.getFollowing() != null ? creator.getFollowing().size() : 0,
-                    creator.getRole());
+                    creator.getRole() , creator.getStatus());
 
             return new ArticleDTO(
                     article.getId(),
@@ -204,28 +204,32 @@ public class ArticleService {
     }
 
     public List<ArticleDTO> getArticlesFromSubscribedUsers(String username) {
-        // 1. Find the logged-in user
+
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        // 2. Get the list of subscribed users
-        // Get users this user is following
         Set<User> subscriptions = user.getFollowing() != null
                 ? user.getFollowing().stream()
                         .map(Follow::getFollowing)
                         .collect(Collectors.toSet())
                 : new HashSet<>();
 
-        // 3. Fetch articles from those users
-        List<Article> articles = articleRepository.findByCreatorIn(subscriptions);
+        List<Article> articles = articleRepository
+                .findByCreatorInAndStatusNot(subscriptions, "hidden");
 
-        // 4. Convert each Article to ArticleDTO
-        List<ArticleDTO> articleDTOs = articles.stream().map(article -> {
-            boolean isLiked = likeRepository.existsByArticleIdAndUserUsername(article.getId(), username);
-            int likeCount = likeRepository.countByArticleId(article.getId());
-            int commentsCount = commentRepository.countByArticleId(article.getId());
+        return articles.stream().map(article -> {
+
+            boolean isLiked = likeRepository
+                    .existsByArticleIdAndUserUsername(article.getId(), username);
+
+            int likeCount = likeRepository
+                    .countByArticleId(article.getId());
+
+            int commentsCount = commentRepository
+                    .countByArticleId(article.getId());
 
             User creator = article.getCreator();
+
             UserDTO creatorDTO = new UserDTO(
                     creator.getId(),
                     creator.getName(),
@@ -234,7 +238,7 @@ public class ArticleService {
                     creator.getArticles() != null ? creator.getArticles().size() : 0,
                     creator.getFollowers() != null ? creator.getFollowers().size() : 0,
                     creator.getFollowing() != null ? creator.getFollowing().size() : 0,
-                    creator.getRole());
+                    creator.getRole(), creator.getStatus());
 
             return new ArticleDTO(
                     article.getId(),
@@ -245,9 +249,8 @@ public class ArticleService {
                     likeCount,
                     commentsCount,
                     isLiked);
-        }).toList();
 
-        return articleDTOs;
+        }).toList();
     }
 
     public Optional<ArticleDTO> getArticleById(Long id, String username) {
@@ -258,6 +261,9 @@ public class ArticleService {
         }
 
         Article article = articleOpt.get();
+        if (article.getStatus().equals("hidden")) {
+            return Optional.empty();
+        }
 
         boolean isLiked = likeRepository.existsByArticleIdAndUserUsername(id, username);
         int likeCount = likeRepository.countByArticleId(id);
@@ -271,7 +277,7 @@ public class ArticleService {
                 user.getArticles() != null ? user.getArticles().size() : 0,
                 user.getFollowers() != null ? user.getFollowers().size() : 0,
                 user.getFollowing() != null ? user.getFollowing().size() : 0,
-                user.getRole());
+                user.getRole() , user.getStatus());
 
         ArticleDTO dto = new ArticleDTO(
                 article.getId(),
@@ -286,33 +292,49 @@ public class ArticleService {
         return Optional.of(dto);
     }
 
-    public List<ArticleDTO> getArticlesByUser(User user, String loggedUsername) {
-        return user.getArticles().stream().map(article -> {
-            boolean isLiked = likeRepository.existsByArticleIdAndUserUsername(article.getId(), loggedUsername);
-            int likeCount = likeRepository.countByArticleId(article.getId());
-            int commentsCount = commentRepository.countByArticleId(article.getId());
+public List<ArticleDTO> getArticlesByUser(User user, String loggedUsername) {
 
-            User creator = article.getCreator();
-            UserDTO creatorDTO = new UserDTO(
-                    creator.getId(),
-                    creator.getName(),
-                    creator.getUsername(),
-                    creator.getEmail(),
-                    creator.getArticles() != null ? creator.getArticles().size() : 0,
-                    creator.getFollowers() != null ? creator.getFollowers().size() : 0,
-                    creator.getFollowing() != null ? creator.getFollowing().size() : 0,
-                    creator.getRole());
+    return user.getArticles()
+            .stream()
+            .filter(article -> !"hidden".equals(article.getStatus()))
+            .map(article -> {
 
-            return new ArticleDTO(
-                    article.getId(),
-                    article.getTitle(),
-                    article.getContent(),
-                    creatorDTO,
-                    article.getCreatedAt(),
-                    likeCount,
-                    commentsCount,
-                    isLiked);
-        }).toList();
-    }
+                boolean isLiked = likeRepository
+                        .existsByArticleIdAndUserUsername(article.getId(), loggedUsername);
+
+                int likeCount = likeRepository
+                        .countByArticleId(article.getId());
+
+                int commentsCount = commentRepository
+                        .countByArticleId(article.getId());
+
+                User creator = article.getCreator();
+
+                UserDTO creatorDTO = new UserDTO(
+                        creator.getId(),
+                        creator.getName(),
+                        creator.getUsername(),
+                        creator.getEmail(),
+                        creator.getArticles() != null ? creator.getArticles().size() : 0,
+                        creator.getFollowers() != null ? creator.getFollowers().size() : 0,
+                        creator.getFollowing() != null ? creator.getFollowing().size() : 0,
+                        creator.getRole() , 
+                        creator.getStatus()
+                );
+
+                return new ArticleDTO(
+                        article.getId(),
+                        article.getTitle(),
+                        article.getContent(),
+                        creatorDTO,
+                        article.getCreatedAt(),
+                        likeCount,
+                        commentsCount,
+                        isLiked
+                );
+
+            }).toList();
+}
+
 
 }

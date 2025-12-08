@@ -9,8 +9,4 @@ import { RouterModule } from '@angular/router';
   templateUrl: './unauthorized.component.html',
   styleUrls: ['./unauthorized.component.css'],
 })
-export class UnauthorizedComponent {
-  goBack() {
-    window.history.back();
-  }
-}
+export class UnauthorizedComponent {}

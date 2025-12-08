@@ -35,12 +35,21 @@ export class ArticleDetailComponent implements OnInit {
   ngOnInit() {
     this.currentUserId = this.authService.getUserId();
 
-    this.route.paramMap.subscribe(params => {
+    this.route.paramMap.subscribe((params) => {
       const articleId = params.get('id');
 
       if (articleId) {
-        this.articleService.getArticleById(articleId).subscribe(article => {
-          this.article = article;
+        this.articleService.getArticleById(articleId).subscribe({
+          next: (article) => {
+            if (!article) {
+              this.router.navigate(['/404']);
+              return;
+            }
+            this.article = article;
+          },
+          error: () => {
+            this.router.navigate(['/not-found']);
+          },
         });
       }
     });
@@ -142,7 +151,7 @@ export class ArticleDetailComponent implements OnInit {
       error: (error) => {
         console.error('Error liking post:', error);
         this.notificationService.error('Failed to like article');
-      }
+      },
     });
   }
 
@@ -155,7 +164,7 @@ export class ArticleDetailComponent implements OnInit {
       error: (error) => {
         console.error('Error unliking post:', error);
         this.notificationService.error('Failed to unlike article');
-      }
+      },
     });
   }
 }

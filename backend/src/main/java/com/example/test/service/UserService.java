@@ -40,7 +40,6 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
     }
 
-
     @Transactional
     public void follow(String followerUsername, UUID followeeId) {
         User follower = findByUsername(followerUsername);
@@ -75,6 +74,7 @@ public class UserService {
         // Search by username, email, or display name
         return userRepository.findByUsernameContainingIgnoreCase(query)
                 .stream()
+                .filter(user -> user.getStatus() != com.example.test.model.Status.BANNED)
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
@@ -89,13 +89,20 @@ public class UserService {
 
     public List<UserDTO> getAllUsers() {
         return userRepository.findAll().stream()
+
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
     public void banUser(UUID id) {
         User user = getUserEntityById(id);
-        user.setRole(com.example.test.model.Role.BANNED);
+        user.setStatus(com.example.test.model.Status.BANNED);
+        userRepository.save(user);
+    }
+
+    public void unbanUser(UUID id) {
+        User user = getUserEntityById(id);
+        user.setStatus(com.example.test.model.Status.ACTIVE);
         userRepository.save(user);
     }
 
@@ -113,6 +120,7 @@ public class UserService {
                 user.getArticles() != null ? user.getArticles().size() : 0,
                 user.getFollowers() != null ? user.getFollowers().size() : 0,
                 user.getFollowing() != null ? user.getFollowing().size() : 0,
-                user.getRole());
+                user.getRole(),
+                user.getStatus());
     }
 }
