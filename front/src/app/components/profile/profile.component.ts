@@ -113,7 +113,6 @@ ngOnInit() {
         targetId: this.user.id,
         targetTitle: this.user.username,
         reason,
-        reportedBy: 'currentUser',
         status: 'pending',
       })
       .subscribe({

@@ -99,10 +99,7 @@ export class ArticleDetailComponent implements OnInit {
       .createReport({
         type: 'post',
         targetId: this.article.id.toString(),
-        targetTitle: this.article.title,
         reason: reason,
-        reportedBy: 'currentUser',
-        status: 'pending',
       })
       .subscribe(() => {
         this.notificationService.success('Article reported successfully');

@@ -1,14 +1,17 @@
 package com.example.test.service;
 
-import com.example.test.model.Report;
 import java.util.List;
 
+import com.example.test.model.Report;
+
 public interface ReportService {
-    Report createReport(Report report);
+    Report createReport(Report report , String reportedByUsername);
 
     List<Report> getAllReports();
 
     void resolveReport(String id, String action);
 
     void dismissReport(String id);
+
+    int getReportCount();
 }
