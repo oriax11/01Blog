@@ -47,13 +47,9 @@ export class AdminPostsComponent implements OnInit {
       );
     }
 
-    if (this.categoryFilter) {
-      // filtered = filtered.filter(post => post.category === this.categoryFilter);
-    }
-
     if (this.statusFilter) {
       // Mock status filtering - in real app, posts would have status property
-      filtered = filtered.filter((post) => this.statusFilter === 'published');
+      filtered = filtered.filter((post) => this.statusFilter === post.status);
     }
 
     this.filteredPosts = filtered;

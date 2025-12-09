@@ -9,6 +9,7 @@ export interface Article {
   likeCount: number;
   commentsCount: number;
   isLiked?: boolean;
+  status: 'published' | 'hidden';
 }
 
 export interface User {
@@ -57,7 +58,7 @@ export interface AdminUser extends User {
 }
 
 export interface AdminPost extends Article {
-  status: 'published' | 'hidden' | 'deleted';
+  status: 'published' | 'hidden' ;
   reportCount: number;
   views: number;
 }

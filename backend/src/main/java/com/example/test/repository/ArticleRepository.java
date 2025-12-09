@@ -6,6 +6,7 @@ import java.util.Set;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.test.model.Article;
+import com.example.test.model.PostStatus;
 import com.example.test.model.User;
 
 public interface ArticleRepository extends JpaRepository<Article, Long> {
@@ -19,6 +20,6 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
 
     List<Article> findByCreatorIn(Set<User> authors);
 
-    List<Article> findByCreatorInAndStatusNot(Set<User> creators, String status);
+    List<Article> findByCreatorInAndStatusNot(Set<User> creators, PostStatus status);
 
 }

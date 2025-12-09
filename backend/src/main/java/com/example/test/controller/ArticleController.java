@@ -128,7 +128,7 @@ public class ArticleController {
         }
 
         Article original = originalOpt.get();
-        if (original.getStatus().equals("hidden")) {
+        if (original.getStatus().equals(com.example.test.model.PostStatus.HIDDEN)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         Article updated = articleService.updateArticle(id, request, username);
@@ -159,8 +159,6 @@ public class ArticleController {
         }
         boolean isAdmin = authentication.getAuthorities().stream()
                 .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
-
-
 
         DeleteArticleResult result = articleService.deleteArticle(id, username, isAdmin);
 

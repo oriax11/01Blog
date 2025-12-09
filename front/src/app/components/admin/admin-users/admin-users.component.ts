@@ -64,7 +64,7 @@ export class AdminUsersComponent implements OnInit {
 
     if (this.statusFilter) {
       // Mock status filtering - in real app, users would have status property
-      filtered = filtered.filter((user) => this.statusFilter === 'active');
+      filtered = filtered.filter((user) => this.statusFilter === user.status);
     }
 
     this.filteredUsers = filtered;
