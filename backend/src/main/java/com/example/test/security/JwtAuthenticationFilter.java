@@ -1,9 +1,9 @@
 package com.example.test.security;
 
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.UUID;
+
+import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,10 +11,13 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-import java.util.UUID;
-import org.springframework.lang.NonNull;
 
-import java.io.IOException;
+import com.example.test.model.Status;
+
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -29,19 +32,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(@NonNull HttpServletRequest request,
+    protected void doFilterInternal(HttpServletRequest request,
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain) throws ServletException, IOException {
-        // Get JWT token from HTTP request
+
         String token = getTokenFromRequest(request);
 
-        // Validate token
         if (StringUtils.hasText(token) && jwtTokenProvider.validateToken(token)) {
-            // Get user ID from token
-            String userId = jwtTokenProvider.getUsername(token); // This returns the ID as a string
 
-            // Load the user by ID instead of username
+            String userId = jwtTokenProvider.getUsername(token);
             UserDetails userDetails = userDetailsService.loadUserById(UUID.fromString(userId));
+
+            if (userDetails instanceof CustomUserDetails customUser) {
+                if (customUser.getUser().getStatus() == Status.BANNED) {
+                    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                    return;
+                }
+            }
 
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                     userDetails,
@@ -49,7 +56,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     userDetails.getAuthorities());
 
             authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         }
 

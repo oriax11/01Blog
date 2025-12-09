@@ -1,14 +1,14 @@
 package com.example.test.security;
-import java.util.UUID;
 
-import com.example.test.model.User;
-import com.example.test.repository.UserRepository;
+import java.util.UUID;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.example.test.model.User;
+import com.example.test.repository.UserRepository;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -28,11 +28,10 @@ public class CustomUserDetailsService implements UserDetailsService {
         return new CustomUserDetails(user);
     }
 
-    // Add this new method
     public UserDetails loadUserById(UUID id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + id));
-        
+
         return new CustomUserDetails(user);
     }
 }

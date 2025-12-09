@@ -7,9 +7,10 @@ import com.example.test.model.Report;
 
 public interface ReportService {
     Report createReportPost(ReportDTO report, String reportedByUsername);
+
     Report createReportUser(ReportDTO report, String reportedByUsername);
 
-    List<Report> getAllReports();
+    List<Report> findAllByOrderByCreatedAtDesc();
 
     void resolveReport(String id, String action);
 

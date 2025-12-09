@@ -9,7 +9,7 @@ export interface Article {
   likeCount: number;
   commentsCount: number;
   isLiked?: boolean;
-  status: 'published' | 'hidden';
+  status:string;
 }
 
 export interface User {

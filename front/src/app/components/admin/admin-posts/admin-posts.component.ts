@@ -63,6 +63,36 @@ export class AdminPostsComponent implements OnInit {
     this.currentPage = 1;
   }
 
+  togglePostStatus(post: Article) {
+    if (post.status === 'PUBLISHED') {
+      this.hidePost(post);
+    } else if (post.status === 'HIDDEN') {
+      this.unhidePost(post);
+    }
+  }
+
+  unhidePost(post: Article) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '450px',
+      data: {
+        title: 'Unhide Post',
+        message: `Are you sure you want to unhide "${post.title}"? This post will visible to all users.`,
+        confirmText: 'Unhide Post',
+        color: 'warn',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.adminService.hidePost(post.id).subscribe(() => {
+          console.log('Post hidden:', post.id);
+          this.showSuccessDialog(`"${post.title}" has been hidden successfully`);
+          this.loadPosts();
+        });
+      }
+    });
+  }
+
   hidePost(post: Article) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '450px',
@@ -77,7 +107,6 @@ export class AdminPostsComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.adminService.hidePost(post.id).subscribe(() => {
-
           console.log('Post hidden:', post.id);
           this.showSuccessDialog(`"${post.title}" has been hidden successfully`);
           this.loadPosts();
@@ -98,10 +127,8 @@ export class AdminPostsComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-
       console.log('Dialog result:', result);
       if (result) {
-        
         this.adminService.deletePost(post.id).subscribe(() => {
           this.showSuccessDialog(`"${post.title}" has been deleted successfully`);
           this.loadPosts();

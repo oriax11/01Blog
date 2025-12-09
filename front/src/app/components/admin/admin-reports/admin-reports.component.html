@@ -54,13 +54,10 @@
 
       <div class="report-actions" *ngIf="report.status === 'pending'">
         <button class="action-btn view" (click)="viewTarget(report)">
-          👁️ View {{ report.type === 'user' ? 'Profile' : 'Post' }}
+          View {{ report.type === 'user' ? 'Profile' : 'Post' }}
         </button>
 
         <div class="action-group" *ngIf="report.type === 'user'">
-          <button class="action-btn warn" (click)="warnUser(report)">
-            Warn User
-          </button>
           <button class="action-btn ban" (click)="banUser(report)">
             Ban User
           </button>
@@ -70,9 +67,7 @@
         </div>
 
         <div class="action-group" *ngIf="report.type === 'post'">
-          <button class="action-btn warn" (click)="warnAuthor(report)">
-            Warn Author
-          </button>
+
           <button class="action-btn hide" (click)="hidePost(report)">
             Hide Post
           </button>

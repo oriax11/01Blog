@@ -14,11 +14,12 @@ import org.springframework.stereotype.Service;
 import com.example.test.dto.LoginDto;
 import com.example.test.dto.RegisterDto;
 import com.example.test.exception.BlogAPIException;
+import com.example.test.exception.UserBannedException;
+import com.example.test.model.Status;
 import com.example.test.model.User;
 import com.example.test.repository.UserRepository;
 import com.example.test.security.JwtTokenProvider;
 import com.example.test.service.AuthService;
-
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -42,6 +43,14 @@ public class AuthServiceImpl implements AuthService {
     public Map<String, String> login(LoginDto loginDto) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 loginDto.getUsernameOrEmail(), loginDto.getPassword()));
+
+        User user = userRepository
+                .findByUsernameOrEmail(loginDto.getUsernameOrEmail(), loginDto.getUsernameOrEmail())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (user.getStatus() == Status.BANNED) {
+            throw new UserBannedException();
+        }
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 

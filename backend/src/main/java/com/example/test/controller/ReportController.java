@@ -60,20 +60,23 @@ public class ReportController {
         if (report.getReason() == null || report.getReason().isEmpty()) {
             throw new BlogAPIException(HttpStatus.BAD_REQUEST, "Reason for report must be provided.");
         }
+
+
         if (report.getType().equals("user")) {
             UserDTO targetUser = userService.getUserDTOById(UUID.fromString(report.getTargetId()));
             if (targetUser == null) {
                 throw new BlogAPIException(HttpStatus.BAD_REQUEST, "The user you are trying to report does not exist.");
             }
-
+            
             return ResponseEntity.ok(reportService.createReportUser(report, loggedUsername));
-
+            
         } else if (report.getType().equals("post")) {
             Optional<Article> targetPost = articleService
-                    .getArticleById(Long.parseLong(report.getTargetId().toString()));
+            .getArticleById(Long.parseLong(report.getTargetId().toString()));
             if (targetPost == null) {
                 throw new BlogAPIException(HttpStatus.BAD_REQUEST, "The post you are trying to report does not exist.");
             }
+            System.out.println("Report Type: " + report.getType());
             return ResponseEntity.ok(reportService.createReportPost(report, loggedUsername));
         }
 
@@ -81,8 +84,8 @@ public class ReportController {
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<Report>> getAllReports() {
-        return ResponseEntity.ok(reportService.getAllReports());
+    public ResponseEntity<List<Report>> findAllByOrderByCreatedAtDesc() {
+        return ResponseEntity.ok(reportService.findAllByOrderByCreatedAtDesc());
     }
 
     @PutMapping("/{id}/resolve")

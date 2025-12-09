@@ -56,12 +56,13 @@ public class ReportServiceImpl implements ReportService {
         newReport.setReportedBy(reportedByUsername);
         newReport.setStatus("pending");
         newReport.setCreatedAt(LocalDateTime.now());
-
+        
         newReport.setTargetId(reportDTO.getTargetId());
-
+        
+        System.out.println("Creating report for post with ID: " + reportDTO.getTargetId());
         // Use the injected repository instance
-        newReport.setTargetTitle(articleRepository.findTitleById(
-                Long.parseLong(reportDTO.getTargetId())));
+        newReport.setTargetTitle(articleRepository.findById(
+                Long.parseLong(reportDTO.getTargetId())).get().getTitle());
 
         newReport.setReason(reportDTO.getReason());
 
@@ -69,7 +70,7 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public List<Report> getAllReports() {
+    public List<Report> findAllByOrderByCreatedAtDesc() {
         return reportRepository.findAll();
     }
 

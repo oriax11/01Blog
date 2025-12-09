@@ -74,7 +74,9 @@
 
         <div class="post-actions">
           <button class="action-btn view" [routerLink]="['/article', post.id]"> View</button>
-          <button class="action-btn hide" (click)="hidePost(post)"> Hide</button>
+          <button class="action-btn hide" (click)="togglePostStatus(post)">
+            {{ post.status.toUpperCase() === 'HIDDEN' ? 'Unhide' : 'Hide' }}
+          </button>
           <button class="action-btn delete" (click)="deletePost(post)"> Delete</button>
         </div>
       </div>

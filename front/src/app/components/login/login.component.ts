@@ -35,15 +35,7 @@ export class LoginComponent {
       this.http.post(`${environment.apiUrl}/api/auth/login`, this.loginForm.value).subscribe(
         (response: any) => {
           const token = response.accessToken;
-          const decoded: any = jwtDecode(token);
 
-          // Check status instead of role
-          if (decoded.status === 'BANNED') {
-            this.ErrorMessage = 'Your account has been banned.';
-            return;
-          }
-
-          // Save token and navigate
           this.authService.setToken(token);
           this.router.navigate(['/home']);
         },
@@ -51,7 +43,7 @@ export class LoginComponent {
           if (error.status === 401) {
             this.ErrorMessage = 'Wrong username or password.';
           } else if (error.status === 403) {
-            this.ErrorMessage = 'You do not have permission to access this resource.';
+            this.ErrorMessage = 'Your account has been banned. Please contact support.';
           } else {
             this.ErrorMessage = 'An unexpected error occurred. Please try again.';
           }

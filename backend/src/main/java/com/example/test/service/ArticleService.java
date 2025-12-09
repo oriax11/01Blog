@@ -98,7 +98,7 @@ public class ArticleService {
         }
 
         public List<ArticleDTO> getAllArticlesDTO() {
-                return articleRepository.findAll().stream().map(article -> {
+                return articleRepository.findAllByOrderByCreatedAtDesc().stream().map(article -> {
                         boolean isLiked = false; // Admin view doesn't need personal like status
                         int likeCount = likeRepository.countByArticleId(article.getId());
                         int commentsCount = commentRepository.countByArticleId(article.getId());
@@ -122,7 +122,7 @@ public class ArticleService {
                                         article.getCreatedAt(),
                                         likeCount,
                                         commentsCount,
-                                        isLiked , article.getStatus());
+                                        isLiked, article.getStatus());
                 }).toList();
         }
 
@@ -153,7 +153,6 @@ public class ArticleService {
                 if (article.getStatus() == PostStatus.HIDDEN && !isAdmin) {
                         return DeleteArticleResult.NOT_FOUND;
                 }
-                System.out.println("Article is hidden and user is not admin");
 
                 if (!article.getCreator().getUsername().equals(username) && !isAdmin) {
                         return DeleteArticleResult.UNAUTHORIZED;
@@ -165,7 +164,13 @@ public class ArticleService {
         public void hideArticle(Long id) {
                 Article article = articleRepository.findById(id)
                                 .orElseThrow(() -> new RuntimeException("Article not found"));
-                article.setStatus(PostStatus.HIDDEN);
+
+                if (article.getStatus() == PostStatus.PUBLISHED) {
+
+                        article.setStatus(PostStatus.HIDDEN);
+                } else {
+                        article.setStatus(PostStatus.PUBLISHED);
+                }
                 articleRepository.save(article);
         }
 
@@ -228,7 +233,7 @@ public class ArticleService {
                                 : new HashSet<>();
 
                 List<Article> articles = articleRepository
-                                .findByCreatorInAndStatusNot(subscriptions, PostStatus.HIDDEN);
+                                .findByCreatorInAndStatusNotOrderByCreatedAtDesc(subscriptions, PostStatus.HIDDEN);
 
                 return articles.stream().map(article -> {
 
@@ -308,9 +313,10 @@ public class ArticleService {
 
         public List<ArticleDTO> getArticlesByUser(User user, String loggedUsername) {
 
-                return user.getArticles()
-                                .stream()
-                                .filter(article -> !article.getStatus().equals(PostStatus.HIDDEN))
+                List<Article> articles = articleRepository
+                                .findByCreatorAndStatusNotOrderByCreatedAtDesc(user, PostStatus.HIDDEN);
+
+                return articles.stream()
                                 .map(article -> {
 
                                         boolean isLiked = likeRepository

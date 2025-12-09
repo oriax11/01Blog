@@ -17,8 +17,6 @@ export class AdminService {
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
-
-
   getAdminStats(): Observable<AdminStats> {
     return this.http.get<AdminStats>(
       `${environment.apiUrl}/api/dashboard/stats`,
@@ -81,6 +79,7 @@ export class AdminService {
       this.authService.getAuthHeaders()
     );
   }
+
 
   deletePost(postId: string): Observable<boolean> {
     return this.http.delete<boolean>(
