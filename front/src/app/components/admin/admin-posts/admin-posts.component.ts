@@ -2,14 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
 import { ArticleService } from '../../../services/article.service';
 import { AdminService } from '../../../services/admin.service';
 import { Article } from '../../../models/article.model';
+import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-admin-posts',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, MatDialogModule, MatButtonModule],
   templateUrl: './admin-posts.component.html',
   styleUrls: ['./admin-posts.component.css'],
 })
@@ -23,7 +26,11 @@ export class AdminPostsComponent implements OnInit {
   totalPages = 1;
   postsPerPage = 12;
 
-  constructor(private articleService: ArticleService, private adminService: AdminService) {}
+  constructor(
+    private articleService: ArticleService,
+    private adminService: AdminService,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit() {
     this.loadPosts();
@@ -48,7 +55,6 @@ export class AdminPostsComponent implements OnInit {
     }
 
     if (this.statusFilter) {
-      // Mock status filtering - in real app, posts would have status property
       filtered = filtered.filter((post) => this.statusFilter === post.status);
     }
 
@@ -57,22 +63,51 @@ export class AdminPostsComponent implements OnInit {
     this.currentPage = 1;
   }
 
-  hidePost(postId: string) {
-    if (confirm('Are you sure you want to hide this post?')) {
-      this.adminService.hidePost(postId).subscribe(() => {
-        alert('Post has been hidden successfully');
-        this.loadPosts();
-      });
-    }
+  hidePost(post: Article) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '450px',
+      data: {
+        title: 'Hide Post',
+        message: `Are you sure you want to hide "${post.title}"? This post will no longer be visible to users but can be restored later.`,
+        confirmText: 'Hide Post',
+        color: 'warn',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.adminService.hidePost(post.id).subscribe(() => {
+
+          console.log('Post hidden:', post.id);
+          this.showSuccessDialog(`"${post.title}" has been hidden successfully`);
+          this.loadPosts();
+        });
+      }
+    });
   }
 
-  deletePost(postId: string) {
-    if (confirm('Are you sure you want to delete this post? This action cannot be undone.')) {
-      this.adminService.deletePost(postId).subscribe(() => {
-        alert('Post has been deleted successfully');
-        this.loadPosts();
-      });
-    }
+  deletePost(post: Article) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '450px',
+      data: {
+        title: 'Delete Post',
+        message: `Are you sure you want to permanently delete "${post.title}"? This action cannot be undone and will remove all associated comments and interactions.`,
+        confirmText: 'Delete Post',
+        color: 'warn',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+
+      console.log('Dialog result:', result);
+      if (result) {
+        
+        this.adminService.deletePost(post.id).subscribe(() => {
+          this.showSuccessDialog(`"${post.title}" has been deleted successfully`);
+          this.loadPosts();
+        });
+      }
+    });
   }
 
   previousPage() {
@@ -85,5 +120,18 @@ export class AdminPostsComponent implements OnInit {
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
     }
+  }
+
+  private showSuccessDialog(message: string) {
+    this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Success',
+        message: message,
+        confirmText: 'OK',
+        color: 'primary',
+        hideCancel: true,
+      },
+    });
   }
 }

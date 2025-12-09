@@ -79,8 +79,6 @@ public class ReportServiceImpl implements ReportService {
                 .orElseThrow(() -> new RuntimeException("Report not found"));
         report.setStatus("resolved");
         report.setResolvedAt(LocalDateTime.now());
-        // In a real app, we might store the 'action' taken (e.g., "User banned") in a
-        // separate field or log
         reportRepository.save(report);
     }
 

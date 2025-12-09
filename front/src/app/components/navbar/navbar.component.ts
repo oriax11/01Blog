@@ -42,7 +42,7 @@ export class NavbarComponent implements OnInit {
   showDropdown: boolean = false;
   results: User[] = [];
   isLoading: boolean = false;
-  
+
   private searchSubject = new Subject<string>();
 
   constructor(
@@ -63,6 +63,30 @@ export class NavbarComponent implements OnInit {
     this.searchSubject.pipe(debounceTime(300)).subscribe((searchValue) => {
       this.performSearch(searchValue);
     });
+  }
+
+  isAdmin(): boolean {
+    const token = this.authService.getToken();
+    if (!token) return false;
+
+    try {
+      const decoded: any = jwtDecode(token);
+
+      // Extract role from different possible field names
+      const role = decoded.role || decoded.roles || decoded.authorities;
+
+      // Check if role contains ADMIN
+      if (Array.isArray(role)) {
+        return role.some((r) => r === 'ADMIN' || r.includes('ADMIN'));
+      } else if (typeof role === 'string') {
+        return role === 'ADMIN' || role.includes('ADMIN');
+      }
+
+      return false;
+    } catch (error) {
+      console.error('Token decode error:', error);
+      return false;
+    }
   }
 
   onSearchInput(): void {
@@ -92,7 +116,7 @@ export class NavbarComponent implements OnInit {
       error: () => {
         this.isLoading = false;
         this.results = [];
-      }
+      },
     });
   }
 
@@ -127,7 +151,7 @@ export class NavbarComponent implements OnInit {
   onDocumentClick(event: MouseEvent): void {
     const target = event.target as HTMLElement;
     const searchContainer = document.querySelector('.search-wrapper');
-    
+
     if (searchContainer && !searchContainer.contains(target)) {
       this.showDropdown = false;
     }

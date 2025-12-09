@@ -38,8 +38,8 @@ export const routes: Routes = [
   { path: 'admin/reports', component: AdminReportsComponent, canActivate: [AdminGuard] },
 
   // Redirect empty path to home
-  { path: 'forbidden', component: UnauthorizedComponent },
+  { path: 'forbidden', component: UnauthorizedComponent, data: { keepUrl: true } },
 
   // Wildcard route
-  { path: '**', component: NotFoundComponent },
+  { path: '**', component: NotFoundComponent, data: { keepUrl: true } },
 ];

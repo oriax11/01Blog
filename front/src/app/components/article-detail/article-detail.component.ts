@@ -88,7 +88,7 @@ export class ArticleDetailComponent implements OnInit {
 
   confirmDelete() {
     this.articleService.deleteArticle(this.article.id.toString()).subscribe(() => {
-      window.location.reload();
+      this.router.navigate(['/']);
     });
     this.showDeleteModal = false;
   }

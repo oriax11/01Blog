@@ -27,7 +27,7 @@
   height: 40px;
   border-radius: 50%;
   flex-shrink: 0;
-    cursor: pointer;
+  cursor: pointer;
 
   border: 2px solid #2ecc71;
 }
@@ -200,6 +200,36 @@
 
 .like-button:hover svg {
   transform: scale(1.1);
+}
+
+.comment-actions-header {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
+.delete-button {
+  background: transparent;
+  border: 1px solid #ff4757;
+  color: #ff4757;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.delete-button:hover {
+  background: rgba(255, 71, 87, 0.1);
+  border-color: #ff4757;
+}
+
+.delete-button svg {
+  width: 14px;
+  height: 14px;
 }
 
 @media (max-width: 768px) {

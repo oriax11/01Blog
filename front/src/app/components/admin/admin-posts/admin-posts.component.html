@@ -73,9 +73,9 @@
         </div>
 
         <div class="post-actions">
-          <button class="action-btn view" [routerLink]="['/article', post.id]">👁️ View</button>
-          <button class="action-btn hide" (click)="hidePost(post.id)">🙈 Hide</button>
-          <button class="action-btn delete" (click)="deletePost(post.id)">🗑️ Delete</button>
+          <button class="action-btn view" [routerLink]="['/article', post.id]"> View</button>
+          <button class="action-btn hide" (click)="hidePost(post)"> Hide</button>
+          <button class="action-btn delete" (click)="deletePost(post)"> Delete</button>
         </div>
       </div>
     </div>

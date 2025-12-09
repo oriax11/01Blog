@@ -169,7 +169,7 @@ public class ArticleController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body("You are not allowed to delete this article");
             case SUCCESS:
-                return ResponseEntity.ok("Article deleted successfully");
+                return ResponseEntity.noContent().build(); 
             default:
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Unknown error");
         }

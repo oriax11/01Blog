@@ -64,11 +64,11 @@
 
 
         <div class="cell actions-cell">
-          <button class="action-btn view" [routerLink]="['/profile', user.id]">👁️ View</button>
+          <button class="action-btn view" [routerLink]="['/profile', user.id]"> View</button>
           <button class="action-btn" [ngClass]="user?.status === 'ACTIVE' ? 'ban' : 'unban'" (click)="toggleBan(user)">
             {{ user.status === 'ACTIVE' ? 'Ban' : 'Unban' }}
           </button>
-          <button class="action-btn delete" (click)="deleteUser(user.id)">🗑️ Delete</button>
+          <button class="action-btn delete" (click)="deleteUser(user)"> Delete</button>
         </div>
       </div>
     </div>

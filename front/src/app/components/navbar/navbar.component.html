@@ -14,27 +14,14 @@
   <span class="nav-search">
     <div class="search-wrapper">
       <form class="search-container" (submit)="$event.preventDefault()">
-        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="11" cy="11" r="8"></circle>
           <path d="m21 21-4.35-4.35"></path>
         </svg>
-        <input 
-          type="text" 
-          placeholder="Search users..." 
-          class="search-input"
-          [(ngModel)]="searchText"
-          (input)="onSearchInput()"
-          (focus)="onSearchFocus()"
-          (blur)="onSearchBlur()"
-          name="search"
-          autocomplete="off">
-        <button 
-          *ngIf="searchText" 
-          type="button"
-          class="clear-btn" 
-          (click)="clearSearch()"
-          aria-label="Clear search">
+        <input type="text" placeholder="Search users..." class="search-input" [(ngModel)]="searchText"
+          (input)="onSearchInput()" (focus)="onSearchFocus()" (blur)="onSearchBlur()" name="search" autocomplete="off">
+        <button *ngIf="searchText" type="button" class="clear-btn" (click)="clearSearch()" aria-label="Clear search">
           <mat-icon>close</mat-icon>
         </button>
       </form>
@@ -49,10 +36,7 @@
 
         <!-- Results -->
         <div *ngIf="!isLoading && results.length > 0" class="dropdown-results">
-          <div 
-            *ngFor="let user of results" 
-            class="result-item"
-            (click)="selectUser(user)">
+          <div *ngFor="let user of results" class="result-item" (click)="selectUser(user)">
             <div class="result-avatar">
               <mat-icon>account_circle</mat-icon>
             </div>
@@ -73,24 +57,31 @@
   </span>
 
   <span class="nav-user">
+    <a  *ngIf="isAdmin()" [routerLink]="['/admin']" class="admin-link">
+      <button mat-icon-button>
+        <mat-icon>admin_panel_settings</mat-icon>
+      </button>
+    </a>
+    <span *ngIf="isAdmin()" class="neon admin-text hide-on-small" [routerLink]="['/admin']">Admin Panel</span>
     <button mat-button routerLink="/create" class="write-btn hide-on-small">
       <mat-icon>edit</mat-icon>
       <span class="neon">Write</span>
     </button>
 
-    <app-notification-dropdown class="hide-on-small"></app-notification-dropdown>
+    <app-notification-dropdown></app-notification-dropdown>
 
-    <a [routerLink]="['/profile', userId]" class="hide-on-small profile-link">
+
+    <a [routerLink]="['/profile', userId]" class=" profile-link">
       <button mat-icon-button>
         <mat-icon>account_circle</mat-icon>
       </button>
     </a>
-    <span class="neon username-text" [routerLink]="['/profile', userId]">{{ username }}</span>
+    <span class="neon username-text hide-on-small" [routerLink]="['/profile', userId]">{{ username }}</span>
 
     <div *ngIf="username" class="hide-on-small">
       <button mat-icon-button class="logout-btn" (click)="logout()" aria-label="Logout">
-        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
-          width="20px" height="20px" viewBox="0 0 113.525 122.879" xml:space="preserve">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20px" height="20px"
+          viewBox="0 0 113.525 122.879" xml:space="preserve">
           <g>
             <path fill="#22c55e" d="M78.098,13.509l0.033,0.013h0.008c2.908,1.182,5.699,2.603,8.34,4.226c2.621,1.612,5.121,3.455,7.467,5.491 
     c11.992,10.408,19.58,25.764,19.58,42.879v0.016h-0.006c-0.006,15.668-6.361,29.861-16.633,40.127 

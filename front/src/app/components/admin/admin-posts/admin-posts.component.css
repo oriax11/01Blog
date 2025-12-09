@@ -240,6 +240,18 @@
   font-weight: 500;
 }
 
+
+
+.action-btn.hide {
+  background-color: #f59e0b;
+  color: #000000;
+}
+
+.action-btn.delete {
+  background-color: #ef4444;
+  color: #ffffff;
+}
+
 .action-btn.view:hover {
   background-color: #22c55e;
   color: #000000;

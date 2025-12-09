@@ -19,6 +19,7 @@ export class CommentSectionComponent {
   username: string | null = null;
   @Input() postId!: string;
   @Input() comments: Comment[] = [];
+  userId: string | null = null;
 
   constructor(
     private articleService: ArticleService,
@@ -32,11 +33,32 @@ export class CommentSectionComponent {
     if (token) {
       const decodedToken: any = jwtDecode(token);
       this.username = decodedToken.username;
+      this.userId = decodedToken.sub || decodedToken.userId; // Get user ID from token
     }
     this.articleService.getComments(this.postId).subscribe((comments) => {
       this.comments = comments;
     });
   }
+
+  canDeleteComment(comment: Comment): boolean {
+    // Assuming comment has a commenterId property
+    return this.userId === comment.commenterId.toString();
+  }
+
+  deleteComment(comment: Comment) {
+    if (confirm('Are you sure you want to delete this comment?')) {
+      this.commentService.deleteComment(comment.id , this.postId).subscribe({
+        next: () => {
+          this.comments = this.comments.filter((c) => c.id !== comment.id);
+        },
+        error: (err) => {
+          console.error('Failed to delete comment', err);
+          alert('Failed to delete comment. Please try again.');
+        },
+      });
+    }
+  }
+
   newCommentText = '';
   currentUser = {
     name: 'Current User',
@@ -50,7 +72,6 @@ export class CommentSectionComponent {
   }
 
   addComment() {
-    console.log(this.postId);
     const text = this.newCommentText.trim();
     if (!text) return;
 

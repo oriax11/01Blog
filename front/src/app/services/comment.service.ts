@@ -16,14 +16,10 @@ export interface Comment {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CommentService {
-
-  constructor(
-    private http: HttpClient,
-    private authService: AuthService
-  ) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
   getComments(articleId: number): Observable<Comment[]> {
     return this.http.get<Comment[]>(
@@ -48,9 +44,9 @@ export class CommentService {
     );
   }
 
-  deleteComment(commentId: number): Observable<void> {
+  deleteComment(commentId: number, articleId: string): Observable<void> {
     return this.http.delete<void>(
-      `${environment.apiUrl}/api/comments/${commentId}`,
+      `${environment.apiUrl}/api/articles/${articleId}/comments/${commentId}`,
       this.authService.getAuthHeaders()
     );
   }

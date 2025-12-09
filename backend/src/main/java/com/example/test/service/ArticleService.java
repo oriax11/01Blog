@@ -150,11 +150,12 @@ public class ArticleService {
                 if (article == null) {
                         return DeleteArticleResult.NOT_FOUND;
                 }
-                if (article.getStatus().equals("hidden") && !isAdmin) {
+                if (article.getStatus() == PostStatus.HIDDEN && !isAdmin) {
                         return DeleteArticleResult.NOT_FOUND;
                 }
+                System.out.println("Article is hidden and user is not admin");
 
-                if (!article.getCreator().getUsername().equals(username)) {
+                if (!article.getCreator().getUsername().equals(username) && !isAdmin) {
                         return DeleteArticleResult.UNAUTHORIZED;
                 }
                 articleRepository.deleteById(id);
