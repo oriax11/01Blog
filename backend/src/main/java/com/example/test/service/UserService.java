@@ -42,6 +42,10 @@ public class UserService {
 
     @Transactional
     public void follow(String followerUsername, UUID followeeId) {
+        if (followRepository.existsByFollower_UsernameAndFollowing_Id(followerUsername, followeeId)) {
+            throw new IllegalStateException("Already following this user");
+        }
+
         User follower = findByUsername(followerUsername);
         User followee = getUserEntityById(followeeId);
         if (follower.getId().equals(followee.getId())) {
@@ -59,15 +63,12 @@ public class UserService {
     public void unfollow(String followerUsername, UUID followeeId) {
         User follower = findByUsername(followerUsername);
         User followee = getUserEntityById(followeeId);
+
         if (follower.getId().equals(followee.getId())) {
             throw new IllegalArgumentException("You cannot unfollow yourself.");
         }
 
-        follower.getFollowing().remove(followee);
-        followee.getFollowers().remove(follower);
-
-        userRepository.save(follower);
-        userRepository.save(followee);
+        followRepository.deleteByFollowerAndFollowing(follower, followee);
     }
 
     public List<UserDTO> searchUsers(String query) {
@@ -79,12 +80,8 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional(readOnly = true)
     public boolean isFollowing(String followerUsername, UUID followeeId) {
-        User follower = findByUsername(followerUsername);
-        User followee = getUserEntityById(followeeId);
-
-        return follower.getFollowing().contains(followee);
+        return followRepository.existsByFollower_UsernameAndFollowing_Id(followerUsername, followeeId);
     }
 
     public List<UserDTO> getAllUsers() {

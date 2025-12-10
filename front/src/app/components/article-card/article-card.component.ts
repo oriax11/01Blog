@@ -5,7 +5,6 @@ import { Article } from '../../models/article.model';
 import { AuthService } from '../../services/auth.service';
 import { ArticleService } from '../../services/article.service';
 import { ReportService } from '../../services/report.service';
-import { NotificationService } from '../../services/toast.service';
 import { ReportModalComponent } from '../report-modal/report-modal.component';
 
 @Component({
@@ -26,7 +25,6 @@ export class ArticleCardComponent implements OnInit {
     private articleService: ArticleService,
     private router: Router,
     private reportService: ReportService,
-    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -74,7 +72,6 @@ export class ArticleCardComponent implements OnInit {
       reportedBy: 'currentUser',
       status: 'pending'
     }).subscribe(() => {
-      this.notificationService.success('Post reported successfully');
       this.showReportModal = false;
     });
   }

@@ -1,12 +1,13 @@
 package com.example.test.service;
 
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.stereotype.Service;
+
 import com.example.test.model.Notification;
 import com.example.test.model.User;
 import com.example.test.repository.NotificationRepository;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.UUID;
 
 @Service
 public class NotificationService {
@@ -37,4 +38,12 @@ public class NotificationService {
             notificationRepository.save(notification);
         });
     }
+
+    public void markAsUnread(UUID notificationId) {
+        notificationRepository.findById(notificationId).ifPresent(notification -> {
+            notification.setRead(false);
+            notificationRepository.save(notification);
+        });
+    }
+
 }

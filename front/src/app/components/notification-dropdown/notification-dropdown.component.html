@@ -34,11 +34,21 @@
           </div>
         </div>
 
+        <!-- Mark as Read button (shows when unread) -->
         <button *ngIf="!notification.read" class="mark-read-btn" (click)="markAsRead(notification, $event)"
           title="Mark as read">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2">
             <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </button>
+
+        <!-- Mark as Unread button (shows when read) -->
+        <button *ngIf="notification.read" class="mark-unread-btn" (click)="markAsUnread(notification, $event)"
+          title="Mark as unread">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
           </svg>
         </button>
       </div>

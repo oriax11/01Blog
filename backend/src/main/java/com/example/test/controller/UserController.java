@@ -57,6 +57,7 @@ public class UserController {
     @DeleteMapping("/{id}/unfollow")
     public ResponseEntity<Void> unfollowUser(@PathVariable UUID id, @AuthenticationPrincipal UserDetails userDetails) {
         userService.unfollow(userDetails.getUsername(), id);
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -64,6 +65,8 @@ public class UserController {
     public ResponseEntity<Boolean> isFollowing(@PathVariable UUID id,
             @AuthenticationPrincipal UserDetails userDetails) {
         boolean isFollowing = userService.isFollowing(userDetails.getUsername(), id);
+
+        System.out.println("Is Following: " + isFollowing); 
         return new ResponseEntity<>(isFollowing, HttpStatus.OK);
     }
 

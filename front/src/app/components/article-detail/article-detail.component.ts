@@ -7,7 +7,9 @@ import { AuthService } from '../../services/auth.service';
 import { CommentSectionComponent } from '../comment-section/comment-section.component';
 import { ReportModalComponent } from '../report-modal/report-modal.component';
 import { ReportService } from '../../services/report.service';
-import { NotificationService } from '../../services/toast.service';
+
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-article-detail',
@@ -29,7 +31,7 @@ export class ArticleDetailComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private reportService: ReportService,
-    private notificationService: NotificationService
+    private dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -111,8 +113,8 @@ export class ArticleDetailComponent implements OnInit {
         reason: reason,
       })
       .subscribe(() => {
-        this.notificationService.success('Article reported successfully');
         this.showReportModal = false;
+        this.showSuccessDialog(`Report Submitted successfully. `);
       });
   }
 
@@ -131,7 +133,6 @@ export class ArticleDetailComponent implements OnInit {
     }
 
     if (!this.currentUserId) {
-      this.notificationService.error('Please login to like articles');
       return;
     }
 
@@ -150,7 +151,6 @@ export class ArticleDetailComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error liking post:', error);
-        this.notificationService.error('Failed to like article');
       },
     });
   }
@@ -163,7 +163,19 @@ export class ArticleDetailComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error unliking post:', error);
-        this.notificationService.error('Failed to unlike article');
+      },
+    });
+  }
+
+  private showSuccessDialog(message: string) {
+    this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Success',
+        message: message,
+        confirmText: 'OK',
+        color: 'primary',
+        hideCancel: true,
       },
     });
   }

@@ -1,10 +1,10 @@
 package com.example.test.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.test.model.Follow;
 import com.example.test.model.User;
@@ -12,6 +12,8 @@ import com.example.test.model.User;
 public interface FollowRepository extends JpaRepository<Follow, UUID> {
 
     Optional<Follow> findByFollowerAndFollowing(User follower, User following);
+
+    boolean existsByFollower_UsernameAndFollowing_Id(String followerUsername, UUID followeeId);
 
     boolean existsByFollowerAndFollowing(User follower, User following);
 

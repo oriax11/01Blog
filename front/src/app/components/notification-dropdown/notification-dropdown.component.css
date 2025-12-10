@@ -8,7 +8,7 @@
   border: none;
   cursor: pointer;
   padding: 8px;
-  color: #9ca3af; /* Light gray */
+  color: #9ca3af;
   transition: color 0.3s;
   display: flex;
   align-items: center;
@@ -29,7 +29,7 @@
   position: absolute;
   top: 2px;
   right: 2px;
-  background: #ef4444; /* Red */
+  background: #ef4444;
   color: white;
   font-size: 10px;
   font-weight: bold;
@@ -45,8 +45,8 @@
   top: 45px;
   width: 360px;
   max-width: 90vw;
-  background: #111111;               /* Dark background */
-  border: 1px solid #00A55033;    /* Subtle green border */
+  background: #111111;
+  border: 1px solid #00A55033;
   border-radius: 12px;
   box-shadow: 0 4px 25px rgba(0, 0, 0, 0.6);
   z-index: 1000;
@@ -112,7 +112,7 @@
 }
 
 .notification-item.unread {
-  background-color: #081f15; /* Dark green tint */
+  background-color: #081f15;
 }
 
 .notification-content {
@@ -152,6 +152,7 @@
   color: #888;
 }
 
+/* Mark as Read button - Green checkmark for unread notifications */
 .mark-read-btn {
   background: #00A550;
   border: none;
@@ -169,6 +170,27 @@
 
 .mark-read-btn:hover {
   background: #008840;
+}
+
+/* Mark as Unread button - Gray circle for read notifications */
+.mark-unread-btn {
+  background: #444;
+  border: none;
+  color: #aaa;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.mark-unread-btn:hover {
+  background: #00A550;
+  color: white;
 }
 
 .no-notifications {

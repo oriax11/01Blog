@@ -60,6 +60,16 @@ export class NotificationDropdownComponent implements OnInit, OnDestroy {
     }
   }
 
+  markAsUnread(notification: Notification, event: Event) {
+    event.stopPropagation();
+    if (notification.read) {
+      this.notificationService.markAsUnread(notification.id).subscribe(() => {
+        notification.read = false;
+        this.loadNotifications();
+      });
+    }
+  }
+
   navigateToPost(notification: Notification) {
     if (notification.type === 'POST' && notification.relatedEntityId) {
       this.router.navigate(['/article', notification.relatedEntityId]);

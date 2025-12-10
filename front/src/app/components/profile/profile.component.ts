@@ -5,14 +5,14 @@ import { ArticleCardComponent } from '../article-card/article-card.component';
 import { ArticleService } from '../../services/article.service';
 import { UserService } from '../../services/user.service';
 import { Article, User } from '../../models/article.model';
-import { NotificationService } from '../../services/toast.service';
 import { ReportService } from '../../services/report.service';
 import { ReportModalComponent } from '../report-modal/report-modal.component';
 import { forkJoin } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { AuthService } from '../../services/auth.service';
 import { RouterModule } from '@angular/router';
-
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../../components/confirm-dialog/confirm-dialog.component';
 @Component({
   selector: 'app-profile',
   standalone: true,
@@ -33,10 +33,10 @@ export class ProfileComponent implements OnInit {
     private route: ActivatedRoute,
     private articleService: ArticleService,
     private userService: UserService,
-    private notificationService: NotificationService,
     private reportService: ReportService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) {}
 
   isOwnProfile = false;
@@ -90,9 +90,7 @@ export class ProfileComponent implements OnInit {
       next: () => {
         this.isFollowing = !this.isFollowing;
         this.user!.followersCount += this.isFollowing ? 1 : -1;
-        this.notificationService.success(
-          this.isFollowing ? 'User followed! 🎉' : 'User unfollowed'
-        );
+
         this.loadingFollow = false;
       },
       error: (err) => {
@@ -120,9 +118,10 @@ export class ProfileComponent implements OnInit {
       })
       .subscribe({
         next: () => {
-          this.notificationService.success('User reported successfully');
           this.showReportModal = false;
           this.loadingReport = false;
+
+          this.showSuccessDialog(`Report Submitted successfully. `);
         },
         error: (err) => {
           console.error('Report failed:', err);
@@ -133,5 +132,18 @@ export class ProfileComponent implements OnInit {
 
   onReportClose() {
     this.showReportModal = false;
+  }
+
+  private showSuccessDialog(message: string) {
+    this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Success',
+        message: message,
+        confirmText: 'OK',
+        color: 'primary',
+        hideCancel: true,
+      },
+    });
   }
 }

@@ -29,11 +29,20 @@ export class CommentSectionComponent {
   ) {}
 
   ngOnInit() {
+    this.loadComments();
+  }
+  ngOnChanges() {
+    this.loadComments();
+  }
+
+  loadComments() {
     const token = this.authService.getToken();
     if (token) {
       const decodedToken: any = jwtDecode(token);
       this.username = decodedToken.username;
       this.userId = decodedToken.sub || decodedToken.userId; // Get user ID from token
+    } else {
+      this.authService.logout();
     }
     this.articleService.getComments(this.postId).subscribe((comments) => {
       this.comments = comments;
@@ -47,7 +56,7 @@ export class CommentSectionComponent {
 
   deleteComment(comment: Comment) {
     if (confirm('Are you sure you want to delete this comment?')) {
-      this.commentService.deleteComment(comment.id , this.postId).subscribe({
+      this.commentService.deleteComment(comment.id, this.postId).subscribe({
         next: () => {
           this.comments = this.comments.filter((c) => c.id !== comment.id);
         },

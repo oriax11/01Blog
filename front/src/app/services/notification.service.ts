@@ -17,41 +17,57 @@ export interface Notification {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class NotificationService {
   private unreadCountSubject = new BehaviorSubject<number>(0);
   public unreadCount$ = this.unreadCountSubject.asObservable();
 
-  constructor(
-    private http: HttpClient,
-    private authService: AuthService
-  ) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
   getNotifications(): Observable<Notification[]> {
-    return this.http.get<Notification[]>(
-      `${environment.apiUrl}/api/notifications`,
-      this.authService.getAuthHeaders()
-    ).pipe(
-      tap(notifications => {
-        const unreadCount = notifications.filter(n => !n.read).length;
-        console.log('Fetched notifications, unread count:', unreadCount);
-        this.unreadCountSubject.next(unreadCount);
-      })
-    );
+    return this.http
+      .get<Notification[]>(
+        `${environment.apiUrl}/api/notifications`,
+        this.authService.getAuthHeaders()
+      )
+      .pipe(
+        tap((notifications) => {
+          const unreadCount = notifications.filter((n) => !n.read).length;
+          console.log('Fetched notifications, unread count:', unreadCount);
+          this.unreadCountSubject.next(unreadCount);
+        })
+      );
   }
 
   markAsRead(notificationId: string): Observable<void> {
-    return this.http.put<void>(
-      `${environment.apiUrl}/api/notifications/${notificationId}/read`,
-      {},
-      this.authService.getAuthHeaders()
-    ).pipe(
-      tap(() => {
-        const currentCount = this.unreadCountSubject.value;
-        this.unreadCountSubject.next(Math.max(0, currentCount - 1));
-      })
-    );
+    return this.http
+      .put<void>(
+        `${environment.apiUrl}/api/notifications/${notificationId}/read`,
+        {},
+        this.authService.getAuthHeaders()
+      )
+      .pipe(
+        tap(() => {
+          const currentCount = this.unreadCountSubject.value;
+          this.unreadCountSubject.next(Math.max(0, currentCount - 1));
+        })
+      );
+  }
+
+  markAsUnread(notificationId: string): Observable<any> {
+    return this.http
+      .put(
+        `${environment.apiUrl}/api/notifications/${notificationId}/unread`,
+        {},
+        this.authService.getAuthHeaders()
+      )
+      .pipe(
+        tap(() => {
+          const currentCount = this.unreadCountSubject.value;
+          this.unreadCountSubject.next(Math.max(0, currentCount - 1));
+        })
+      );
   }
 
   refreshUnreadCount(): void {
