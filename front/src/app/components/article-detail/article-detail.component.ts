@@ -65,7 +65,7 @@ export class ArticleDetailComponent implements OnInit {
       this.isDropdownOpen = false;
     }
   }
-
+  
   isAuthor(): boolean {
     if (!this.currentUserId || !this.article.creator) {
       return false;

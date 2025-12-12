@@ -20,6 +20,11 @@
   justify-content: space-between;
   margin-bottom: 2rem;
 }
+.article-header > div:first-child {
+  flex-shrink: 1;        /* allow it to shrink when needed */
+  min-width: 0;          /* needed to make text truncate inside flex */
+}
+
 
 .article-meta {
   display: flex;
@@ -28,15 +33,14 @@
   margin-bottom: 1.5rem;
 }
 
-.category {
-  background-color: #22c55e;
-  color: #000000;
-  padding: 0.375rem 1rem;
-  border-radius: 9999px;
-  font-size: 0.875rem;
-  font-weight: bold;
-  text-transform: uppercase;
+.article-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
+
+
+
 
 .date {
   color: #9ca3af;
@@ -74,42 +78,19 @@
   font-weight: 600;
 }
 
-.read-time {
-  color: #9ca3af;
-  font-size: 0.875rem;
-}
 
-.article-image {
-  margin: 2rem 0;
-  border-radius: 0.75rem;
-  overflow: hidden;
-}
 
-.article-image img {
-  width: 100%;
-  height: 400px;
-  object-fit: cover;
-}
 
-.article-content {
-  width: 100%;
-  color: #e5e7eb;
-  font-size: 1.125rem;
-  line-height: 1.8;
-  margin: 2rem 0;
-}
 
-.article-img {
-  width: 100%;
-  display: block;
-}
+
+
 
 .article-footer {
   margin-top: 3rem;
   padding-top: 2rem;
   border-top: 1px solid #333333;
 }
-
+z
 .article-stats {
   margin: 10px;
   display: flex;
@@ -164,6 +145,16 @@
 .like-btn.liked {
   background-color: rgba(34, 197, 94, 0.1);
   border: 1px solid #22c55e;
+}
+
+:host ::ng-deep .ql-editor img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 10px 0;
+  display: block;
+  border: 2px solid #333333;
+  transition: border-color 0.3s ease;
 }
 
 .like-btn.liked .stat {
