@@ -48,7 +48,7 @@
     <!-- Submit Actions -->
     <div class="form-actions">
       <button type="button" class="btn-secondary" (click)="clearEditor()">CLEAR</button>
-      <button type="button" class="btn-primary" (click)="submitPost()" [disabled]="isUploading()">
+      <button type="button" class="btn-primary" (click)="submitPost()" [disabled]="isUploading()" [disabled]="isEmpty() " >
         SUBMIT
       </button>
     </div>
