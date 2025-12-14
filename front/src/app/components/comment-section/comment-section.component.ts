@@ -92,7 +92,6 @@ export class CommentSectionComponent {
           comment.isLiked = false;
           comment.likes--;
         },
-        error: (err) => console.error('Failed to unlike comment', err),
       });
     } else {
       // Like
@@ -101,7 +100,6 @@ export class CommentSectionComponent {
           comment.isLiked = true;
           comment.likes++;
         },
-        error: (err) => console.error('Failed to like comment', err),
       });
     }
   }
@@ -143,7 +141,6 @@ export class CommentSectionComponent {
         this.comments = this.comments.filter((c) => c.id !== comment.id);
       },
       error: (err) => {
-        console.error('Failed to delete comment', err);
         alert('Failed to delete comment. Please try again.');
       },
     });

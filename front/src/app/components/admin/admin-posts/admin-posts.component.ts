@@ -85,7 +85,7 @@ export class AdminPostsComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.adminService.hidePost(post.id).subscribe(() => {
-          console.log('Post hidden:', post.id);
+          ;
           this.showSuccessDialog(`"${post.title}" has been hidden successfully`);
           this.loadPosts();
         });
@@ -107,7 +107,7 @@ export class AdminPostsComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.adminService.hidePost(post.id).subscribe(() => {
-          console.log('Post hidden:', post.id);
+          ;
           this.showSuccessDialog(`"${post.title}" has been hidden successfully`);
           this.loadPosts();
         });
@@ -127,7 +127,7 @@ export class AdminPostsComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      console.log('Dialog result:', result);
+      ;
       if (result) {
         this.adminService.deletePost(post.id).subscribe(() => {
           this.showSuccessDialog(`"${post.title}" has been deleted successfully`);

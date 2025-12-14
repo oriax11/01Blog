@@ -150,7 +150,6 @@ export class ArticleDetailComponent implements OnInit {
         this.article.likeCount++;
       },
       error: (error) => {
-        console.error('Error liking post:', error);
       },
     });
   }
@@ -162,7 +161,6 @@ export class ArticleDetailComponent implements OnInit {
         this.article.likeCount--;
       },
       error: (error) => {
-        console.error('Error unliking post:', error);
       },
     });
   }

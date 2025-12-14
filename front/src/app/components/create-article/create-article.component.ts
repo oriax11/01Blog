@@ -121,7 +121,7 @@ export class PostEditorComponent implements OnInit, OnDestroy {
 
       // Create temporary blob URL for immediate preview
       const tempUrl = URL.createObjectURL(file);
-      console.log(tempUrl);
+      ;
       const uploadId = `upload_${Date.now()}_${Math.random()}`;
 
       // Insert media immediately with temp URL
@@ -156,14 +156,14 @@ export class PostEditorComponent implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (response: MediaUploadResponse) => {
-          console.log('Upload successful:', response);
+          ;
 
           // Build full URL for media preview
           const serverUrl = `${environment.apiUrl}/api/media${response.fileUrl}`;
 
           // Store mapping from temp URL to server URL
           this.uploadedFiles.set(tempUrl, serverUrl);
-          console.log('link : ', serverUrl);
+          ;
 
           // Replace temp URL with server URL in editor
           this.replaceUrlInEditor(uploadId, serverUrl, type);
@@ -172,7 +172,6 @@ export class PostEditorComponent implements OnInit, OnDestroy {
           URL.revokeObjectURL(tempUrl);
         },
         error: (error) => {
-          console.error('Upload failed:', error);
           const errorMessage = error.error?.message || 'Failed to upload file';
           alert(`Upload failed: ${errorMessage}`);
 
@@ -192,7 +191,7 @@ export class PostEditorComponent implements OnInit, OnDestroy {
     const delta = this.quillEditor.getContents();
     let position = 0;
     let found = false;
-    console.log(delta);
+    ;
 
     for (let i = 0; i < delta.ops!.length; i++) {
       const op = delta.ops![i];
@@ -208,7 +207,7 @@ export class PostEditorComponent implements OnInit, OnDestroy {
 
           // Insert new embed with server URL
           this.quillEditor.insertEmbed(position, type, newUrl, 'silent');
-          console.log('new here :' + newUrl);
+          ;
 
           found = true;
           break;
@@ -220,7 +219,6 @@ export class PostEditorComponent implements OnInit, OnDestroy {
     }
 
     if (!found) {
-      console.warn('Could not find URL to replace:', oldUrl);
     }
   }
 
@@ -454,8 +452,8 @@ export class CreateArticleComponent implements AfterViewInit, OnInit {
     const content = this.getContent();
     const fileUrls = this.extractFileUrls();
 
-    console.log('Post content:', content);
-    console.log('File URLs:', fileUrls);
+    ;
+    ;
     this.article.content = content;
     this.article.fileUrls = fileUrls;
 

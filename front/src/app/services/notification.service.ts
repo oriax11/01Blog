@@ -34,7 +34,7 @@ export class NotificationService {
       .pipe(
         tap((notifications) => {
           const unreadCount = notifications.filter((n) => !n.read).length;
-          console.log('Fetched notifications, unread count:', unreadCount);
+          ;
           this.unreadCountSubject.next(unreadCount);
         })
       );

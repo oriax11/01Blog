@@ -84,7 +84,6 @@ export class NavbarComponent implements OnInit {
 
       return false;
     } catch (error) {
-      console.error('Token decode error:', error);
       return false;
     }
   }

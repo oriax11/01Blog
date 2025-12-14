@@ -58,7 +58,7 @@ export class ProfileComponent implements OnInit {
       )
       .subscribe({
         next: ([user, followStatus]) => {
-          console.log('Profile User:', user);
+          ;
           this.user = user;
           this.isOwnProfile = this.user?.id === this.currentUser?.username;
           this.isFollowing = followStatus;
@@ -74,7 +74,6 @@ export class ProfileComponent implements OnInit {
     if (!this.user) return;
     this.articleService.getUserArticles(this.user.id).subscribe({
       next: (articles) => (this.userArticles = articles),
-      error: (err) => console.error('Failed to load articles:', err),
     });
   }
 
@@ -94,7 +93,6 @@ export class ProfileComponent implements OnInit {
         this.loadingFollow = false;
       },
       error: (err) => {
-        console.error('Follow/unfollow failed:', err);
         this.loadingFollow = false;
       },
     });
@@ -124,7 +122,6 @@ export class ProfileComponent implements OnInit {
           this.showSuccessDialog(`Report Submitted successfully. `);
         },
         error: (err) => {
-          console.error('Report failed:', err);
           this.loadingReport = false;
         },
       });
