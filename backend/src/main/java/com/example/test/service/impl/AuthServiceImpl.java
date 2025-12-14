@@ -21,6 +21,8 @@ import com.example.test.repository.UserRepository;
 import com.example.test.security.JwtTokenProvider;
 import com.example.test.service.AuthService;
 
+import org.apache.commons.validator.routines.EmailValidator;
+
 @Service
 public class AuthServiceImpl implements AuthService {
 
@@ -64,6 +66,26 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public Map<String, String> register(RegisterDto registerDto) {
 
+        // Validate username
+        if (!registerDto.getUsername().matches("^[a-zA-Z0-9_.-]{3,30}$")) {
+            throw new BlogAPIException(HttpStatus.BAD_REQUEST, "Username contains invalid characters.");
+        }
+
+        // Validate name
+        if (!registerDto.getName().matches("^[a-zA-Z '-]{1,50}$")) {
+            throw new BlogAPIException(HttpStatus.BAD_REQUEST, "Name contains invalid characters.");
+        }
+
+        // Validate email
+        EmailValidator validator = EmailValidator.getInstance();
+        if (!validator.isValid(registerDto.getEmail())) {
+            throw new BlogAPIException(HttpStatus.BAD_REQUEST, "Email format is invalid.");
+        }
+
+        // Validate password
+        if (registerDto.getPassword().length() < 8) {
+            throw new BlogAPIException(HttpStatus.BAD_REQUEST, "Password must be at least 8 characters.");
+        }
         // Check for username exists in database
         if (userRepository.existsByUsername(registerDto.getUsername())) {
             throw new BlogAPIException(HttpStatus.CONFLICT, "Username is already taken!.");
@@ -73,7 +95,6 @@ public class AuthServiceImpl implements AuthService {
         if (userRepository.existsByEmail(registerDto.getEmail())) {
             throw new BlogAPIException(HttpStatus.CONFLICT, "Email is already used!.");
         }
-
         User user = new User();
         user.setName(registerDto.getName());
         user.setUsername(registerDto.getUsername());
@@ -81,7 +102,6 @@ public class AuthServiceImpl implements AuthService {
         user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
 
         // endpoint for the roles or something similar
-
         userRepository.save(user);
 
         Map<String, String> response = new HashMap<>();

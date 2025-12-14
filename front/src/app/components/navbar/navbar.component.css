@@ -20,6 +20,11 @@
   flex-shrink: 0;
 }
 
+.admin_place{
+  display: flex;
+  align-items: center;
+}
+
 .brand-link {
   text-decoration: none;
   font-family: 'Courier New', monospace;

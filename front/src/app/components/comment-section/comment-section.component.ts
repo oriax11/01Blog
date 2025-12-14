@@ -20,6 +20,7 @@ export class CommentSectionComponent {
   @Input() postId!: string;
   @Input() comments: Comment[] = [];
   userId: string | null = null;
+  showDeleteModal = false;
 
   constructor(
     private articleService: ArticleService,
@@ -54,18 +55,8 @@ export class CommentSectionComponent {
     return this.userId === comment.commenterId.toString();
   }
 
-  deleteComment(comment: Comment) {
-    if (confirm('Are you sure you want to delete this comment?')) {
-      this.commentService.deleteComment(comment.id, this.postId).subscribe({
-        next: () => {
-          this.comments = this.comments.filter((c) => c.id !== comment.id);
-        },
-        error: (err) => {
-          console.error('Failed to delete comment', err);
-          alert('Failed to delete comment. Please try again.');
-        },
-      });
-    }
+  deleteComment() {
+    this.showDeleteModal = true;
   }
 
   newCommentText = '';
@@ -139,5 +130,23 @@ export class CommentSectionComponent {
 
   goToAuthorProfile(id: string) {
     this.router.navigate(['/profile', id]);
+  }
+  cancelDelete() {
+    this.showDeleteModal = false;
+  }
+
+  confirmDelete(comment: Comment) {
+    // Implement the delete logic here
+
+    this.commentService.deleteComment(comment.id, this.postId).subscribe({
+      next: () => {
+        this.comments = this.comments.filter((c) => c.id !== comment.id);
+      },
+      error: (err) => {
+        console.error('Failed to delete comment', err);
+        alert('Failed to delete comment. Please try again.');
+      },
+    });
+    this.showDeleteModal = false;
   }
 }

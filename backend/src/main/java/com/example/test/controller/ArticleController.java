@@ -181,15 +181,28 @@ public class ArticleController {
     public ResponseEntity<List<ArticleDTO>> getArticlesByUser(
             @PathVariable UUID userId, Authentication authentication) {
 
-        User user = userService.getUserEntityById(userId);
-        String loggedUsername = authentication.getName();
+        String loggedUsername = authentication != null ? authentication.getName() : null;
+        if (loggedUsername == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
-        List<ArticleDTO> articleDTOs = articleService.getArticlesByUser(user, loggedUsername);
+        User user = userService.findByUsername(loggedUsername);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        User desiredUser = userService.getUserEntityById(userId);
+        if (desiredUser == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        List<ArticleDTO> articleDTOs = articleService.getArticlesByUser(desiredUser, loggedUsername);
 
         return ResponseEntity.ok(articleDTOs);
     }
 
     @GetMapping("/all")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<ArticleDTO>> getAllArticles() {
         return ResponseEntity.ok(articleService.getAllArticlesDTO());
     }
