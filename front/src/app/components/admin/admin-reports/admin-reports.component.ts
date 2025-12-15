@@ -11,15 +11,9 @@ import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.comp
 @Component({
   selector: 'app-admin-reports',
   standalone: true,
-  imports: [
-    CommonModule, 
-    FormsModule, 
-    RouterModule, 
-    MatDialogModule,
-    MatButtonModule
-  ],
+  imports: [CommonModule, FormsModule, RouterModule, MatDialogModule, MatButtonModule],
   templateUrl: './admin-reports.component.html',
-  styleUrls: ['./admin-reports.component.css']
+  styleUrls: ['./admin-reports.component.css'],
 })
 export class AdminReportsComponent implements OnInit {
   reports: Report[] = [];
@@ -27,17 +21,14 @@ export class AdminReportsComponent implements OnInit {
   statusFilter = '';
   typeFilter = '';
 
-  constructor(
-    private adminService: AdminService,
-    private dialog: MatDialog
-  ) {}
+  constructor(private adminService: AdminService, private dialog: MatDialog) {}
 
   ngOnInit() {
     this.loadReports();
   }
 
   loadReports() {
-    this.adminService.getReports().subscribe(reports => {
+    this.adminService.getReports().subscribe((reports) => {
       this.reports = reports;
       this.filterReports();
     });
@@ -47,11 +38,11 @@ export class AdminReportsComponent implements OnInit {
     let filtered = this.reports;
 
     if (this.statusFilter) {
-      filtered = filtered.filter(report => report.status === this.statusFilter);
+      filtered = filtered.filter((report) => report.status === this.statusFilter);
     }
 
     if (this.typeFilter) {
-      filtered = filtered.filter(report => report.type === this.typeFilter);
+      filtered = filtered.filter((report) => report.type === this.typeFilter);
     }
 
     this.filteredReports = filtered;
@@ -72,11 +63,11 @@ export class AdminReportsComponent implements OnInit {
         title: 'Warn User',
         message: 'Are you sure you want to send a warning to this user?',
         confirmText: 'Send Warning',
-        color: 'warn'
-      }
+        color: 'warn',
+      },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.resolveReport(report.id, 'User warned');
       }
@@ -88,13 +79,14 @@ export class AdminReportsComponent implements OnInit {
       width: '450px',
       data: {
         title: 'Ban User',
-        message: 'Are you sure you want to ban this user? This will prevent them from accessing the platform.',
+        message:
+          'Are you sure you want to ban this user? This will prevent them from accessing the platform.',
         confirmText: 'Ban User',
-        color: 'warn'
-      }
+        color: 'warn',
+      },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.adminService.banUser(report.targetId).subscribe(() => {
           this.resolveReport(report.id, 'User banned');
@@ -108,36 +100,40 @@ export class AdminReportsComponent implements OnInit {
       width: '450px',
       data: {
         title: 'Delete User',
-        message: 'Are you sure you want to delete this user? This action cannot be undone and will permanently remove all their data.',
+        message:
+          'Are you sure you want to delete this user? This action cannot be undone and will permanently remove all their data.',
         confirmText: 'Delete User',
-        color: 'warn'
-      }
+        color: 'warn',
+      },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
+        this.adminService.deleteUser(report.targetId).subscribe(() => {
+        });
         this.resolveReport(report.id, 'User deleted');
+
       }
     });
   }
 
-  warnAuthor(report: Report) {
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: '450px',
-      data: {
-        title: 'Warn Author',
-        message: 'Are you sure you want to send a warning to the post author?',
-        confirmText: 'Send Warning',
-        color: 'warn'
-      }
-    });
+  // warnAuthor(report: Report) {
+  //   const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+  //     width: '450px',
+  //     data: {
+  //       title: 'Warn Author',
+  //       message: 'Are you sure you want to send a warning to the post author?',
+  //       confirmText: 'Send Warning',
+  //       color: 'warn'
+  //     }
+  //   });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.resolveReport(report.id, 'Author warned');
-      }
-    });
-  }
+  //   dialogRef.afterClosed().subscribe(result => {
+  //     if (result) {
+  //       this.resolveReport(report.id, 'Author warned');
+  //     }
+  //   });
+  // }
 
   hidePost(report: Report) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
@@ -146,11 +142,11 @@ export class AdminReportsComponent implements OnInit {
         title: 'Hide Post',
         message: 'Are you sure you want to hide this post? It will no longer be visible to users.',
         confirmText: 'Hide Post',
-        color: 'warn'
-      }
+        color: 'warn',
+      },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.adminService.hidePost(report.targetId).subscribe(() => {
           this.resolveReport(report.id, 'Post hidden');
@@ -164,13 +160,14 @@ export class AdminReportsComponent implements OnInit {
       width: '450px',
       data: {
         title: 'Delete Post',
-        message: 'Are you sure you want to delete this post? This action cannot be undone and will permanently remove the content.',
+        message:
+          'Are you sure you want to delete this post? This action cannot be undone and will permanently remove the content.',
         confirmText: 'Delete Post',
-        color: 'warn'
-      }
+        color: 'warn',
+      },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.adminService.deletePost(report.targetId).subscribe(() => {
           this.resolveReport(report.id, 'Post deleted');
@@ -186,11 +183,11 @@ export class AdminReportsComponent implements OnInit {
         title: 'Dismiss Report',
         message: 'Are you sure you want to dismiss this report? No action will be taken.',
         confirmText: 'Dismiss',
-        color: 'primary'
-      }
+        color: 'primary',
+      },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.adminService.dismissReport(reportId).subscribe(() => {
           this.showSuccessDialog('Report dismissed successfully');
@@ -215,8 +212,8 @@ export class AdminReportsComponent implements OnInit {
         message: message,
         confirmText: 'OK',
         color: 'primary',
-        hideCancel: true
-      }
+        hideCancel: true,
+      },
     });
   }
 }
