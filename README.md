@@ -37,7 +37,7 @@ A fullstack social blogging platform where students can share their learning exp
 - **Maven** - Build and dependency management
 
 ### Frontend
-- **Angular 18** - Frontend framework
+- **Angular 17** - Frontend framework
 - **TypeScript** - Programming language
 - **Angular Material** - UI component library
 - **RxJS** - Reactive programming

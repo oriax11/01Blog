@@ -4,11 +4,13 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.test.dto.UserDTO;
 import com.example.test.model.Follow;
+import com.example.test.model.Role;
 import com.example.test.model.User;
 import com.example.test.repository.FollowRepository;
 import com.example.test.repository.UserRepository;
@@ -18,10 +20,12 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
+    private PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, FollowRepository followRepository) {
+    public UserService(UserRepository userRepository, FollowRepository followRepository ,  PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.followRepository = followRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public User findByUsername(String username) {
@@ -86,7 +90,6 @@ public class UserService {
 
     public List<UserDTO> getAllUsers() {
         return userRepository.findAll().stream()
-
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
@@ -119,5 +122,20 @@ public class UserService {
                 user.getFollowing() != null ? user.getFollowing().size() : 0,
                 user.getRole(),
                 user.getStatus());
+    }
+
+    public User createAdmin(String username,String name, String email, String password) {
+        if (userRepository.findByUsername(username).isPresent()) {
+            return null; // Admin already exists
+        }
+
+        User admin = new User();
+        admin.setUsername(username);
+        admin.setEmail(email);
+        admin.setName(name);
+        admin.setPassword(passwordEncoder.encode(password));
+        admin.setRole(Role.ADMIN);
+
+        return userRepository.save(admin);
     }
 }

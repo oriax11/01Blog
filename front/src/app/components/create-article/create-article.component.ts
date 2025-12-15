@@ -113,7 +113,7 @@ export class PostEditorComponent implements OnInit, OnDestroy {
       if (!file) return;
 
       // Validate file size (10MB max)
-      const maxSize = 10 * 1024 * 1024;
+      const maxSize = 100 * 1024 * 1024;
       if (file.size > maxSize) {
         alert('File size exceeds 10MB limit');
         return;

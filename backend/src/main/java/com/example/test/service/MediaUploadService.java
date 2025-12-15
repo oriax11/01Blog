@@ -23,7 +23,7 @@ public class MediaUploadService {
     private final MediaUploadRepository mediaUploadRepository;
     private final FileStorageService fileStorageService;
 
-    private static final long MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+    private static final long MAX_FILE_SIZE = 100 * 1024 * 1024; // 10MB
 
     /**
      * Upload file to temporary storage
@@ -31,6 +31,8 @@ public class MediaUploadService {
     @Transactional
     public MediaUploadResponse uploadTemporaryFile(MultipartFile file, UUID userId) throws IOException {
         // Validate file
+
+        System.out.println("Uploading file: " + file.getOriginalFilename());
         validateFile(file);
 
         // Store file
@@ -131,6 +133,7 @@ public class MediaUploadService {
      * Validate uploaded file
      */
     private void validateFile(MultipartFile file) {
+        System.out.println("Validating file: " + file.getOriginalFilename());
         if (file.isEmpty()) {
             throw new IllegalArgumentException("File is empty");
         }

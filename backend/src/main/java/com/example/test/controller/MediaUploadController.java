@@ -39,6 +39,7 @@ public class MediaUploadController {
     public ResponseEntity<?> uploadMedia(
             @RequestParam("file") MultipartFile file,
             Authentication authentication) {
+
         String username = authentication.getName();
         User user = userService.findByUsername(username);
 
@@ -49,6 +50,7 @@ public class MediaUploadController {
             return ResponseEntity.badRequest()
                     .body(createErrorResponse(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
         } catch (IOException e) {
+
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(createErrorResponse("Failed to upload file: " + e.getMessage(),
                             HttpStatus.INTERNAL_SERVER_ERROR.value()));
@@ -56,9 +58,8 @@ public class MediaUploadController {
     }
 
     /**
-     * Serve uploaded files
-     * GET /api/media/uploads/{filename}
-     * Example: /api/media/uploads/379be99e-0506-46cc-a143-07e230351b84.png
+     * Serve uploaded files GET /api/media/uploads/{filename} Example:
+     * /api/media/uploads/379be99e-0506-46cc-a143-07e230351b84.png
      */
     @GetMapping("/uploads/{filename:.+}")
     public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
@@ -93,8 +94,7 @@ public class MediaUploadController {
     }
 
     /**
-     * Get user's temporary uploads
-     * GET /api/media/temp
+     * Get user's temporary uploads GET /api/media/temp
      */
     // @GetMapping("/temp")
     // public ResponseEntity<List<MediaUploadResponse>> getTemporaryUploads(
@@ -105,7 +105,6 @@ public class MediaUploadController {
     // mediaUploadService.getUserTemporaryUploads(user.getId());
     // return ResponseEntity.ok(uploads);
     // }
-
     // /**
     // * Delete temporary file
     // * DELETE /api/media/temp
@@ -114,7 +113,6 @@ public class MediaUploadController {
     // public ResponseEntity<?> deleteTemporaryFile(
     // @RequestParam("fileUrl") String fileUrl,
     // @RequestHeader("User-Id") Long userId) {
-
     // try {
     // mediaUploadService.deleteTempo // private Map<String, Object>
     // createErrorResponse(String message, int status) {
@@ -130,10 +128,8 @@ public class MediaUploadController {
     // .body(createErrorResponse(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
     // }
     // }
-
     /**
-     * Health check endpoint
-     * GET /api/media/health
+     * Health check endpoint GET /api/media/health
      */
     // @GetMapping("/health")
     // public ResponseEntity<Map<String, String>> health() {
@@ -141,7 +137,6 @@ public class MediaUploadController {
     // "status", "UP",
     // "timestamp", LocalDateTime.now().toString()));
     // }
-
     /**
      * Create error response
      */
