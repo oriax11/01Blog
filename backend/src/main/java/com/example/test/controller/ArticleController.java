@@ -59,6 +59,19 @@ public class ArticleController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
+
+        //check links for valid urls
+        List<String> fileUrls = request.getFileUrls();
+        try {
+            mediaUploadService.checkUrlsValidForUser(fileUrls, user.getId());
+            
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
+
+         
+
         // Build the article entity
         Article article = new Article();
         article.setTitle(request.getTitle());
@@ -69,7 +82,6 @@ public class ArticleController {
         ArticleDTO saved = articleService.createArticle(article, user.getId());
 
         // Associate uploaded files (if any)
-        List<String> fileUrls = request.getFileUrls();
         if (fileUrls != null && !fileUrls.isEmpty()) {
             try {
                 mediaUploadService.associateFilesWithPost(fileUrls, saved.getId(), user.getId());

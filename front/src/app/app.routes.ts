@@ -26,6 +26,8 @@ export const routes: Routes = [
   // Protected routes (require login)
   { path: '', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
+
   { path: 'profile/:userId', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'create', component: PostEditorComponent, canActivate: [AuthGuard] },
   { path: 'article/:id', component: ArticleDetailComponent, canActivate: [AuthGuard] },

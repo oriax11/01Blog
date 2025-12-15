@@ -1,18 +1,20 @@
 package com.example.test.service;
 
-import com.example.test.dto.MediaUploadResponse;
-import com.example.test.model.MediaUpload;
-import com.example.test.repository.MediaUploadRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.example.test.dto.MediaUploadResponse;
+import com.example.test.model.MediaUpload;
+import com.example.test.repository.MediaUploadRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -56,7 +58,6 @@ public class MediaUploadService {
         for (String tmpfileUrl : fileUrls) {
             // Verify file belongs to user and is temporary
             String fileUrl = tmpfileUrl.replace("http://localhost:8080/api/media", "");
-            System.out.println(fileUrl + "helmqfkjsdmlj fqlskdj mqlsj fqmlsj");
             MediaUpload upload = mediaUploadRepository.findByFileUrl(fileUrl)
                     .orElseThrow(() -> new IllegalArgumentException("File not found: " + fileUrl));
 
@@ -190,5 +191,19 @@ public class MediaUploadService {
             }
         }
     }
+    public void  checkUrlsValidForUser (List<String> fileUrls, UUID userId) throws IOException {
+        for (String tmpfileUrl : fileUrls) {
+            // Verify file belongs to user and is temporary
+            String fileUrl = tmpfileUrl.replace("http://localhost:8080/api/media", "");
+            MediaUpload upload = mediaUploadRepository.findByFileUrl(fileUrl)
+                    .orElseThrow(() -> new IllegalArgumentException("File not found: " + fileUrl));
+
+            if (!upload.getUserId().equals(userId)) {
+                throw new IllegalArgumentException("Unauthorized access to file: " + fileUrl);
+            }
+        }
+    }
+
+
 
 }

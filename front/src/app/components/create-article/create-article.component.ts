@@ -6,6 +6,8 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ArticleService } from '../../services/article.service';
 import { FormsModule } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import Quill from 'quill';
 
 const BlockEmbed = Quill.import('blots/block/embed') as any;
@@ -55,7 +57,8 @@ export class PostEditorComponent implements OnInit, OnDestroy {
   constructor(
     private mediaUploadService: MediaUploadService,
     private articleService: ArticleService,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) {}
 
   article: any = {
@@ -300,7 +303,15 @@ export class PostEditorComponent implements OnInit, OnDestroy {
    */
   async submitPost() {
     if (this.isUploading()) {
-      alert('Please wait for all files to finish uploading');
+      this.dialog.open(ConfirmDialogComponent, {
+        data: {
+          title: 'Upload in Progress',
+          message: 'Please wait for all files to finish uploading before submitting.',
+          confirmText: 'OK',
+          hideCancel: true,
+          color: 'primary',
+        },
+      });
       return;
     }
 
@@ -310,8 +321,52 @@ export class PostEditorComponent implements OnInit, OnDestroy {
     this.article.content = content;
     this.article.fileUrls = fileUrls;
 
-    this.articleService.createArticle(this.article).subscribe(() => {
-      this.router.navigate(['/home']);
+    this.articleService.createArticle(this.article).subscribe({
+      next: () => {
+        this.dialog.open(ConfirmDialogComponent, {
+          data: {
+            title: "Post submitted",
+            message: "Your post has been successfully created.",
+            confirmText: 'OK',
+            hideCancel: true,
+            color: 'primary',
+          },
+        });
+
+        this.router.navigate(['/home']);
+      },
+      error: (error) => {
+        console.error('Error creating article:', error);
+
+        let title = 'Error';
+        let message = 'Failed to create post. Please try again later.';
+
+        // Customize message based on error status
+        if (error.status === 401) {
+          title = 'Authentication Required';
+          message = 'You must be logged in to create a post. Please log in and try again.';
+        } else if (error.status === 403) {
+          title = 'Permission Denied';
+          message = 'You do not have permission to create posts.';
+        } else if (error.status === 400) {
+          title = 'Invalid Data';
+          message =
+            error.error?.message || 'The data provided is invalid. Please check and try again.';
+        } else if (error.status === 0) {
+          title = 'Network Error';
+          message = 'Unable to connect to the server. Please check your internet connection.';
+        }
+
+        this.dialog.open(ConfirmDialogComponent, {
+          data: {
+            title: title,
+            message: message,
+            confirmText: 'OK',
+            hideCancel: true,
+            color: 'warn',
+          },
+        });
+      },
     });
   }
 
