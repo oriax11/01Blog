@@ -3,6 +3,7 @@ package com.example.test.service.impl;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,8 +21,6 @@ import com.example.test.model.User;
 import com.example.test.repository.UserRepository;
 import com.example.test.security.JwtTokenProvider;
 import com.example.test.service.AuthService;
-
-import org.apache.commons.validator.routines.EmailValidator;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -44,10 +43,10 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public Map<String, String> login(LoginDto loginDto) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                loginDto.getUsernameOrEmail(), loginDto.getPassword()));
+                loginDto.getUsernameOrEmail().toLowerCase(), loginDto.getPassword()));
 
         User user = userRepository
-                .findByUsernameOrEmail(loginDto.getUsernameOrEmail(), loginDto.getUsernameOrEmail())
+                .findByUsernameOrEmail(loginDto.getUsernameOrEmail().toLowerCase(), loginDto.getUsernameOrEmail().toLowerCase())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         if (user.getStatus() == Status.BANNED) {
@@ -82,23 +81,24 @@ public class AuthServiceImpl implements AuthService {
             throw new BlogAPIException(HttpStatus.BAD_REQUEST, "Email format is invalid.");
         }
 
+
         // Validate password
         if (registerDto.getPassword().length() < 8) {
             throw new BlogAPIException(HttpStatus.BAD_REQUEST, "Password must be at least 8 characters.");
         }
         // Check for username exists in database
-        if (userRepository.existsByUsername(registerDto.getUsername())) {
+        if (userRepository.existsByUsername(registerDto.getUsername().toLowerCase())) {
             throw new BlogAPIException(HttpStatus.CONFLICT, "Username is already taken!.");
         }
 
         // Check for email exists in database
-        if (userRepository.existsByEmail(registerDto.getEmail())) {
+        if (userRepository.existsByEmail(registerDto.getEmail().toLowerCase())) {
             throw new BlogAPIException(HttpStatus.CONFLICT, "Email is already used!.");
         }
         User user = new User();
         user.setName(registerDto.getName());
-        user.setUsername(registerDto.getUsername());
-        user.setEmail(registerDto.getEmail());
+        user.setUsername(registerDto.getUsername().toLowerCase());
+        user.setEmail(registerDto.getEmail().toLowerCase());
         user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
 
         // endpoint for the roles or something similar

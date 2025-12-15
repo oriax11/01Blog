@@ -336,7 +336,6 @@ export class PostEditorComponent implements OnInit, OnDestroy {
         this.router.navigate(['/home']);
       },
       error: (error) => {
-        console.error('Error creating article:', error);
 
         let title = 'Error';
         let message = 'Failed to create post. Please try again later.';
